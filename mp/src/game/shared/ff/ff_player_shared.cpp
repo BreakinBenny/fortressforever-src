@@ -1859,20 +1859,8 @@ void CFFPlayer::JetpackRechargeThink( void )
 
 bool CFFPlayer::CanJetpack()
 {
-	if (!IsAlive())
-	{
-		return false;
-	}
-
-	if (GetFlags() & FL_ONGROUND) // no jetpacking on ground
-	{
-		return false;
-	}
-
-	if (m_iJetpackFuel < JETPACK_MINFUEL)
-	{
-		return false;
-	}
+	if (!IsAlive() || GetFlags() & FL_ONGROUND || m_iJetpackFuel < JETPACK_MINFUEL || !m_bCanUseJetpack)
+		return false;	// must be alive, in the air, have fuel left, and the jetpack is allowed
 
 	return true;
 }
