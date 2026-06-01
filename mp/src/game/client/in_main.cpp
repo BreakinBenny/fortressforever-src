@@ -619,6 +619,7 @@ void IN_ServerInfo(const CCommand& args)
 }
 
 extern void HudContextShowCalls(bool visible);
+extern void HudContextShowDiscards(bool visible);
 
 // BEG: Mulch: For medic & engy hud radial style menu
 void IN_MedEngyMenuDown(const CCommand& args)
@@ -638,6 +639,17 @@ void IN_MedEngyMenuUp(const CCommand& args)
 }
 // END: Mulch: For medic & engy hud radial style menu
 
+// BEGIN: BreakinBenny & hlieb: Ammo discard radialmenu
+void IN_DiscardMenuDown(const CCommand& args)
+{
+	HudContextShowDiscards(true);
+}
+
+void IN_DiscardMenuUp(const CCommand& args)
+{
+	HudContextShowDiscards(false);
+}
+// END: BreakinBenny & hlieb: Ammo discard radialmenu
 
 // BEGIN: Jiggles: For displaying the Hint Center
 void IN_HintCenterDown(const CCommand& args)
@@ -1817,6 +1829,11 @@ static ConCommand serverinfo("serverinfo", IN_ServerInfo);
 static ConCommand startMedEngyMenu("+medengymenu", IN_MedEngyMenuDown);
 static ConCommand endMedEngymenu("-medengymenu", IN_MedEngyMenuUp);
 // END: Mulch: For medic & engy hud radial style menu
+
+// BEG: BreakinBenny & hlieb: Ammo discard radialmenu
+static ConCommand startDiscardMenu("+discardmenu", IN_DiscardMenuDown);
+static ConCommand endDiscardmenu("-discardmenu", IN_DiscardMenuUp);
+// END: BreakinBenny & hlieb: Ammo discard radialmenu
 
 // BEGIN: Jiggles: For display of the Hint Center
 static ConCommand startHintCenter("+hintcenter", IN_HintCenterDown);
