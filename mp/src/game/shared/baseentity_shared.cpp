@@ -693,15 +693,15 @@ void CBaseEntity::DecalTrace( trace_t *pTrace, char const *decalName )
 			return;
 	}
 
-	int index = decalsystem->GetDecalIndexForName( decalName );
-	if ( index < 0 )
+	int indexD = decalsystem->GetDecalIndexForName( decalName );
+	if ( indexD < 0 )
 		return;
 
 	Assert( pTrace->m_pEnt );
 
 	CBroadcastRecipientFilter filter;
 	te->Decal( filter, 0.0, &pTrace->endpos, &pTrace->startpos,
-		pTrace->GetEntityIndex(), pTrace->hitbox, index );
+		pTrace->GetEntityIndex(), pTrace->hitbox, indexD );
 }
 
 //-----------------------------------------------------------------------------
@@ -1645,9 +1645,9 @@ void CBaseEntity::FireBullets( const FireBulletsInfo_t &info )
 	CAmmoDef*	pAmmoDef	= GetAmmoDef();
 	int			nDamageType	= pAmmoDef->DamageType(info.m_iAmmoType);
 	int			nAmmoFlags	= pAmmoDef->Flags(info.m_iAmmoType);
-
+#ifdef FF
 	float		flDmg = (info.m_iShots ? info.m_flDamage / info.m_iShots : info.m_flDamage);	// |-- Mirv: Split damage up into shots
-	
+#endif
 	bool bDoServerEffects = true;
 
 #if defined( HL2MP ) && defined( GAME_DLL )
@@ -1948,12 +1948,12 @@ void CBaseEntity::FireBullets( const FireBulletsInfo_t &info )
 				dmgInfo.ScaleDamageForce( info.m_flDamageForceScale );
 				dmgInfo.SetAmmoType( info.m_iAmmoType );
 
-				// --> Mirv: Quick hack, fix this tomorrow
+#ifdef FF		// --> Mirv: Quick hack, fix this tomorrow
 				if (tr.m_pEnt->IsPlayer())
 				{
 					dmgInfo.ScaleDamageForce(0.01f);
 				}
-				// <-- Mirv
+#endif			// <-- Mirv
 
 				tr.m_pEnt->DispatchTraceAttack( dmgInfo, vecDir, &tr );
 			
@@ -2630,34 +2630,3 @@ bool CBaseEntity::IsToolRecording() const
 #endif
 }
 #endif
-
-#ifdef CLIENT_DLL
-ConVar dump_deletes_cl("dump_deletes_cl", "0");
-ConVar dump_deletes_flush("dump_deletes_flush", "0");
-#endif
-
-
-void CBaseEntity::PrintDeleteInfo()
-{
-	static FileHandle_t m_hClassNameFile = NULL;
-
-#ifdef CLIENT_DLL
-	if (dump_deletes_cl.GetBool())
-	{
-		if (!m_hClassNameFile)
-		{
-			m_hClassNameFile = filesystem->Open("classdump_client.txt", "wt", "MOD");
-		}
-		if (m_hClassNameFile)
-		{
-			const char* classname = GetClassname();
-			char buffer[1024] = {};
-			V_snprintf(buffer, 1024, "%.2f deleted %s, index %d\n",
-				gpGlobals->curtime, classname ? classname : "unknown", entindex());
-			filesystem->Write(buffer, V_strlen(buffer), m_hClassNameFile);
-			if (dump_deletes_flush.GetBool())
-				filesystem->Flush(m_hClassNameFile);
-		}
-	}
-#endif
-}
