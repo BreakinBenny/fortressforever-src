@@ -1192,7 +1192,7 @@ void CBaseEntity::SetParent( CBaseEntity *pParentEntity, int iAttachment )
 		}
 	}
 	// set the move parent if we have one
-	if ( edict() )
+	if ( edict() || IsEFlagSet( EFL_FORCE_ALLOW_MOVEPARENT ) )
 	{
 		// add ourselves to the list
 		LinkChild( m_pParent, this );

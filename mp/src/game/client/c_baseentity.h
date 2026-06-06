@@ -69,7 +69,7 @@ typedef unsigned int			AimEntsListHandle_t;
 extern void RecvProxy_IntToColor32( const CRecvProxyData *pData, void *pStruct, void *pOut );
 extern void RecvProxy_LocalVelocity( const CRecvProxyData *pData, void *pStruct, void *pOut );
 
-// BEG: Added by Mulchman
+#ifdef FF // BEG: Added by Mulchman
 enum Class_T
 {
 	CLASS_NONE = 0,
@@ -113,7 +113,7 @@ enum Class_T
 
 	NUM_AI_CLASSES
 };
-// END: Added by Mulchman
+#endif // END: Added by Mulchman
 
 enum CollideType_t
 {
@@ -1404,12 +1404,11 @@ public:
 	char							m_lifeState;
 
 	int								m_iHealth;
-
-	// BEG: Added by Mulchman
+#ifdef FF	// BEG: Added by Mulchman
 	int								m_iMaxHealth;
 	int								m_iArmor;
 	int								m_iMaxArmor;
-	// END: Added by Mulchman
+#endif	// END: Added by Mulchman
 
 	// was pev->speed
 	float							m_flSpeed;

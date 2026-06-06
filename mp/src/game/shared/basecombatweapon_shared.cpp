@@ -2929,7 +2929,6 @@ void CBaseCombatWeapon::ForceRemove(void)
 	RemoveEffects(EF_NODRAW);
 	VPhysicsDestroyObject();
 	SetGroundEntity(NULL);
-	AddEFlags(EFL_NO_WEAPON_PICKUP);
 	SetThink(NULL);
 	SetTouch(NULL);
 	SetOwnerEntity(NULL);
