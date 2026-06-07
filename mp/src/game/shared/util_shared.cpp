@@ -237,8 +237,8 @@ bool PassServerEntityFilter( const IHandleEntity *pTouch, const IHandleEntity *p
 	// don't clip against owner
 	if (!pEntPass->CanClipOwnerEntity())
 	{
-		if (pEntPass->GetOwnerEntity() == pEntTouch)
-			return false;
+		if ( pEntPass->GetOwnerEntity() == pEntTouch )
+			return false;	
 	}
 
 	if (!pEntPass->CanClipPlayer() && pEntTouch->IsPlayer())

@@ -1469,7 +1469,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 		}
 
 		char szRecommendedName[ MAX_PATH ];
-		V_sprintf_safe( szRecommendedName, "cfg/%s", pszVar );
+		V_sprintf_safe( szRecommendedName, "/cfg/%s", pszVar );
 
 		// First, look for a mapcycle file in the cfg directory, which is preferred
 		V_strncpy( pszResult, szRecommendedName, nSizeResult );
@@ -1483,7 +1483,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 			return;
 		}
 
-		// Nope?  Try the root.
+		// Nope?  Try the root.  
 		V_strncpy( pszResult, pszVar, nSizeResult );
 		if ( filesystem->FileExists( pszResult, "GAME" ) )
 		{
@@ -1880,6 +1880,18 @@ ConVarRef suitcharger( "sk_suitcharger" );
 		return BaseClass::ClientCommand( pEdict, args );
 	}
 
+#ifdef TF_DLL
+	#define ACHIEVEMENT_LIST_(id) id
+	#define ACHIEVEMENT_LIST(className, achievementID, achievementName, iPointValue) \
+		ACHIEVEMENT_LIST_(achievementID),
+
+	static const std::unordered_set<int> g_ValidAchiementIdxs = {{
+		#include "achievements_tf_list.inc"
+	}};
+
+	#undef ACHIEVEMENT_LIST
+#endif
+
 	void CMultiplayRules::ClientCommandKeyValues( edict_t *pEntity, KeyValues *pKeyValues )
 	{
 		CBaseMultiplayerPlayer *pPlayer = dynamic_cast< CBaseMultiplayerPlayer * >( CBaseEntity::Instance( pEntity ) );
@@ -1892,20 +1904,32 @@ ConVarRef suitcharger( "sk_suitcharger" );
 		{
 			if ( FStrEq( pszCommand, "AchievementEarned" ) )
 			{
-				if ( pPlayer->ShouldAnnounceAchievement() )
+				if ( !pPlayer->ShouldAnnounceAchievement() )
+					return;
+
+				int nAchievementID = pKeyValues->GetInt( "achievementID" );
+
+#ifdef TF_DLL
+				// Josh:
+				// Bots are using this as a back-channel to communicate on our servers
+				// with invalid achievement indexes.
+				// I did want to use achievementmgr but that isn't available on the server --
+				// nor are the achievement's actually DECLARED (they rely on a bunch of client code)
+				// so we have a list of achievements in achievements_tf_list.inc.
+				// Let's validate the achievement is actually valid before continuing...
+				if ( g_ValidAchiementIdxs.find( nAchievementID ) == g_ValidAchiementIdxs.end() )
+					return;
+#endif
+
+				IGameEvent * event = gameeventmanager->CreateEvent( "achievement_earned" );
+				if ( event )
 				{
-					int nAchievementID = pKeyValues->GetInt( "achievementID" );
-
-					IGameEvent * event = gameeventmanager->CreateEvent( "achievement_earned" );
-					if ( event )
-					{
-						event->SetInt( "player", pPlayer->entindex() );
-						event->SetInt( "achievement", nAchievementID );
-						gameeventmanager->FireEvent( event );
-					}
-
-					pPlayer->OnAchievementEarned( nAchievementID );
+					event->SetInt( "player", pPlayer->entindex() );
+					event->SetInt( "achievement", nAchievementID );
+					gameeventmanager->FireEvent( event );
 				}
+
+				pPlayer->OnAchievementEarned( nAchievementID );
 			}
 		}
 	}
