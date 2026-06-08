@@ -163,13 +163,10 @@ void CEnvParticleScript::Activate()
 //-----------------------------------------------------------------------------
 int CEnvParticleScript::UpdateTransmitState()
 {
-	// --> FF
-#ifdef GAME_DLL
-	// always transmit if you're an objective
+#ifdef FF_DLL // --> FF: always transmit if you're an objective
 	if (m_ObjectivePlayerRefs.Count() > 0)
 		return SetTransmitState(FL_EDICT_ALWAYS);
-#endif // GAME_DLL
-	// <-- FF
+#endif // <-- FF
 
 	if ( IsEffectActive( EF_NODRAW ) )
 	{

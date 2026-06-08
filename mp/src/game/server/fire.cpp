@@ -747,13 +747,10 @@ void CFire::Spawn( void )
 
 int CFire::UpdateTransmitState()
 {
-	// --> FF
-#ifdef GAME_DLL
-	// always transmit if you're an objective
+#ifdef FF_DLL // --> FF: always transmit if you're an objective
 	if (m_ObjectivePlayerRefs.Count() > 0)
 		return SetTransmitState(FL_EDICT_ALWAYS);
-#endif // GAME_DLL
-	// <-- FF
+#endif // <-- FF_DLL
 
 	// Don't want to be FL_EDICT_DONTSEND because our fire entity may make us transmit.
 	return SetTransmitState( FL_EDICT_ALWAYS );

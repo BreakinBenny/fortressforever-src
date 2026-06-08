@@ -772,6 +772,7 @@ CSceneEntity::CSceneEntity( void )
 		m_pcvSndMixahead	= cvar->FindVar( "snd_mixahead" );
 
 	m_BusyActor			= SCENE_BUSYACTOR_DEFAULT;
+
 }
 
 //-----------------------------------------------------------------------------
@@ -4291,14 +4292,10 @@ void CSceneEntity::OnSceneFinished( bool canceled, bool fireoutput )
 //-----------------------------------------------------------------------------
 int CSceneEntity::UpdateTransmitState()
 {
-
-	// --> FF
-#ifdef GAME_DLL
-	// always transmit if you're an objective
+#ifdef FF_DLL // --> FF: always transmit if you're an objective
 	if (m_ObjectivePlayerRefs.Count() > 0)
 		return SetTransmitState(FL_EDICT_ALWAYS);
-#endif // GAME_DLL
-	// <-- FF
+#endif // <!-- FF
 
 	if ( !ShouldNetwork() )
 	{

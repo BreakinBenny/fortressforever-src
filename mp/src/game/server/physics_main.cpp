@@ -757,7 +757,8 @@ void CPhysicsPushedEntities::GenerateBlockingEntityListAddBox( const Vector &vec
 //-----------------------------------------------------------------------------
 void CPhysicsPushedEntities::SetupAllInHierarchy( CBaseEntity *pParent )
 {
-	if (!pParent)
+	// Server-only entities do not have a valid partition
+	if ( !pParent || pParent->IsEFlagSet( EFL_SERVER_ONLY ) )
 		return;
 
 	VPROF("CPhysicsPushedEntities::SetupAllInHierarchy");
@@ -951,8 +952,8 @@ void CBaseEntity::PhysicsDispatchThink( BASEPTR thinkFunc )
 	if ( thinkLimit )
 	{
 		// calculate running time of the AI in milliseconds
-		float ftime = ( engine->Time() - startTime ) * 1000.0f;
-		if ( ftime > thinkLimit )
+		float time = ( engine->Time() - startTime ) * 1000.0f;
+		if ( time > thinkLimit )
 		{
 #if defined( _XBOX ) && !defined( _RETAIL )
 			if ( vprof_think_limit.GetBool() )
@@ -965,14 +966,14 @@ void CBaseEntity::PhysicsDispatchThink( BASEPTR thinkFunc )
 			CAI_BaseNPC *pNPC = MyNPCPointer();
 			if (pNPC && pNPC->GetCurSchedule())
 			{
-				pNPC->ReportOverThinkLimit( ftime );
+				pNPC->ReportOverThinkLimit( time );
 			}
 			else
 			{
 #ifdef _WIN32
-				Msg( "%s(%s) thinking for %.02f ms!!!\n", GetClassname(), typeid(this).raw_name(), ftime );
+				Msg( "%s(%s) thinking for %.02f ms!!!\n", GetClassname(), typeid(this).raw_name(), time );
 #elif POSIX
-				Msg( "%s(%s) thinking for %.02f ms!!!\n", GetClassname(), typeid(this).name(), ftime );
+				Msg( "%s(%s) thinking for %.02f ms!!!\n", GetClassname(), typeid(this).name(), time );
 #else
 #error "typeinfo"
 #endif

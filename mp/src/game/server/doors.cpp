@@ -23,8 +23,10 @@
 
 #ifdef TF_DLL
 #include "tf_gamerules.h"
+#include "tf/nav_mesh/tf_nav_mesh.h"
 #endif // TF_DLL
 
+#ifdef FF
 #include "ff_scriptman.h"
 //#include "ff_luaobject_wrapper.h"
 #include "ff_luacontext.h"
@@ -35,7 +37,7 @@
 #undef MINMAX_H
 #include "minmax.h"
 
-
+#endif
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -354,6 +356,8 @@ void CBaseDoor::Spawn()
 		// Never block doors in TF2 - to prevent various exploits.
 		m_bIgnoreNonPlayerEntsOnBlock = true;
 	}
+
+	TheTFNavMesh()->OnDoorCreated( this );
 #else
 	m_bIgnoreNonPlayerEntsOnBlock = false;
 #endif // TF_DLL
@@ -361,8 +365,9 @@ void CBaseDoor::Spawn()
 
 void CBaseDoor::MovingSoundThink( void )
 {
-	//CPASAttenuationFilter filter( this );
-	// 
+#ifndef FF
+	CPASAttenuationFilter filter( this );
+#else
 	// --> Mirv: Bug #0000094: Door sounds aren't heard when they're emitted from inside the "void."
 	trace_t tr;
 
@@ -370,7 +375,7 @@ void CBaseDoor::MovingSoundThink( void )
 
 	CPASAttenuationFilter filter((m_toggle_state == TS_GOING_DOWN || m_toggle_state == TS_AT_TOP) ? tr.endpos : tr.startpos);
 	// <-- Mirv: Bug #0000094: Door sounds aren't heard when they're emitted from inside the "void."
-
+#endif
 	filter.MakeReliable();
 
 	EmitSound_t ep;
@@ -650,7 +655,7 @@ void CBaseDoor::DoorTouch( CBaseEntity *pOther )
 		return;
 	}
 
-	// TODO: Will need to change this so more than players can trigger doors
+#ifdef FF // TODO: Will need to change this so more than players can trigger doors
 	//CFFLuaObjectWrapper hAllowed;
 	CFFLuaSC hAllowed(1, pOther);
 	if (_scriptman.RunPredicates_LUA(this, &hAllowed, "allowed"))
@@ -661,7 +666,7 @@ void CBaseDoor::DoorTouch( CBaseEntity *pOther )
 			return;
 		}
 	}
-
+#endif
 	// If door is not opened by touch, do nothing.
 	if ( !HasSpawnFlags(SF_DOOR_PTOUCH) )
 	{
@@ -694,7 +699,9 @@ void CBaseDoor::DoorTouch( CBaseEntity *pOther )
 
 	if (DoorActivate( ))
 	{
+#ifdef FF
 		_scriptman.RunPredicates_LUA(this, &hAllowed, "ontouch");
+#endif
 		// Temporarily disable the touch function, until movement is finished.
 		SetTouch( NULL );
 	}
@@ -767,7 +774,7 @@ void CBaseDoor::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 		PlayLockSounds( this, &m_ls, TRUE, FALSE );
 		return;
 	}
-
+#ifdef FF
 	//CFFLuaObjectWrapper hAllowed;
 	CFFLuaSC hAllowed(1, pActivator);
 	if (_scriptman.RunPredicates_LUA(this, &hAllowed, "allowed"))
@@ -778,7 +785,7 @@ void CBaseDoor::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 			return;
 		}
 	}
-
+#endif
 
 	bool bAllowUse = false;
 
@@ -809,7 +816,9 @@ void CBaseDoor::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 		}
 		else
 		{
+#ifdef FF
 			_scriptman.RunPredicates_LUA(this, &hAllowed, "onuse");
+#endif
 			DoorActivate();
 		}
 	}
@@ -997,7 +1006,7 @@ void CBaseDoor::DoorGoUp( void )
 	edict_t	*pevActivator;
 
 	UpdateAreaPortals( true );
-
+#ifdef FF
 	// jon: if already open and being told to open, stay open...
 	if (m_toggle_state == TS_AT_TOP)
 	{
@@ -1029,7 +1038,7 @@ void CBaseDoor::DoorGoUp( void )
 		// seriously, do nothing but stay open
 		return;
 	}
-
+#endif
 	// It could be going-down, if blocked.
 	ASSERT(m_toggle_state == TS_AT_BOTTOM || m_toggle_state == TS_GOING_DOWN);
 
@@ -1099,15 +1108,16 @@ void CBaseDoor::DoorHitTop( void )
 {
 	if ( !HasSpawnFlags( SF_DOOR_SILENT ) )
 	{
-		//CPASAttenuationFilter filter( this );
-
+#ifndef FF
+		CPASAttenuationFilter filter( this );
+#else
 		// --> Mirv: Bug #0000094: Door sounds aren't heard when they're emitted from inside the "void."
 		trace_t tr;
 		UTIL_TraceLine(m_vecPosition1, m_vecPosition2, CONTENTS_SOLID | CONTENTS_MOVEABLE, this, COLLISION_GROUP_NONE, &tr);
 
 		CPASAttenuationFilter filter(tr.endpos);
 		// <-- Mirv: Bug #0000094: Door sounds aren't heard when they're emitted from inside the "void."
-
+#endif
 		filter.MakeReliable();
 		StopMovingSound();
 
@@ -1298,6 +1308,7 @@ void CBaseDoor::Blocked( CBaseEntity *pOther )
 		}
 		else
 		{
+#ifdef FF
 			if ( pOther->Classify() == CLASS_PIPEBOMB )
 			{
 				CFFProjectilePipebomb* pEnt = static_cast<CFFProjectilePipebomb*>(pOther);
@@ -1314,18 +1325,18 @@ void CBaseDoor::Blocked( CBaseEntity *pOther )
 
 				return;
 			}
-
+#endif
 			pOther->TakeDamage( CTakeDamageInfo( this, this, m_flBlockDamage, DMG_CRUSH ) );
 		}
 	}
 	// If set, ignore non-player ents that block us.  Mainly of use in multiplayer to prevent exploits.
 	else if ( pOther && !pOther->IsPlayer() && m_bIgnoreNonPlayerEntsOnBlock )
 	{
-		// This doesn't actually prevent door movement being stopped...
+#ifdef FF // This doesn't actually prevent door movement being stopped...
 		// Disable collisions with the blocking entity so we can resume opening/closing
 		// and not spam collision sounds
 		EntityPhysics_CreateSolver(this, pOther, true, 4.0f);
-
+#endif
 		return;
 	}
 
@@ -1333,11 +1344,11 @@ void CBaseDoor::Blocked( CBaseEntity *pOther )
 	if ( m_bForceClosed )
 		return;
 
-	// --> Mirv: #0000356: Packs, grens keeping doors from closing
+#ifdef FF // --> Mirv: #0000356: Packs, grens keeping doors from closing
 	if (pOther->GetCollisionGroup() == COLLISION_GROUP_WEAPON || pOther->GetCollisionGroup() == COLLISION_GROUP_PROJECTILE)
 		return;
 	// <-- Mirv: #0000356: Packs, grens keeping doors from closing
-
+#endif
 	// if a door has a negative wait, it would never come back if blocked,
 	// so let it just squash the object to death real fast
 	if (m_flWait >= 0)
@@ -1481,7 +1492,7 @@ void CRotDoor::Spawn( void )
 	if ( HasSpawnFlags(SF_DOOR_ROTATE_BACKWARDS) )
 		m_vecMoveAng = m_vecMoveAng * -1;
 	
-	//m_flWait			= 2; who the hell did this? (sjb)
+	//m_flWait			= 2; who did this? (sjb)
 	m_vecAngle1	= GetLocalAngles();
 	m_vecAngle2	= GetLocalAngles() + m_vecMoveAng * m_flMoveDistance;
 

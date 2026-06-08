@@ -278,14 +278,16 @@ public:
 		Vector ret(0,0,0);
 		int nfaces=0;
 		for(int f=0;f<6;f++)
+		{
 			if (face_maps[f].RGBAData)
 			{
 				nfaces++;
 				ret+=face_maps[f].AverageColor();
 			}
-			if (nfaces)
-				ret*=(1.0/nfaces);
-			return ret;
+		}
+		if (nfaces)
+			ret*=(1.0/nfaces);
+		return ret;
 	}
 
 	float BrightestColor(void)
@@ -293,12 +295,14 @@ public:
 		float ret=0.0;
 		int nfaces=0;
 		for(int f=0;f<6;f++)
+		{
 			if (face_maps[f].RGBAData)
 			{
 				nfaces++;
 				ret=max(ret,face_maps[f].BrightestColor());
 			}
-			return ret;
+		}
+		return ret;
 	}
 
 

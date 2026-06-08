@@ -29,7 +29,7 @@ public:
 
 	// Tell the client that this camera needs to be rendered
 	void SetActive( bool bActive );
-	int  UpdateTransmitState(void);
+	int  UpdateTransmitState( void );
 
 	void ChangeFOVThink( void );
 
