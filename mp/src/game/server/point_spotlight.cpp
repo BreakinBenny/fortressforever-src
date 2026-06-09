@@ -121,8 +121,6 @@ CPointSpotlight::CPointSpotlight()
 	m_flHDRColorScale = 1.0f;
 	m_nMinDXLevel = 0;
 	m_bIgnoreSolid = false;
-
-	AddEFlags( EFL_FORCE_ALLOW_MOVEPARENT );
 }
 
 

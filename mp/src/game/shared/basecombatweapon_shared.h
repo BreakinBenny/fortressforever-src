@@ -18,9 +18,8 @@
 #include "baseviewmodel_shared.h"
 #include "weapon_proficiency.h"
 #include "utlmap.h"
-#ifdef FF
 #include "mathlib/mathlib.h"
-#endif
+
 #if defined( CLIENT_DLL )
 #define CBaseCombatWeapon C_BaseCombatWeapon
 #endif
@@ -270,6 +269,9 @@ public:
 	virtual void			HandleFireOnEmpty();					// Called when they have the attack button down
 																	// but they are out of ammo. The default implementation
 																	// either reloads, switches weapons, or plays an empty sound.
+	// FF
+	virtual void			GetHeatLevel(int _firemode, float& _current, float& _max) { _current = 0.f; _max = 0.f; }
+
 	virtual bool			CanPerformSecondaryAttack() const;
 
 	virtual bool			ShouldBlockPrimaryFire() { return false; }
@@ -333,12 +335,9 @@ public:
 	inline Activity			GetActivity( void ) const { return m_Activity; }
 
 	virtual void			AddViewKick( void );	// Add in the view kick for the weapon
-#ifdef FF
-	virtual void			GetHeatLevel(int _firemode, float& _current, float& _max) { _current = 0.f; _max = 0.f; }
-	virtual const char		*GetDeathNoticeName( void );	// Get the string to print death notices with
-#else
-	virtual char			*GetDeathNoticeName( void );
-#endif
+
+	virtual const char			*GetDeathNoticeName( void );	// Get the string to print death notices with
+
 	CBaseCombatCharacter	*GetOwner() const;
 	void					SetOwner( CBaseCombatCharacter *owner );
 	virtual void			OnPickedUp( CBaseCombatCharacter *pNewOwner );
@@ -393,10 +392,9 @@ public:
 	virtual int				GetSecondaryAmmoType( void )  const { return m_iSecondaryAmmoType; }
 	virtual int				Clip1() { return m_iClip1; }
 	virtual int				Clip2() { return m_iClip2; }
-#ifdef FF
-	void						Clip1(int count) { m_iClip1 = clamp(count, 0, GetMaxClip1()); }
-	void						Clip2(int count) { m_iClip2 = clamp(count, 0, GetMaxClip1()); }
-#endif
+	void					Clip1(int count) { m_iClip1 = clamp(count, 0, GetMaxClip1()); }
+	void					Clip2(int count) { m_iClip2 = clamp(count, 0, GetMaxClip1()); }
+
 	// Ammo quantity queries for weapons that do not use clips. These are only
 	// used to determine how much ammo is in a weapon that does not have an owner.
 	// That is, a weapon that's on the ground for the player to get ammo out of.
@@ -448,10 +446,10 @@ public:
 	void					DestroyItem( void );
 	virtual void			Kill( void );
 
-#ifdef FF
+	// FF
 	// Just die & get deleted already you stupid weapon
 	virtual void			ForceRemove(void);
-#endif
+
 	virtual int				CapabilitiesGet( void ) { return 0; }
 	virtual	int				ObjectCaps( void );
 
@@ -588,11 +586,7 @@ public:
 	CNetworkVar( float, m_flNextSecondaryAttack );					// soonest time ItemPostFrame will call SecondaryAttack
 	CNetworkVar( float, m_flTimeWeaponIdle );							// soonest time ItemPostFrame will call WeaponIdle
 	// Weapon state
-#ifndef FF
-	bool					m_bInReload;
-#else
 	CNetworkVar( bool,		m_bInReload);			// Are we in the middle of a reload;
-#endif
 	bool					m_bFireOnEmpty;			// True when the gun is empty and the player is still holding down the attack key(s)
 	bool					m_bFiringWholeClip;		// Are we in the middle of firing the whole clip;
 	// Weapon art

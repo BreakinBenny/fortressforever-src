@@ -2063,7 +2063,7 @@ void EntityMatrix::InitFromEntity( CBaseEntity *pEntity, int iAttachment )
 
 void EntityMatrix::InitFromEntityLocal( CBaseEntity *entity )
 {
-	if ( !entity || ( !entity->edict() && !entity->IsEFlagSet( EFL_FORCE_ALLOW_MOVEPARENT ) ) )
+	if ( !entity || !entity->edict() )
 	{
 		Identity();
 		return;
