@@ -28,7 +28,7 @@ void CAI_BaseNPC::AddActivityToSR(const char *actName, int actID)
 	if ( !m_pActivitySR )
 		return;
 
-	// technically order isn't dependent, but it's too easy to forget to add new ACT_'s to all three lists.
+	// technically order isn't dependent, but it's too damn easy to forget to add new ACT_'s to all three lists.
 
 	// NOTE: This assertion generally means that the activity enums are out of order or that new enums were not added to all
 	//		 relevant tables.  Make sure that you have included all new enums in:
@@ -338,7 +338,7 @@ void CAI_BaseNPC::InitDefaultActivitySR(void)
 	ADD_ACTIVITY_TO_SR( ACT_FISTS_VM_IDLE );
 	ADD_ACTIVITY_TO_SR( ACT_FISTS_VM_DRAW );
 
-#ifdef FF // --> Mirv: Anims
+	// --> Mirv: Anims
 //===========================
 // FortressForever Specific Activities
 //===========================
@@ -410,7 +410,7 @@ void CAI_BaseNPC::InitDefaultActivitySR(void)
 	ADD_ACTIVITY_TO_SR(ACT_VM_FINISHRELOAD_WITH5);
 	ADD_ACTIVITY_TO_SR(ACT_VM_FINISHRELOAD_WITH6);
 
-#endif // <-- Mirv: Anims
+	// <-- Mirv: Anims
 
 //===========================
 // HL2 Specific Activities
@@ -1456,6 +1456,14 @@ void CAI_BaseNPC::InitDefaultActivitySR(void)
 
 	// Portal!
 	ADD_ACTIVITY_TO_SR( ACT_VM_FIZZLE );
+	// Portal.. these were missing
+	ADD_ACTIVITY_TO_SR(ACT_MP_STAND_IDLE_PORTALGUN);
+	ADD_ACTIVITY_TO_SR(ACT_MP_RUN_IDLE_PORTALGUN);
+	ADD_ACTIVITY_TO_SR(ACT_MP_CROUCH_IDLE_PORTALGUN);
+	ADD_ACTIVITY_TO_SR(ACT_MP_WALK_CROUCH_PORTALGUN);
+	ADD_ACTIVITY_TO_SR(ACT_MP_GESTURE_RANGE_ATTACK_PORTALGUN);
+	ADD_ACTIVITY_TO_SR(ACT_MP_GESTURE_RELOAD_PORTALGUN);
+	ADD_ACTIVITY_TO_SR(ACT_MP_JUMP_PORTALGUN);
 
 	// Multiplayer
 	ADD_ACTIVITY_TO_SR( ACT_MP_STAND_IDLE );
@@ -1970,6 +1978,7 @@ void CAI_BaseNPC::InitDefaultActivitySR(void)
 	ADD_ACTIVITY_TO_SR( ACT_MP_PASSTIME_THROW_BEGIN );
 	ADD_ACTIVITY_TO_SR( ACT_MP_PASSTIME_THROW_MIDDLE );
 	ADD_ACTIVITY_TO_SR( ACT_MP_PASSTIME_THROW_END );
+	ADD_ACTIVITY_TO_SR( ACT_MP_PASSTIME_THROW_CANCEL );
 
 	ADD_ACTIVITY_TO_SR( ACT_VM_UNUSABLE );
 	ADD_ACTIVITY_TO_SR( ACT_VM_UNUSABLE_TO_USABLE );

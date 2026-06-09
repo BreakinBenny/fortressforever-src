@@ -120,7 +120,6 @@
 #include "tf_hud_disconnect_prompt.h"
 #include "../engine/audio/public/sound.h"
 #include "tf_shared_content_manager.h"
-#include "tf_gamerules.h"
 #endif
 #include "renamed_recvtable_compat.h"
 #include "mouthinfo.h"

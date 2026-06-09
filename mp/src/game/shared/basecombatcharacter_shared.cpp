@@ -81,12 +81,12 @@ bool CBaseCombatCharacter::Weapon_CanSwitchTo( CBaseCombatWeapon *pWeapon )
 		if (pVehicle && !pPlayer->UsingStandardWeaponsInVehicle())
 			return false;
 	}
-#ifndef FF // --> Mirv: Use CanBeSelected instead, which takes into account ITEM_FLAG_SELECTONEMPTY
-	if ( !pWeapon->HasAnyAmmo() && !GetAmmoCount( pWeapon->m_iPrimaryAmmoType ) )
-		return false;
-#else
-	if ( !pWeapon->CanBeSelected() )
-#endif
+
+	// --> Mirv: Use CanBeSelected instead, which takes into account ITEM_FLAG_SELECTONEMPTY
+	//if ( !pWeapon->HasAnyAmmo() && !GetAmmoCount( pWeapon->m_iPrimaryAmmoType ) ) 
+	//	return false;
+	if (!pWeapon->CanBeSelected())
+
 	if ( !pWeapon->CanDeploy() )
 		return false;
 	

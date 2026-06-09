@@ -52,10 +52,14 @@ CBaseParticleEntity::~CBaseParticleEntity( void )
 #if !defined( CLIENT_DLL )
 int CBaseParticleEntity::UpdateTransmitState( void )
 {
-#ifdef FF // --> FF: always transmit if you're an objective
+	// --> FF
+#ifdef GAME_DLL
+	// always transmit if you're an objective
 	if (m_ObjectivePlayerRefs.Count() > 0)
 		return SetTransmitState(FL_EDICT_ALWAYS);
-#endif // <-- FF
+#endif // GAME_DLL
+	// <-- FF
+
 	if ( IsEffectActive( EF_NODRAW ) )
 		return SetTransmitState( FL_EDICT_DONTSEND );
 

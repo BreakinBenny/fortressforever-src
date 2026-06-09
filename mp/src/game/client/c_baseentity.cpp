@@ -1253,6 +1253,7 @@ void C_BaseEntity::Release()
 
 	UpdateOnRemove();
 
+	PrintDeleteInfo();
 	delete this;
 }
 
@@ -1765,9 +1766,9 @@ void C_BaseEntity::SetNetworkAngles( const QAngle& ang )
 // Purpose: 
 // Input  : index - 
 //-----------------------------------------------------------------------------
-void C_BaseEntity::SetModelIndex( int index_ )
+void C_BaseEntity::SetModelIndex( int index )
 {
-	m_nModelIndex = index_;
+	m_nModelIndex = index;
 	const model_t *pModel = modelinfo->GetModel( m_nModelIndex );
 	SetModelPointer( pModel );
 }
@@ -3205,11 +3206,10 @@ void C_BaseEntity::Simulate()
 void C_BaseEntity::InterpolateServerEntities()
 {
 	VPROF_BUDGET( "C_BaseEntity::InterpolateServerEntities", VPROF_BUDGETGROUP_INTERPOLATION );
-#ifndef FF
-	s_bInterpolate = cl_interpolate.GetBool();
-#else
+
+	// fuck off!!!!
+	// s_bInterpolate = cl_interpolate.GetBool();
 	s_bInterpolate = true;
-#endif
 
 	// Don't interpolate during timedemo playback
 	if ( engine->IsPlayingTimeDemo() || engine->IsPaused() )
@@ -4933,9 +4933,9 @@ C_BaseEntity *C_BaseEntity::CreatePredictedEntityByName( const char *classname, 
 				return ent;
 			}
 		}
-#ifndef FF // Mirv: For predicted rockets...
-		return NULL;
-#endif
+
+		// Mirv: For predicted rockets...
+		//return NULL;
 	}
 
 	// Try to create it
@@ -5623,22 +5623,16 @@ void C_BaseEntity::DrawBBoxVisualizations( void )
 {
 	if ( m_fBBoxVisFlags & VISUALIZE_COLLISION_BOUNDS )
 	{
-		if ( debugoverlay )
-		{
-			debugoverlay->AddBoxOverlay( CollisionProp()->GetCollisionOrigin(), CollisionProp()->OBBMins(),
-				CollisionProp()->OBBMaxs(), CollisionProp()->GetCollisionAngles(), 190, 190, 0, 0, 0.01 );
-		}
+		debugoverlay->AddBoxOverlay( CollisionProp()->GetCollisionOrigin(), CollisionProp()->OBBMins(),
+			CollisionProp()->OBBMaxs(), CollisionProp()->GetCollisionAngles(), 190, 190, 0, 0, 0.01 );
 	}
 
 	if ( m_fBBoxVisFlags & VISUALIZE_SURROUNDING_BOUNDS )
 	{
 		Vector vecSurroundMins, vecSurroundMaxs;
 		CollisionProp()->WorldSpaceSurroundingBounds( &vecSurroundMins, &vecSurroundMaxs );
-		if ( debugoverlay )
-		{
-			debugoverlay->AddBoxOverlay( vec3_origin, vecSurroundMins,
-				vecSurroundMaxs, vec3_angle, 0, 255, 255, 0, 0.01 );
-		}
+		debugoverlay->AddBoxOverlay( vec3_origin, vecSurroundMins,
+			vecSurroundMaxs, vec3_angle, 0, 255, 255, 0, 0.01 );
 	}
 
 	if ( m_fBBoxVisFlags & VISUALIZE_RENDER_BOUNDS || r_drawrenderboxes.GetInt() )
@@ -6370,12 +6364,15 @@ bool C_BaseEntity::ValidateEntityAttachedToPlayer( bool &bShouldRetry )
 	{
 		if ( FStrEq( pszModel, "models/flag/briefcase.mdl" ) )
 			return true;
-				
+
+		if ( FStrEq( pszModel, "models/passtime/ball/passtime_ball.mdl" ) )
+			return true;
+
 		if ( FStrEq( pszModel, "models/props_doomsday/australium_container.mdl" ) )
 			return true;
 
 		// Temp for MVM testing
-		if ( FStrEq( pszModel, "models/buildables/sapper_placement.mdl" ) )
+		if ( FStrEq( pszModel, "models/buildables/sapper_placement_sentry1.mdl" ) )
 			return true;
 
 		if ( FStrEq( pszModel, "models/props_td/atom_bomb.mdl" ) )

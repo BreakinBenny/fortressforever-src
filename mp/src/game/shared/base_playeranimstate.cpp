@@ -480,7 +480,7 @@ int CBasePlayerAnimState::CalcSequenceIndex( const char *pBaseName, ... )
 		if ( dict.Find( szFullName ) == -1 )
 		{
 			dict.Insert( szFullName, 0 );
-			Warning( "CalcSequenceIndex: can't find '%s'.\n", szFullName );
+			DevWarning( "CalcSequenceIndex: can't find '%s'.\n", szFullName );
 		}
 
 		iSequence = 0;
@@ -1072,23 +1072,21 @@ void CBasePlayerAnimState::DebugShowAnimState( int iStartLine )
 			m_angRender[YAW], g_flLastBodyYaw, g_flLastBodyPitch, m_vLastMovePose.x, m_vLastMovePose.y );
 	}
 
-	if ( debugoverlay)
-	{
-		// Draw a red triangle on the ground for the eye yaw.
-		float flBaseSize = 10;
-		float flHeight = 80;
-		Vector vBasePos = GetOuter()->GetAbsOrigin() + Vector( 0, 0, 3 );
-		QAngle angles( 0, 0, 0 );
-		angles[YAW] = m_flEyeYaw;
-		Vector vForward, vRight, vUp;
-		AngleVectors( angles, &vForward, &vRight, &vUp );
-		debugoverlay->AddTriangleOverlay( vBasePos+vRight*flBaseSize/2, vBasePos-vRight*flBaseSize/2, vBasePos+vForward*flHeight, 255, 0, 0, 255, false, 0.01 );
+	// Draw a red triangle on the ground for the eye yaw.
+	float flBaseSize = 10;
+	float flHeight = 80;
+	Vector vBasePos = GetOuter()->GetAbsOrigin() + Vector( 0, 0, 3 );
+	QAngle angles( 0, 0, 0 );
+	angles[YAW] = m_flEyeYaw;
+	Vector vForward, vRight, vUp;
+	AngleVectors( angles, &vForward, &vRight, &vUp );
+	debugoverlay->AddTriangleOverlay( vBasePos+vRight*flBaseSize/2, vBasePos-vRight*flBaseSize/2, vBasePos+vForward*flHeight, 255, 0, 0, 255, false, 0.01 );
 
-		// Draw a blue triangle on the ground for the body yaw.
-		angles[YAW] = m_angRender[YAW];
-		AngleVectors( angles, &vForward, &vRight, &vUp );
-		debugoverlay->AddTriangleOverlay( vBasePos+vRight*flBaseSize/2, vBasePos-vRight*flBaseSize/2, vBasePos+vForward*flHeight, 0, 0, 255, 255, false, 0.01 );
-	}
+	// Draw a blue triangle on the ground for the body yaw.
+	angles[YAW] = m_angRender[YAW];
+	AngleVectors( angles, &vForward, &vRight, &vUp );
+	debugoverlay->AddTriangleOverlay( vBasePos+vRight*flBaseSize/2, vBasePos-vRight*flBaseSize/2, vBasePos+vForward*flHeight, 0, 0, 255, 255, false, 0.01 );
+
 }
 
 // -----------------------------------------------------------------------------

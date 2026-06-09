@@ -234,11 +234,13 @@ public:
 	DECLARE_CLIENTCLASS();
 	DECLARE_PREDICTABLE();
 
+	void PrintDeleteInfo();
+
 									C_BaseEntity();
 	virtual							~C_BaseEntity();
-#ifdef FF
+
 	virtual Class_T					Classify(void) { return CLASS_NONE; }
-#endif
+
 	static C_BaseEntity				*CreatePredictedEntityByName( const char *classname, const char *module, int line, bool persist = false );
 	
 	// FireBullets uses shared code for prediction.
@@ -376,10 +378,10 @@ public:
 	C_BaseEntity					*GetEffectEntity( void ) const;
 	void							SetEffectEntity( C_BaseEntity *pEffectEnt );
 
-#ifdef FF // specifies if this entity can collide with its owner entity
+	// specifies if this entity can collide with its owner entity
 	virtual bool					CanClipOwnerEntity() const { return false; }
 	virtual bool					CanClipPlayer() const { return true; }
-#endif
+
 	// This function returns a value that scales all damage done by this entity.
 	// Use CDamageModifier to hook in damage modifiers on a guy.
 	virtual float					GetAttackDamageScale( void );
@@ -1093,9 +1095,8 @@ public:
 
 	// Sets physics parameters
 	void				SetFriction( float flFriction );
-#ifdef FF
 	float				GetFriction(void) const;
-#endif
+
 	void				SetGravity( float flGravity );
 	float				GetGravity( void ) const;
 
@@ -1215,7 +1216,7 @@ public:
 #ifdef _DEBUG
 	void FunctionCheck( void *pFunction, const char *name );
 
-	ENTITYFUNCPTR TouchSet( ENTITYFUNCPTR func, const char *name ) 
+	ENTITYFUNCPTR TouchSet( ENTITYFUNCPTR func, const char *name )
 	{ 
 		//COMPILE_TIME_ASSERT( sizeof(func) == 4 );
 		m_pfnTouch = func; 
@@ -1397,11 +1398,9 @@ public:
 #ifdef TF_CLIENT_DLL
 	int								m_nModelIndexOverrides[MAX_VISION_MODES];
 #endif
-#ifndef FF
-	char							m_takedamage;
-#else
+
+	//char							m_takedamage;
 	unsigned char					m_takedamage;
-#endif
 	char							m_lifeState;
 
 	int								m_iHealth;
@@ -1410,6 +1409,7 @@ public:
 	int								m_iArmor;
 	int								m_iMaxArmor;
 #endif	// END: Added by Mulchman
+
 	// was pev->speed
 	float							m_flSpeed;
 
@@ -2052,12 +2052,12 @@ inline void C_BaseEntity::SetFriction( float flFriction )
 { 
 	m_flFriction = flFriction; 
 }
-#ifdef FF
+
 inline float C_BaseEntity::GetFriction() const
 {
 	return m_flFriction;
 }
-#endif
+
 inline void C_BaseEntity::SetGravity( float flGravity ) 
 { 
 	m_flGravity = flGravity; 
