@@ -352,8 +352,6 @@ void CFFWeaponBase::Drop( const Vector& vecVelocity )
 
 	//If it was dropped then there's no need to respawn it.
 	AddSpawnFlags( SF_NORESPAWN );
-	if ( !hl2_episodic.GetBool() )
-		AddSpawnFlags( SF_WEAPON_NO_PLAYER_PICKUP );
 
 	StopAnimation();
 	StopFollowingEntity( );
@@ -364,8 +362,14 @@ void CFFWeaponBase::Drop( const Vector& vecVelocity )
 	RemoveEffects( EF_NODRAW );
 	FallInit();
 	SetGroundEntity( NULL );
+	AddEFlags( EFL_NO_WEAPON_PICKUP );
 	SetThink( &CFFWeaponBase::DropThink );
 	SetTouch( NULL );
+
+	if( hl2_episodic.GetBool() )
+	{
+		RemoveSpawnFlags( SF_WEAPON_NO_PLAYER_PICKUP );
+	}
 
 	IPhysicsObject *pObj = VPhysicsGetObject();
 	if ( pObj != NULL )

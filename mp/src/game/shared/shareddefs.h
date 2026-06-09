@@ -120,13 +120,13 @@ public:
 #define MAX_ITEMS				5	// hard coded item types
 
 #define WEAPON_NOCLIP			-1	// clip sizes set to this tell the weapon it doesn't use a clip
-#ifndef FF
-#define	MAX_AMMO_TYPES	32		// ???
-#define MAX_AMMO_SLOTS  32		// not really slots
-#else
+
+//#define	MAX_AMMO_TYPES	32		// ???
+//#define MAX_AMMO_SLOTS  32		// not really slots
+
 #define	MAX_AMMO_TYPES	8		// ???
 #define MAX_AMMO_SLOTS  8		// not really slots
-#endif
+
 #define HUD_PRINTNOTIFY		1
 #define HUD_PRINTCONSOLE	2
 #define HUD_PRINTTALK		3
@@ -163,7 +163,11 @@ typedef enum
 
 enum
 {
+#ifdef STAGING_ONLY
+	SERVER_MODIFICATION_ITEM_DURATION_IN_MINUTES = 2
+#else
 	SERVER_MODIFICATION_ITEM_DURATION_IN_MINUTES = 120
+#endif
 };
 
 #define MAX_VOTE_DETAILS_LENGTH 64
@@ -203,21 +207,12 @@ enum CastVote
 #define HIDEHUD_INVEHICLE			( 1<<10 )
 #define HIDEHUD_BONUS_PROGRESS		( 1<<11 )	// Hide bonus progress display (for bonus map challenges)
 
-#if defined( TF_DLL ) || defined ( TF_CLIENT_DLL )
-#define HIDEHUD_BUILDING_STATUS		        ( 1<<12 )	// Hide Engineer building status
-#define HIDEHUD_CLOAK_AND_FEIGN             ( 1<<13 )	// Hide item effect meter (cloak, etc)
-#define HIDEHUD_PIPES_AND_CHARGE            ( 1<<14 )	// Hide demo hud
-#define HIDEHUD_METAL                       ( 1<<15 )	// Metal/account hud
-#define HIDEHUD_TARGET_ID                   ( 1<<16 )	// Target ID
-#define HIDEHUD_MATCH_STATUS				( 1<<17 )	// Hide match status
-#define HIDEHUD_BITCOUNT			18
-#elif defined ( FF )
+// --> FF
 #define HIDEHUD_SPECTATING			( 1<<12 )	// Hide while spectating
 #define HIDEHUD_UNASSIGNED			( 1<<13 )	// Hide while the local player has not chosen a class or team
+// <-- FF
+
 #define HIDEHUD_BITCOUNT			14
-#else
-#define HIDEHUD_BITCOUNT			12
-#endif
 
 //===================================================================================================================
 // suit usage bits
@@ -243,6 +238,7 @@ enum CastVote
 	#define MAX_PLAYERS				65  // Absolute max players supported
 #else
 	#define MAX_PLAYERS				33  // Absolute max players supported
+										// FF sets this to 22, ... why?
 #endif
 
 #define MAX_PLACE_NAME_LENGTH		18
@@ -255,18 +251,32 @@ enum CastVote
 #define	TEAM_INVALID			-1
 #define TEAM_UNASSIGNED			0	// not assigned to a team
 #define TEAM_SPECTATOR			1	// spectator team
+
 // Start your team numbers after this
 #define LAST_SHARED_TEAM		TEAM_SPECTATOR
 
+// BEG: Added by Mulchman
+#define TEAM_BLUE				2   // blue team
+#define TEAM_RED				3   // red team
+#define TEAM_YELLOW				4   // yellow team
+#define TEAM_GREEN				5   // green team
+#define TEAM_COUNT				6   // # of teams there are
+// END: Added by Mulchman 
+
 // The first team that's game specific (i.e. not unassigned / spectator)
+// TEAM_BLUE
 #define FIRST_GAME_TEAM			(LAST_SHARED_TEAM+1)
 
 #define MAX_TEAMS				32	// Max number of teams in a game
 #define MAX_TEAM_NAME_LENGTH	32	// Max length of a team's name
 
+// Weapon m_iState
+#define WEAPON_IS_ONTARGET				0x40
 
+#define WEAPON_NOT_CARRIED				0	// Weapon is on the ground
+#define WEAPON_IS_CARRIED_BY_PLAYER		1	// This client is carrying this weapon.
+#define WEAPON_IS_ACTIVE				2	// This client is carrying this weapon and it's the currently held weapon
 
-#ifdef FF
 // --> Mirv: Class defines
 #define CLASS_SCOUT			1
 #define CLASS_SNIPER		2
@@ -279,22 +289,6 @@ enum CastVote
 #define CLASS_ENGINEER		9
 #define CLASS_CIVILIAN		10
 // <-- Mirv: Class defines
-
-// BEG: Teams by Mulchman
-#define TEAM_BLUE				2   // blue team
-#define TEAM_RED				3   // red team
-#define TEAM_YELLOW				4   // yellow team
-#define TEAM_GREEN				5   // green team
-#define TEAM_COUNT				6   // # of teams there are
-// END: Teams by Mulchman 
-#endif
-
-// Weapon m_iState
-#define WEAPON_IS_ONTARGET				0x40
-
-#define WEAPON_NOT_CARRIED				0	// Weapon is on the ground
-#define WEAPON_IS_CARRIED_BY_PLAYER		1	// This client is carrying this weapon.
-#define WEAPON_IS_ACTIVE				2	// This client is carrying this weapon and it's the currently held weapon
 
 // -----------------------------------------
 // Skill Level
@@ -415,19 +409,20 @@ enum PLAYER_ANIM
 #define PLAYER_LAND_ON_FLOATING_OBJECT	173 // Can fall another 173 in/sec without getting hurt
 #define PLAYER_MIN_BOUNCE_SPEED		173
 #define PLAYER_FALL_PUNCH_THRESHOLD 303.0f // won't punch player's screen/make scrape noise unless player falling at least this fast - at least a 76" fall (sqrt( 2 * g * 76))
-#elif !defined( FF_DLL )
-#define PLAYER_FATAL_FALL_SPEED		1024 // approx 60 feet
-#define PLAYER_MAX_SAFE_FALL_SPEED	580 // approx 20 feet
-#define PLAYER_LAND_ON_FLOATING_OBJECT	200 // Can go another 200 units without getting hurt
-#define PLAYER_MIN_BOUNCE_SPEED		200
-#define PLAYER_FALL_PUNCH_THRESHOLD (float)350 // won't punch player's screen/make scrape noise unless player falling at least this fast.
-#else // --> Mirv: Changed fall speed limits
+#else
+//#define PLAYER_FATAL_FALL_SPEED		1024 // approx 60 feet
+//#define PLAYER_MAX_SAFE_FALL_SPEED	580 // approx 20 feet
+//#define PLAYER_LAND_ON_FLOATING_OBJECT	200 // Can go another 200 units without getting hurt
+//#define PLAYER_MIN_BOUNCE_SPEED		200
+//#define PLAYER_FALL_PUNCH_THRESHOLD (float)350 // won't punch player's screen/make scrape noise unless player falling at least this fast.
+
+// --> Mirv: Changed fall speed limits
 #define PLAYER_FATAL_FALL_SPEED				1024	// This is a kind of arbitary figure
 #define PLAYER_MAX_SAFE_FALL_SPEED			640		// Just a bit more than the 2fort balc drop
 #define PLAYER_LAND_ON_FLOATING_OBJECT		200		// Can go another 200 units without getting hurt
 #define PLAYER_MIN_BOUNCE_SPEED				200
 #define PLAYER_FALL_PUNCH_THRESHOLD			(float)490 // Won't punch player's screen/make scrape noise unless player falling at least this fast.
-#endif // <-- Mirv: Changed fall speed limits
+// <-- Mirv: Changed fall speed limits
 
 #endif
 #define DAMAGE_FOR_FALL_SPEED		100.0f / ( PLAYER_FATAL_FALL_SPEED - PLAYER_MAX_SAFE_FALL_SPEED ) // damage per unit per second.
@@ -465,6 +460,8 @@ enum PLAYER_ANIM
 #define DMG_ALWAYSGIB		(1 << 13)	// with this bit OR'd in, any damage type can be made to gib victims upon death.
 #define DMG_DROWN			(1 << 14)	// Drowning
 
+// time-based damage
+#define DMG_TIMEBASED		(DMG_PARALYZE | DMG_NERVEGAS | DMG_POISON | DMG_RADIATION | DMG_DROWNRECOVER | DMG_ACID | DMG_SLOWBURN)	// mask for time-based damage
 
 #define DMG_PARALYZE		(1 << 15)	// slows affected creature down
 #define DMG_NERVEGAS		(1 << 16)	// nerve toxins, very bad
@@ -492,10 +489,6 @@ enum PLAYER_ANIM
 // TODO: keep this up to date so all the mod-specific flags don't overlap anything.
 #define DMG_LASTGENERICFLAG	DMG_BUCKSHOT
 
-#ifdef FF
-// time-based damage
-#define DMG_TIMEBASED		(DMG_PARALYZE | DMG_NERVEGAS | DMG_POISON | DMG_RADIATION | DMG_DROWNRECOVER | DMG_ACID | DMG_SLOWBURN)	// mask for time-based damage
-
 // these are the damage types that are allowed to gib corpses
 #define DMG_GIB_CORPSE		( DMG_CRUSH | DMG_FALL | DMG_BLAST | DMG_SONIC | DMG_CLUB )
 
@@ -504,7 +497,6 @@ enum PLAYER_ANIM
 
 // these are the damage types that don't have to supply a physics force & position
 #define DMG_NO_PHYSICS_FORCE	(DMG_FALL | DMG_BURN | DMG_PLASMA | DMG_DROWN | DMG_TIMEBASED | DMG_CRUSH | DMG_PHYSGUN | DMG_PREVENT_PHYSICS_FORCE)
-#endif
 
 // settings for m_takedamage
 #define	DAMAGE_NO				0
@@ -520,8 +512,8 @@ enum {
 	OBS_MODE_FIXED,		// view from a fixed camera position
 	OBS_MODE_IN_EYE,	// follow a player in first person view
 	OBS_MODE_CHASE,		// follow a player in third person view
-	OBS_MODE_POI,		// PASSTIME point of interest - game objective, big fight, anything interesting; added in the middle of the enum due to tons of hard-coded "<ROAMING" enum compares
 	OBS_MODE_ROAMING,	// free roaming
+	OBS_MODE_POI,		// PASSTIME point of interest - game objective, big fight, anything interesting; added in the middle of the enum due to tons of hard-coded "<ROAMING" enum compares
 
 	NUM_OBSERVER_MODES,
 };
@@ -667,7 +659,8 @@ enum
 	EFL_DIRTY_ABSANGVELOCITY =	(1<<13),
 	EFL_DIRTY_SURROUNDING_COLLISION_BOUNDS	= (1<<14),
 	EFL_DIRTY_SPATIAL_PARTITION = (1<<15),
-	EFL_FORCE_ALLOW_MOVEPARENT	= (1<<16),
+	//	UNUSED	(NOW TAKEN)		= (1<<16),
+	EFL_NO_WEAPON_PICKUP =		(1 << 16),		// Characters can't pick up weapons
 
 	EFL_IN_SKYBOX =				(1<<17),	// This is set if the entity detects that it's in the skybox.
 											// This forces it to pass the "in PVS" for transmission.
@@ -1013,3 +1006,5 @@ enum
 	MAX_VISION_MODES
 };
 #endif // TF_DLL || TF_CLIENT_DLL
+
+#endif // SHAREDDEFS_H
