@@ -184,7 +184,7 @@ void CPlayerMove::SetupMove( CBasePlayer *player, CUserCmd *ucmd, IMoveHelper *p
 	// has time to catch up. This will stop a lot of warping that occurs when the
 	// max speed changes.
 	// m_flMaxspeedChangeTime is set to curtime + the client's latency
-	move->m_flClientMaxSpeed		= player->m_flMaxspeed;
+	move->m_flClientMaxSpeed = player->m_flMaxspeed;
 
 	CFFPlayer* pPlayer = ToFFPlayer(player);
 
@@ -355,8 +355,8 @@ void CPlayerMove::RunCommand ( CBasePlayer *player, CUserCmd *ucmd, IMoveHelper 
 	StartCommand( player, ucmd );
 
 	// Set globals appropriately
-	gpGlobals->curtime = playerCurTime;
-	gpGlobals->frametime = playerFrameTime;
+	gpGlobals->curtime		=  playerCurTime;
+	gpGlobals->frametime	=  playerFrameTime;
 
 	// Prevent hacked clients from sending us invalid view angles to try to get leaf server code to crash
 	if ( !ucmd->viewangles.IsValid() || !IsEntityQAngleReasonable(ucmd->viewangles) )

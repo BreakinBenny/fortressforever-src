@@ -274,10 +274,13 @@ bool CBoneFollower::Init( CBaseEntity *pOwner, const char *pModelName, solid_t &
 
 int CBoneFollower::UpdateTransmitState()
 {
-#ifdef FF_DLL // --> FF: always transmit if you're an objective
+	// --> FF
+#ifdef GAME_DLL
+	// always transmit if you're an objective
 	if (m_ObjectivePlayerRefs.Count() > 0)
 		return SetTransmitState(FL_EDICT_ALWAYS);
-#endif // <-- FF_DLL
+#endif // GAME_DLL
+	// <-- FF
 
 	// Send to the client for client-side collisions and visualization
 	return SetTransmitState( FL_EDICT_PVSCHECK );

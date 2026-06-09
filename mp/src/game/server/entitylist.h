@@ -158,12 +158,12 @@ public:
 
 	CBaseEntity *FindEntityProcedural( const char *szName, CBaseEntity *pSearchingEntity = NULL, CBaseEntity *pActivator = NULL, CBaseEntity *pCaller = NULL );
 
-#ifdef FF
+	// FF
 	CBaseEntity* FindEntityByOwner(CBaseEntity* pStartEntity, const CBaseEntity* pOwner);	// |-- Mirv: Useful method
 	CBaseEntity* FindEntityByClassT(CBaseEntity* pStartEntity, int szClassT);	// |-- Mulch
 	CBaseEntity* FindEntityByOwnerAndClassname(CBaseEntity* pStartEntity, const CBaseEntity* pOwner, const char* szClassname); // |- Mulch
 	CBaseEntity* FindEntityByOwnerAndClassT(CBaseEntity* pStartEntity, const CBaseEntity* pOwner, int szClassT); // |- Mulch
-#endif
+	
 	CGlobalEntityList();
 
 // CBaseEntityList overrides.

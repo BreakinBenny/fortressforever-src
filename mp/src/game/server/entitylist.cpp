@@ -1188,7 +1188,6 @@ CBaseEntity *CGlobalEntityList::FindEntityNearestFacing( const Vector &origin, c
 	return best_ent;
 }
 
-
 void CGlobalEntityList::OnAddEntity( IHandleEntity *pEnt, CBaseHandle handle )
 {
 	int i = handle.GetEntryIndex();

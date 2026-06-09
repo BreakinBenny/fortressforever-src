@@ -376,7 +376,7 @@ void MapEntity_ParseAllEntities(const char *pMapData, IMapEntityFilter *pFilter,
 			continue;
 		}
 
-		// To
+		// To 
 		if ( dynamic_cast<CWorld*>( pEntity ) )
 		{
 			VPROF( "MapEntity_ParseAllEntities_SpawnWorld");
@@ -386,7 +386,7 @@ void MapEntity_ParseAllEntities(const char *pMapData, IMapEntityFilter *pFilter,
 			DispatchSpawn(pEntity);
 			continue;
 		}
-
+				
 		CNodeEnt *pNode = dynamic_cast<CNodeEnt*>(pEntity);
 		if ( pNode )
 		{

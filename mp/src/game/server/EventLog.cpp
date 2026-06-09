@@ -121,12 +121,12 @@ bool CEventLog::PrintPlayerEvent( IGameEvent *event )
 	}
 	else if ( !Q_strncmp( eventName, "player_death", Q_strlen("player_death") ) )
 	{
-		const int attackerid = event->GetInt("attacker" );
+		const int attackerid = event->GetInt("attacker");
 
 		const int assisterid = event->GetInt("killassister");
 
 //#ifdef HL2MP
-		const char *weapon = event->GetString( "weapon" );
+		const char* weapon = event->GetString("weapon");
 		int damagetype = event->GetInt("damagetype");
 //#endif
 		

@@ -712,10 +712,13 @@ void CBasePlayer::SetupVisibility( CBaseEntity *pViewEntity, unsigned char *pvs,
 
 int	CBasePlayer::UpdateTransmitState()
 {
-#ifdef FF_DLL // --> FF: always transmit if you're an objective
+	// --> FF
+#ifdef GAME_DLL
+	// always transmit if you're an objective
 	if (m_ObjectivePlayerRefs.Count() > 0)
 		return SetTransmitState(FL_EDICT_ALWAYS);
-#endif // <-- FF_DLL
+#endif // GAME_DLL
+	// <-- FF
 
 	// always call ShouldTransmit() for players
 	return SetTransmitState( FL_EDICT_FULLCHECK );
@@ -764,11 +767,11 @@ int CBasePlayer::ShouldTransmit( const CCheckTransmitInfo *pInfo )
 
 bool CBasePlayer::WantsLagCompensationOnEntity( const CBasePlayer *pPlayer, const CUserCmd *pCmd, const CBitVec<MAX_EDICTS> *pEntityTransmitBits ) const
 {
-#ifndef FF // Jiggles: We need to predict team members for our Medpack and Wrench
+	/*  Jiggles: We need to predict team members for our Medpack and Wrench
 	// Team members shouldn't be adjusted unless friendly fire is on.
 	if ( !friendlyfire.GetInt() && pPlayer->GetTeamNumber() == GetTeamNumber() )
-		return false;
-#endif
+		return false;*/
+
 	// If this entity hasn't been transmitted to us and acked, then don't bother lag compensating it.
 	if ( pEntityTransmitBits && !pEntityTransmitBits->Get( pPlayer->entindex() ) )
 		return false;
@@ -946,7 +949,7 @@ void CBasePlayer::TraceAttack( const CTakeDamageInfo &inputInfo, const Vector &v
 			//  If an NPC check if friendly fire is disallowed
 			// --------------------------------------------------
 			// --> Mirv: All this disabled so we can impact friendlies
-			/*CAI_BaseNPC *pNPC = info.GetAttacker()->MyNPCPointer();
+			/*CAI_BaseNPC* pNPC = info.GetAttacker()->MyNPCPointer();
 			if ( pNPC && (pNPC->CapabilitiesGet() & bits_CAP_NO_HIT_PLAYER) && pNPC->IRelationType( this ) != D_HT )
 				return;
 
@@ -961,7 +964,7 @@ void CBasePlayer::TraceAttack( const CTakeDamageInfo &inputInfo, const Vector &v
 		SetLastHitGroup( ptr->hitgroup );
 
 		// --> Mirv: No location damage please
-		/*switch ( ptr->hitgroup )
+		/*switch (ptr->hitgroup)
 		{
 		case HITGROUP_GENERIC:
 			break;
@@ -997,7 +1000,7 @@ void CBasePlayer::TraceAttack( const CTakeDamageInfo &inputInfo, const Vector &v
 			if (g_pGameRules->FCanTakeDamage(ToFFPlayer(this), info.GetAttacker()))
 			{
 				SpawnBlood(ptr->endpos, vecDir, BloodColor(), info.GetDamage());// a little surface blood.
-				TraceBleed( info.GetDamage(), vecDir, ptr, info.GetDamageType() );
+				TraceBleed(info.GetDamage(), vecDir, ptr, info.GetDamageType());
 			}
 		}
 
@@ -1167,8 +1170,7 @@ int CBasePlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 		return 0;
 	// go take the damage first
 
-	
-	if ( !g_pGameRules->FCanTakeDamage( this, info.GetAttacker()/*, inputInfo*/ ) )
+	if ( !g_pGameRules->FCanTakeDamage(this, info.GetAttacker()/*, inputInfo*/))
 	{
 		// Refuse the damage
 		return 0;
@@ -2009,7 +2011,7 @@ void CBasePlayer::WaterMove()
 		{
 			// --> Mirv: Fix the bubbly spawn start
 			if (GetTeamNumber() != TEAM_SPECTATOR && GetTeamNumber() != TEAM_UNASSIGNED)
-				EmitSound( "Player.DrownStart" );
+				EmitSound("Player.DrownStart");
 			// <-- Mirv: Fix the bubbly spawn start
 		}
 
@@ -2030,7 +2032,6 @@ void CBasePlayer::WaterMove()
 			m_bitsDamageType &= ~DMG_DROWN;
 			m_rgbTimeBasedDamage[itbd_DrownRecover] = 0;
 		}
-
 	}
 	else
 	{	// fully under water
@@ -2250,7 +2251,7 @@ void CBasePlayer::PlayerDeathThink(void)
 // wait for any button down,  or mp_forcerespawn is set and the respawn time is up
 	if (!fAnyButtonDown 
 		&& !( g_pGameRules->IsMultiplayer() && forcerespawn.GetInt() > 0 && (gpGlobals->curtime > (m_flDeathTime + 0.5f))))	// |-- Mirv: No minimum length death time
-		return;	// 5 -> 0.5f
+		return;																												// 5 -> 0.5f
 
 	m_nButtons = 0;
 	m_iRespawnFrames = 0;
@@ -2258,7 +2259,7 @@ void CBasePlayer::PlayerDeathThink(void)
 	//Msg( "Respawn\n");
 
 	respawn( this, !IsObserver() );// don't copy a corpse if we're in deathcam.
-	//SetNextThink( TICK_NEVER_THINK );	// |-- Mirv: Still think because respawn may not be possible
+	//SetNextThink( TICK_NEVER_THINK );		// |-- Mirv: Still think because respawn may not be possible
 }
 
 /*
@@ -2791,13 +2792,12 @@ bool CBasePlayer::IsValidObserverTarget(CBaseEntity * target)
 
 	// MOD AUTHORS: Add checks on target here or in derived method
 
-	if ( target->IsPlayer() )	// only track players
+	if (target->IsPlayer())	// track players
 	{
-
 		CBasePlayer * player = ToBasePlayer( target );
 
 		/* Don't spec observers or players who haven't picked a class yet
-		if ( player->IsObserver() )
+ 		if ( player->IsObserver() )
 			return false;	*/
 
 		if( player == this )
@@ -2829,23 +2829,23 @@ bool CBasePlayer::IsValidObserverTarget(CBaseEntity * target)
 			{
 				case OBS_ALLOW_ALL	:	break;
 				case OBS_ALLOW_TEAM :	if ( GetTeamNumber() != target->GetTeamNumber() )
-											return false;
+											 return false;
 										break;
 				case OBS_ALLOW_NONE :	return false;
 			}
 		}
-		else if (target->Classify() == CLASS_INFOSCRIPT) // track info_ff_scripts
-		{
-			CFFInfoScript* pInfoScript = static_cast<CFFInfoScript*>(target);
-
-			if (pInfoScript->IsRemoved())
-				return false;
-		}
-		else
-			return false; // not one of the trackable entity types
-	
-		return true;	// passed all test
 	}
+	else if (target->Classify() == CLASS_INFOSCRIPT) // track info_ff_scripts
+	{
+		CFFInfoScript* pInfoScript = static_cast<CFFInfoScript*>(target);
+
+		if (pInfoScript->IsRemoved())
+			return false;
+	}
+	else
+		return false; // not one of the trackable entity types
+	
+	return true;	// passed all test
 }
 
 int CBasePlayer::GetNextObserverSearchStartPoint( bool bReverse )
@@ -3043,15 +3043,15 @@ void CBasePlayer::Duck( )
 		}
 	}
 }
-#ifndef FF
+
 //
 // ID's player as such.
 //
-Class_T  CBasePlayer::Classify ( void )
-{
-	return CLASS_PLAYER;
-}
-#endif
+//Class_T  CBasePlayer::Classify ( void )
+//{
+//	return CLASS_PLAYER;
+//}
+
 
 void CBasePlayer::ResetFragCount()
 {
@@ -3349,9 +3349,6 @@ void CBasePlayer::AdjustPlayerTimeBase( int simulation_ticks )
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 void CBasePlayer::RunNullCommand( void )
 {
 	CUserCmd cmd;	// NULL command
@@ -3586,7 +3583,7 @@ void CBasePlayer::PhysicsSimulate( void )
 	// FIXME:  Should this occur after simulation of children so
 	//  that they are in the timespace of the player?
 	gpGlobals->curtime		= savetime;
-	gpGlobals->frametime	= saveframetime;
+	gpGlobals->frametime	= saveframetime;	
 
 	// Since this isn't called for bots.. call it here?
 	if (m_pPhysicsController && IsBot())
@@ -4655,7 +4652,7 @@ void FixPlayerCrouchStuck( CBasePlayer *pPlayer )
 
 	// Move up as many as 18 pixels if the player is stuck.
 	int i;
-	Vector org = pPlayer->GetAbsOrigin();
+	Vector org = pPlayer->GetAbsOrigin();;
 	for ( i = 0; i < 18; i++ )
 	{
 		UTIL_TraceHull( pPlayer->GetAbsOrigin(), pPlayer->GetAbsOrigin(), 
@@ -6463,7 +6460,7 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		break;
 
 	case 103:
-		// What are you doing?
+		// What the hell are you doing?
 		pEntity = FindEntityForward( this, true );
 		if ( pEntity )
 		{
@@ -6659,7 +6656,7 @@ bool CBasePlayer::ClientCommand( const CCommand &args )
 
 		RemoveAllItems( true );
 
-#ifdef FF // dexter - if a FF Player, be sure to remove buildables
+		// dexter - if a FF Player, be sure to remove buildables
 		// note: could we just remove this console command and force the player to use existing team spec/menu code?
 		CFFPlayer* pPlayer = ToFFPlayer(this);
 		if (pPlayer)
@@ -6669,7 +6666,7 @@ bool CBasePlayer::ClientCommand( const CCommand &args )
 			pPlayer->RemoveBackpacks();
 			pPlayer->RemoveBuildables();
 		}
-#endif
+
 		ChangeTeam( TEAM_SPECTATOR );
 
 		StartObserverMode( OBS_MODE_ROAMING );
@@ -6728,7 +6725,7 @@ bool CBasePlayer::ClientCommand( const CCommand &args )
 		{
 			// set new spectator mode, don't allow OBS_MODE_NONE
 			if ( !SetObserverMode( mode ) )
-				ClientPrint( this, HUD_PRINTCONSOLE, "#Spectator_Mode_Unknown");
+				ClientPrint( this, HUD_PRINTCONSOLE, "#Spectator_Mode_Unkown");
 			else
 				engine->ClientCommand( edict(), "cl_spec_mode %d", mode );
 		}
@@ -6759,7 +6756,7 @@ bool CBasePlayer::ClientCommand( const CCommand &args )
 		
 		return true;
 	}
-	else if ( stricmp( cmd, "spec_prev" ) == 0 ) // chase previous player
+	else if ( stricmp( cmd, "spec_prev" ) == 0 ) // chase prevoius player
 	{
 		if ( GetObserverMode() > OBS_MODE_FIXED )
 		{
@@ -6774,16 +6771,17 @@ bool CBasePlayer::ClientCommand( const CCommand &args )
 		{
 			AttemptToExitFreezeCam();
 		}
-
+		
 		return true;
 	}
+	
 	else if ( stricmp( cmd, "spec_player" ) == 0 ) // chase next player
 	{
 		if ( GetObserverMode() > OBS_MODE_FIXED && args.ArgC() == 2 )
 		{
 			int index = atoi( args[1] );
 
-			CBasePlayer *target;
+			CBasePlayer * target;
 
 			if ( index == 0 )
 			{
@@ -6987,7 +6985,7 @@ bool CBasePlayer::RemovePlayerItem( CBaseCombatWeapon *pItem )
 	{
 		ResetAutoaim( );
 		pItem->Holster( );
-		pItem->SetNextThink( TICK_NEVER_THINK ); // crowbar may be trying to swing again, etc
+		pItem->SetNextThink( TICK_NEVER_THINK );; // crowbar may be trying to swing again, etc
 		pItem->SetThink( NULL );
 	}
 
@@ -7227,7 +7225,6 @@ void CBasePlayer::RumbleEffect( unsigned char index, unsigned char rumbleData, u
 	return;
 #endif
 }
-
 void CBasePlayer::EnableControl(bool fControl)
 {
 	if (!fControl)

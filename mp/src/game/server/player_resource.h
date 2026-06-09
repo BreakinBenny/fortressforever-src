@@ -24,7 +24,7 @@ public:
 	virtual	int	 ObjectCaps( void ) { return BaseClass::ObjectCaps() | FCAP_DONT_SAVE; }
 	virtual void ResourceThink( void );
 	virtual void UpdatePlayerData( void );
-	virtual int  UpdateTransmitState( void );
+	virtual int  UpdateTransmitState(void);
 
 protected:
 	// Data for each player that's propagated to all clients

@@ -453,7 +453,7 @@ public:
 
 	virtual void			OnEmitFootstepSound( const CSoundParameters& params, const Vector& vecOrigin, float fVolume ) {}
 
-	Class_T					Classify( void ) { return CLASS_PLAYER; }
+	Class_T					Classify(void) { return CLASS_PLAYER; }
 	virtual void			SetAnimation( PLAYER_ANIM playerAnim );
 	void					SetWeaponAnimType( const char *szExtention );
 
@@ -475,7 +475,7 @@ public:
 	virtual int				GetObserverMode( void ); // returns observer mode or OBS_NONE
 	virtual bool			SetObserverTarget(CBaseEntity * target);
 	virtual void			ObserverUse( bool bIsPressed ); // observer pressed use
-	virtual CBaseEntity		*GetObserverTarget( void ); // returns players target or NULL
+	virtual CBaseEntity		*GetObserverTarget( void ); // returns players targer or NULL
 	virtual CBaseEntity		*FindNextObserverTarget( bool bReverse ); // returns next/prev player to follow or NULL
 	virtual int				GetNextObserverSearchStartPoint( bool bReverse ); // Where we should start looping the player list in a FindNextObserverTarget call
 	virtual bool			IsValidObserverTarget(CBaseEntity * target); // true, if player is allowed to see this target
@@ -596,7 +596,7 @@ public:
 	float					GetTimeSinceLastUserCommand( void ) { return ( !IsConnected() || IsFakeClient() || IsBot() ) ? 0.f : gpGlobals->curtime - m_flLastUserCommandTime; }
 
 	// Team Handling
-	virtual void			ChangeTeam( int iTeamNum ) { ChangeTeam( iTeamNum, false, false ); }
+	virtual void			ChangeTeam( int iTeamNum ) { ChangeTeam(iTeamNum,false, false); }
 	virtual void			ChangeTeam( int iTeamNum, bool bAutoTeam, bool bSilent );
 
 	// say/sayteam allowed?
@@ -667,7 +667,7 @@ public:
 	// Accessor methods
 	int		FragCount() const		{ return m_iFrags; }
 	int		FortPointsCount() const { return m_iFortPoints; }
-	int		DeathCount() const		{ return m_iDeaths;}
+	int		DeathCount() const		{ return m_iDeaths; }
 	int		AssistsCount() const	{ return m_iAssists; }
 	bool	IsConnected() const		{ return m_iConnected != PlayerDisconnected; }
 	bool	IsDisconnecting() const	{ return m_iConnected == PlayerDisconnecting; }

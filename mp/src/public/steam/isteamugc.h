@@ -202,7 +202,7 @@ struct SteamUGCDetails_t
 	uint32 m_unVotesDown;											// number of votes down
 	float m_flScore;												// calculated score
 	// collection details
-	uint32 m_unNumChildren;							
+	uint32 m_unNumChildren;
 	uint64 m_ulTotalFilesSize;										// Total size of all files (non-legacy), excluding the preview file
 };
 
