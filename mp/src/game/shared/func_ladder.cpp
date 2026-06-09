@@ -326,11 +326,11 @@ int CFuncLadder::GetDismountCount() const
 // Input  : index - 
 // Output : CInfoLadderDismountHandle
 //-----------------------------------------------------------------------------
-CInfoLadderDismount *CFuncLadder::GetDismount( int index_ )
+CInfoLadderDismount *CFuncLadder::GetDismount( int index )
 {
-	if ( index_ < 0 || index_ >= m_Dismounts.Count() )
+	if ( index < 0 || index >= m_Dismounts.Count() )
 		return NULL;
-	return m_Dismounts[index_];
+	return m_Dismounts[ index ];
 }
 
 //-----------------------------------------------------------------------------
@@ -487,10 +487,13 @@ void CInfoLadderDismount::DrawDebugGeometryOverlays()
 #if defined( GAME_DLL )
 int CFuncLadder::UpdateTransmitState()
 {
-#ifdef FF_DLL // --> FF: always transmit if you're an objective
+	// --> FF
+#ifdef GAME_DLL
+	// always transmit if you're an objective
 	if (m_ObjectivePlayerRefs.Count() > 0)
 		return SetTransmitState(FL_EDICT_ALWAYS);
-#endif // <-- FF
+#endif // GAME_DLL
+	// <-- FF
 
 	// transmit if in PVS for clientside prediction
 	return SetTransmitState( FL_EDICT_PVSCHECK );

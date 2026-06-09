@@ -889,8 +889,8 @@ void CTeamRoundTimer::RoundTimerSetupThink( void )
 		m_OnSetupFinished.FireOutput( this, this );
 		m_bFireFinished = false;
 
-		SetState( RT_STATE_NORMAL );
 		SetTimeRemaining( m_nTimeToUseAfterSetupFinished );
+		SetState( RT_STATE_NORMAL );
 
 		if ( ShowInHud() && !TeamplayRoundBasedRules()->IsInWaitingForPlayers() )
 		{
@@ -1109,8 +1109,8 @@ void CTeamRoundTimer::InputRoundSpawn( inputdata_t &input )
 
 	if ( m_nSetupTimeLength > 0 )
 	{
-		SetState( RT_STATE_SETUP );
 		SetTimeRemaining( m_nSetupTimeLength );
+		SetState( RT_STATE_SETUP );
 
 		if ( ShowInHud() && !TeamplayRoundBasedRules()->IsInWaitingForPlayers() )
 		{
@@ -1119,8 +1119,8 @@ void CTeamRoundTimer::InputRoundSpawn( inputdata_t &input )
 	}
 	else
 	{
-		SetState( RT_STATE_NORMAL );
 		SetTimeRemaining( m_nTimeToUseAfterSetupFinished );
+		SetState( RT_STATE_NORMAL );
 	}
 
 	if ( !m_bStartPaused && !TeamplayRoundBasedRules()->IsInWaitingForPlayers() )

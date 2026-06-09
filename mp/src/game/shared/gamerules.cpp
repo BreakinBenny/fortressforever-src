@@ -375,7 +375,8 @@ bool CGameRules::CanHavePlayerItem( CBasePlayer *pPlayer, CBaseCombatWeapon *pWe
 //=========================================================
 void CGameRules::RefreshSkillData ( bool forceUpdate )
 {
-#ifndef FF // We don't care about this stuff, do we? -- Mulch
+	// We don't care about this stuff, do we? -- Mulch
+	/*
 #ifndef CLIENT_DLL
 	if ( !forceUpdate )
 	{
@@ -410,7 +411,7 @@ void CGameRules::RefreshSkillData ( bool forceUpdate )
 
 #endif // HL2_DLL
 #endif // CLIENT_DLL
-#endif
+*/
 }
 
 
@@ -858,7 +859,7 @@ bool CGameRules::ShouldCollide( int collisionGroup0, int collisionGroup1 )
 	// Adding so projectiles dont collide with players -GreenMushy
 	if ( collisionGroup1 == COLLISION_GROUP_PROJECTILE )
 	{
-		if ( collisionGroup0 == COLLISION_GROUP_DEBRIS || 
+		if (collisionGroup0 == COLLISION_GROUP_DEBRIS ||
 			collisionGroup0 == COLLISION_GROUP_PLAYER ||
 			collisionGroup0 == COLLISION_GROUP_WEAPON ||
 			collisionGroup0 == COLLISION_GROUP_ROCKET ||

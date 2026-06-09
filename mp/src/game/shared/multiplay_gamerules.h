@@ -255,18 +255,17 @@ protected:
 
 public:
 	virtual void ChangeLevel( void );
-#ifndef FF // FF moves this to public so we can use changelevel/gotointermission in lua
-protected:
-#endif
 
-	virtual void GoToIntermission( void );
-	virtual void LoadMapCycleFile( void );
-	void ChangeLevelToMap( const char *pszMap );
+	// moving to public so we can use changelevel/gotointermission in lua
+	//===============================
+	virtual void GoToIntermission(void);
+	virtual void LoadMapCycleFile(void);
+	void ChangeLevelToMap(const char* pszMap);
 
 	float m_flIntermissionEndTime;
-#ifdef FF
+	//===============================
+
 protected:
-#endif
 	static int m_nMapCycleTimeStamp;
 	static int m_nMapCycleindex;
 	static CUtlVector<char*> m_MapList;

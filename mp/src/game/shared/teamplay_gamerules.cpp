@@ -306,30 +306,30 @@ void CTeamplayRules::DeathNotice( CBasePlayer *pVictim, const CTakeDamageInfo &i
 {
 	if ( m_DisableDeathMessages )
 		return;
-#ifndef FF
-	CBaseEntity *pKiller = info.GetAttacker();
-	if ( pVictim && pKiller && pKiller->IsPlayer() )
-	{
-		CBasePlayer *pk = (CBasePlayer*)pKiller;
 
-		if ( pk )
-		{
-			if ( (pk != pVictim) && (PlayerRelationship( pVictim, pk ) == GR_TEAMMATE) )
-			{
-				IGameEvent * event = gameeventmanager->CreateEvent( "player_death" );
-				if ( event )
-				{
-					event->SetInt("killer", pk->GetUserID() );
-					event->SetInt("victim", pVictim->GetUserID() );
-					event->SetInt("priority", 7 );	// HLTV event priority, not transmitted
-					
-					gameeventmanager->FireEvent( event );
-				}
-				return;
-			}
-		}
-	}
-#endif
+	//CBaseEntity *pKiller = info.GetAttacker();
+	//if ( pVictim && pKiller && pKiller->IsPlayer() )
+	//{
+	//	CBasePlayer *pk = (CBasePlayer*)pKiller;
+
+	//	if ( pk )
+	//	{
+	//		if ( (pk != pVictim) && (PlayerRelationship( pVictim, pk ) == GR_TEAMMATE) )
+	//		{
+	//			IGameEvent * event = gameeventmanager->CreateEvent( "player_death" );
+	//			if ( event )
+	//			{
+	//				event->SetInt("killer", pk->GetUserID() );
+	//				event->SetInt("victim", pVictim->GetUserID() );
+	//				event->SetInt("priority", 7 );	// HLTV event priority, not transmitted
+	//				
+	//				gameeventmanager->FireEvent( event );
+	//			}
+	//			return;
+	//		}
+	//	}
+	//}
+
 	BaseClass::DeathNotice( pVictim, info );
 }
 
@@ -355,7 +355,7 @@ bool CTeamplayRules::IsTeamplay( void )
 
 bool CTeamplayRules::FCanTakeDamage( CBaseEntity *pVictim, CBaseEntity *pAttacker, const CTakeDamageInfo &info )
 {
-	if ( pAttacker && PlayerRelationship( pVictim, pAttacker ) == GR_TEAMMATE && !info.IsForceFriendlyFire() )
+	if ( pAttacker && PlayerRelationship(pVictim, pAttacker ) == GR_TEAMMATE && !info.IsForceFriendlyFire() )
 	{
 		// If friendly fire is off and I'm not attacking myself, then
 		// someone else on my team/an ally is attacking me - don't
@@ -367,7 +367,7 @@ bool CTeamplayRules::FCanTakeDamage( CBaseEntity *pVictim, CBaseEntity *pAttacke
 		}
 	}
 
-	return BaseClass::FCanTakeDamage( pVictim, pAttacker, info );
+	return BaseClass::FCanTakeDamage(pVictim, pAttacker, info );
 }
 
 //=========================================================

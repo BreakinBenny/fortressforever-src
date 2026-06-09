@@ -46,7 +46,7 @@ struct fogparams_t
 	CNetworkVar( bool, blend );
 };
 
-// Needs to be here because it wants to use 
+// Crappy. Needs to be here because it wants to use 
 #ifdef CLIENT_DLL
 #define CFogController C_FogController
 #endif

@@ -26,7 +26,8 @@ class CVGuiScreen;
 #define CBaseCombatWeapon C_BaseCombatWeapon
 #endif
 
-#ifdef FF_CLIENT_DLL
+#ifdef FF
+#ifdef CLIENT_DLL
 class C_BaseViewModelArms : public C_BaseAnimating
 {
 	DECLARE_CLASS( C_BaseViewModelArms, C_BaseAnimating );
@@ -49,7 +50,8 @@ public:
 
 	CHandle<CBaseViewModel> m_hViewModel;
 };
-#endif // FF_CLIENT_DLL
+#endif // CLIENT_DLL
+#endif // FF
 
 #define VIEWMODEL_INDEX_BITS 1
 

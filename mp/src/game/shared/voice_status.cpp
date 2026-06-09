@@ -30,10 +30,10 @@
 #include "cdll_int.h"
 #include <vgui/IPanel.h>
 
-#ifdef FF
+
 #include "c_ff_player.h"
 #include "ff_gamerules.h"
-#endif
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -230,7 +230,7 @@ void CVoiceStatus::DrawHeadLabels()
 		if ( !pClient || pClient->IsDormant() )
 			continue;
 
-		C_FFPlayer *pPlayer = dynamic_cast<C_FFPlayer*>(pClient);
+		C_FFPlayer* pPlayer = dynamic_cast<C_FFPlayer*>(pClient);
 		if( !pPlayer )
 			continue;
 
@@ -409,7 +409,7 @@ void CVoiceStatus::UpdateServerState(bool bForce)
 
 			player_info_t pi;
 
-			if ( !engine->GetPlayerInfo( playerIndex + 1, &pi ) )
+			if ( !engine->GetPlayerInfo( i+1, &pi ) )
 				continue;
 
 			if ( m_BanMgr.GetPlayerBan( pi.guid ) )

@@ -31,9 +31,10 @@
 //#define PANEL_BUYPRESET_MAIN	"buypreset_main"
 //#define PANEL_BUYPRESET_EDIT	"buypreset_edit"
 #define PANEL_INTRO			"intro"
-#ifdef FF
+
 #define PANEL_MAP			"map"		// so players can view the map at any time
-#endif
+
+
 #define PANEL_COMMENTARY_MODELVIEWER	"commentary_modelviewer"
 
 #endif // VIEWPORT_PANEL_NAMES_H
