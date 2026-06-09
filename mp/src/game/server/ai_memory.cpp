@@ -191,7 +191,7 @@ AI_EnemyInfo_t *CAI_Enemies::GetFirst( AIEnemiesIter_t *pIter )
 
 AI_EnemyInfo_t *CAI_Enemies::GetNext( AIEnemiesIter_t *pIter )
 {
-	CMemMap::IndexType_t i = (CMemMap::IndexType_t)( (unsigned)(*pIter) );
+	CMemMap::IndexType_t i = (CMemMap::IndexType_t)((unsigned)(*pIter));
 
 	if ( i == m_Map.InvalidIndex() )
 		return NULL;
@@ -546,8 +546,6 @@ bool CAI_Enemies::HasFreeKnowledgeOf( CBaseEntity *pEnemy )
 
 	if ( pEnemy != AI_UNKNOWN_ENEMY )
 		DevWarning( 2,"Asking HasFreeKnowledgeOf for enemy that's not in my memory!!\n");
-
-
 	return AI_INVALID_TIME;
 }
 

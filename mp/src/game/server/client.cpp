@@ -360,6 +360,12 @@ inline int FF_ParsePercentCommand(edict_t* pEdict, const char* cCommand, char* p
 	return 0;
 }
 
+enum eAllowPointServerCommand {
+	eAllowNever,
+	eAllowOfficial,
+	eAllowAlways
+};
+
 #ifdef TF_DLL
 // The default value here should match the default of the convar
 eAllowPointServerCommand sAllowPointServerCommand = eAllowOfficial;

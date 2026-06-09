@@ -2057,7 +2057,7 @@ bool CAI_Navigator::DelayNavigationFailure( const AIMoveTrace_t &trace )
 
 // @TODO (toml 11-12-02): right now, physics can pull the box back pretty far even though a hull
 // trace said we could make the move. Jay is looking into it. For now, if the NPC physics shadow
-// is active, allow for a larger tolerance
+// is active, allow for a bugger tolerance
 extern ConVar npc_vphysics;
 
 bool test_it = false;
