@@ -217,11 +217,22 @@ void CMultiPlayerAnimState::DoAnimationEvent( PlayerAnimEvent_t event, int nData
 
 			// Set the modified reload playback rate
 			float flPlaybackRate = 1.0f;
-			#if defined(TF_CLIENT_DLL) || defined(TF_DLL)
+#if defined ( TF_CLIENT_DLL ) || defined ( TF_DLL )
 				CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( GetBasePlayer(), flPlaybackRate, mult_reload_time );
 				CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( GetBasePlayer(), flPlaybackRate, mult_reload_time_hidden );
 				CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( GetBasePlayer(), flPlaybackRate, fast_reload );
-			#endif
+
+
+
+
+
+
+
+
+
+
+
+#endif // TF_CLIENT_DLL || TF_DLL
 			m_aGestureSlots[ GESTURE_SLOT_ATTACK_AND_RELOAD ].m_pAnimLayer->m_flPlaybackRate = flPlaybackRate;
 
 			break;
