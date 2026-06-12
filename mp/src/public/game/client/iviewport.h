@@ -36,6 +36,8 @@ public:
 	virtual bool HasInputElements( void ) = 0;	// true if panel contains elments which accepts input
 
 	virtual void ShowPanel( bool state ) = 0; // activate VGUI Frame
+
+	
 		
 	// VGUI functions:
 	virtual vgui::VPANEL GetVPanel( void ) = 0; // returns VGUI panel handle

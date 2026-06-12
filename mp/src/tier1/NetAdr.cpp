@@ -189,7 +189,6 @@ unsigned int netadr_t::GetIPHostByteOrder() const
 	return ntohl( GetIPNetworkByteOrder() );
 }
 
-
 void netadr_t::ToSockadr (struct sockaddr * s) const
 {
 	Q_memset ( s, 0, sizeof(struct sockaddr));

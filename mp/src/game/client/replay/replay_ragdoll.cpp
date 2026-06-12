@@ -430,7 +430,7 @@ bool CReplayRagdollRecorder::DumpRagdollsToDisk( char const* pFilename ) const
 		CDmxElement* pRagdoll = CreateDmxElement( "ragdoll" );
 		ragdolls.AddToTail( pRagdoll );
 
-		V_snprintf( name, sizeof(name), "ragdoll %d", i );
+		V_snprintf( name, sizeof(name), "ragdoll %lld", i );
 		pRagdoll->SetValue( "name", name );
 
 		CDmxElementModifyScope modifyClass( pRagdoll );
@@ -445,7 +445,7 @@ bool CReplayRagdollRecorder::DumpRagdollsToDisk( char const* pFilename ) const
 			CDmxElement* pFrame = CreateDmxElement( "frame" );
 			frames.AddToTail( pFrame );
 
-			V_snprintf( name, sizeof(name), "frame %d", j );
+			V_snprintf( name, sizeof(name), "frame %lld", j );
 			pFrame->SetValue( "name", name );
 
 			// Store tick

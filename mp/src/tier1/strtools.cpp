@@ -622,7 +622,7 @@ char const* V_stristr( char const* pStr, char const* pSearch )
 	if (!pStr || !pSearch) 
 		return 0;
 
-	char const* pLetter = pStr;
+	const char* pLetter = pStr;
 
 	// Check the entire string
 	while (*pLetter != 0)
@@ -631,8 +631,8 @@ char const* V_stristr( char const* pStr, char const* pSearch )
 		if (FastToLower((unsigned char)*pLetter) == FastToLower((unsigned char)*pSearch))
 		{
 			// Check for match
-			char const* pMatch = pLetter + 1;
-			char const* pTest = pSearch + 1;
+			const char* pMatch = pLetter + 1;
+			const char* pTest = pSearch + 1;
 			while (*pTest != 0)
 			{
 				// We've run off the end; don't bother.
@@ -647,7 +647,7 @@ char const* V_stristr( char const* pStr, char const* pSearch )
 			}
 
 			// Found a match!
-			if (*pTest == 0)
+			if ( *pTest == 0 )
 				return pLetter;
 		}
 

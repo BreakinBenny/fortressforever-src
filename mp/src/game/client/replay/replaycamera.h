@@ -44,7 +44,7 @@ public:
 	void SpecNamedPlayer( const char *szPlayerName );
 	bool IsPVSLocked();
 	void SetAutoDirector( bool bActive );
-	
+
 	int  GetMode();	// returns current camera mode
 	C_BaseEntity *GetPrimaryTarget();  // return primary target
 	inline int GetPrimaryTargetIndex()	{ return m_iTarget1; }	

@@ -11,10 +11,12 @@
 #include "tier1/KeyValues.h"
 #include "vgui/IInput.h"
 
+#include "tier0/valve_minmax_off.h" // turn off min/max macros so std headers compile cleanly
+#include <string>
+#include "tier0/valve_minmax_on.h"
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include <tier0/memdbgon.h>
-#include <string>
-
 using namespace vgui;
 
 

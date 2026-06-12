@@ -94,7 +94,7 @@ void HapticMsg_Punch(CBasePlayer* pPlayer, float x, float y, float z)
 #ifdef HL2MP
 	CSingleUserRecipientFilter user(pPlayer);
 	user.MakeReliable();
-	UserMessageBegin(user, "HapPunch");
+	UserMessageBegin(user,"HapPunch");
 
 	WRITE_FLOAT(x);
 	WRITE_FLOAT(y);

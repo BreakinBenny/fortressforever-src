@@ -848,7 +848,7 @@ bool ConVar::ClampValue( float& value )
 		value = m_fMinVal;
 		return true;
 	}
-	
+
 	if ( m_bHasMax && ( value > m_fMaxVal ) )
 	{
 		value = m_fMaxVal;

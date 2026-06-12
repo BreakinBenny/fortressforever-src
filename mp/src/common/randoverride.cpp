@@ -23,7 +23,7 @@ extern "C"
 	DLL_LOCAL
 		int __cdecl rand()
 	{
-		return RandomInt(0, VALVE_RAND_MAX);
+		return RandomInt( 0, VALVE_RAND_MAX );
 	}
 
 } // extern "C"
