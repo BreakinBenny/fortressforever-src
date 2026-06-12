@@ -1267,7 +1267,7 @@ void Menu::OnKeyCodeTyped(KeyCode keycode)
 	switch (code)
 	{
 	case KEY_ESCAPE:
-	case KEY_XBUTTON_B: 
+	case KEY_XBUTTON_B:
 		{
 			// hide the menu on ESC
 			SetVisible(false);
@@ -1277,7 +1277,7 @@ void Menu::OnKeyCodeTyped(KeyCode keycode)
 		// they should also scroll the scroll bar if needed
 	case KEY_UP:
 	case KEY_XBUTTON_UP: 
-	case KEY_XSTICK1_UP: 
+	case KEY_XSTICK1_UP:
 		{	
 			MoveAlongMenuItemList(MENU_UP, 0);
 			if ( m_MenuItems.IsValidIndex( m_iCurrentlySelectedItemID ) )

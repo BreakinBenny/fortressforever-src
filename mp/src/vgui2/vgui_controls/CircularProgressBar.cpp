@@ -29,7 +29,8 @@ DECLARE_BUILD_FACTORY( CircularProgressBar );
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
-CircularProgressBar::CircularProgressBar(Panel *parent, const char *panelName) : ProgressBar(parent, panelName)
+CircularProgressBar::CircularProgressBar(Panel *parent, const char *panelName)
+	: ProgressBar(parent, panelName)
 {
 	m_iProgressDirection = CircularProgressBar::PROGRESS_CCW;
 

@@ -1069,7 +1069,13 @@ void AnimationController::CancelAnimationsForPanel( Panel *pWithinParent )
 //-----------------------------------------------------------------------------
 // Purpose: Runs a custom command from code, not from a script file
 //-----------------------------------------------------------------------------
-void AnimationController::RunAnimationCommand(vgui::Panel *panel, const char *variable, float targetValue, float startDelaySeconds, float duration, Interpolators_e interpolator, float animParameter /* = 0 */ )
+void AnimationController::RunAnimationCommand(vgui::Panel *panel,
+											   const char *variable,
+											   float targetValue,
+											   float startDelaySeconds,
+											   float duration,
+											   Interpolators_e interpolator,
+											   float animParameter /* = 0 */ )
 {
 	// clear any previous animations of this variable
 	UtlSymId_t var = g_ScriptSymbols.AddString(variable);
@@ -1093,7 +1099,13 @@ void AnimationController::RunAnimationCommand(vgui::Panel *panel, const char *va
 //-----------------------------------------------------------------------------
 // Purpose: Runs a custom command from code, not from a script file
 //-----------------------------------------------------------------------------
-void AnimationController::RunAnimationCommand(vgui::Panel *panel, const char *variable, Color targetValue, float startDelaySeconds, float duration, Interpolators_e interpolator, float animParameter /* = 0 */ )
+void AnimationController::RunAnimationCommand(vgui::Panel *panel,
+											   const char *variable,
+											   Color targetValue,
+											   float startDelaySeconds,
+											   float duration,
+											   Interpolators_e interpolator,
+											   float animParameter /* = 0 */ )
 {
 	// clear any previous animations of this variable
 	UtlSymId_t var = g_ScriptSymbols.AddString(variable);

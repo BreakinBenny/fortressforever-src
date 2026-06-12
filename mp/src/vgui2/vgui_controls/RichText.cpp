@@ -2673,7 +2673,14 @@ void RichText::OnTextClicked(const wchar_t *wszText)
 	}
 	else
 	{
-		system()->ShellExecute( "open", ansi );
+		
+		
+			
+		
+		
+		
+			system()->ShellExecute( "open", ansi );
+		
 	}
 }
 

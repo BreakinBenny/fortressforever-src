@@ -664,6 +664,7 @@ qboolean CMapFile::MakeBrushWindings (mapbrush_t *ob)
 	return true;
 }
 
+
 //-----------------------------------------------------------------------------
 // Purpose: Takes all of the brushes from the current entity and adds them to the
 //			world's brush list. Used by func_detail and func_areaportal.
@@ -1581,11 +1582,12 @@ ChunkFileResult_t CMapFile::LoadEntityCallback(CChunkFile *pFile, int nParam)
 
 		if ( !strcmp( "func_detail", pClassName ) )
 		{
-			MoveBrushesToWorld (mapent);
-			mapent->numbrushes = 0;
-			
-			// clear out this entity
-			mapent->epairs = NULL;
+			MoveBrushesToWorld( mapent );
+
+				mapent->numbrushes = 0;
+				// clear out this entity
+				mapent->epairs = NULL;
+
 			return(ChunkFile_Ok);
 		}
 
@@ -1971,6 +1973,7 @@ bool CMapFile::DeterminePath( const char *pszBaseFileName, const char *pszInstan
 //-----------------------------------------------------------------------------
 void CMapFile::CheckForInstances( const char *pszFileName )
 {
+
 	if ( this != g_MainMap )
 	{	// all sub-instances will be appended to the main map master list as they are read in
 		// so the main loop below will naturally get to the appended ones.
@@ -2019,6 +2022,8 @@ void CMapFile::CheckForInstances( const char *pszFileName )
 		if ( !strcmp( pEntity, "func_instance" ) )
 		{
 			char *pInstanceFile = ValueForKey( &entities[ i ], "file" );
+
+
 			if ( pInstanceFile[ 0 ] )
 			{
 				char	InstancePath[ MAX_PATH ];
@@ -2470,6 +2475,7 @@ void CMapFile::MergeEntities( entity_t *pInstanceEntity, CMapFile *Instance, Vec
 
 		oldValue = Connection->m_Pair->value;
 		strcpy( origValue, oldValue );
+
 		char *pos = strchr( origValue, ',' );
 		if ( pos )
 		{	// null terminate the first field
@@ -2483,6 +2489,7 @@ void CMapFile::MergeEntities( entity_t *pInstanceEntity, CMapFile *Instance, Vec
 			strcpy( newValue, temp );
 			if ( pos )
 			{
+
 				strcat( newValue, "," );
 				strcat( newValue, pos + 1 );
 			}

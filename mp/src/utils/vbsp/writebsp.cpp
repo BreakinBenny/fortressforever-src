@@ -406,6 +406,7 @@ int FindOrCreateOrigFace( face_t *f )
     return index;
 }
 
+
 /*
 ==================
 EmitFace
@@ -453,6 +454,7 @@ void EmitFace( face_t *f, qboolean onNode )
 	// Save the correlation between dfaces and faces -- since dfaces doesnt have worldcraft face id
 	dfaceids.AddToTail();
 	dfaceids[numfaces].hammerfaceid = f->originalface->id;
+
 
 	numfaces++;
 
@@ -1256,8 +1258,8 @@ void EndBSPFile (void)
 	Overlay_EmitOverlayFaces();
 	OverlayTransition_EmitOverlayFaces();
 
-	// phys collision needs dispinfo to operate (needs to generate phys collision for displacement surfs)
-	EmitPhysCollision();
+		// phys collision needs dispinfo to operate (needs to generate phys collision for displacement surfs)
+		EmitPhysCollision();
 
 	// We can't calculate this properly until vvis (since we need vis to do this), so we set
 	// to zero everywhere by default.

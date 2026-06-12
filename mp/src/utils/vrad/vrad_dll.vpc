@@ -14,6 +14,7 @@ $Configuration
 	$Compiler
 	{
 		$AdditionalIncludeDirectories		"$BASE,..\common,..\vmpi,..\vmpi\mysql\mysqlpp\include,..\vmpi\mysql\include"
+		
 		$PreprocessorDefinitions			"$BASE;MPI;PROTECTED_THINGS_DISABLE;VRAD"
 	}
 
@@ -23,7 +24,7 @@ $Configuration
 	}
 }
 
-$Project "Vrad_dll"
+$Project "VRAD"
 {
 	$Folder	"Source Files"
 	{

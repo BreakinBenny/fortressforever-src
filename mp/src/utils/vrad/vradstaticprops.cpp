@@ -2582,45 +2582,47 @@ static void FilterCoarserMipmaps(unsigned int _resX, unsigned int _resY, CUtlVec
 
 	int srcResX = _resX;
 	int srcResY = _resY;
-	int dstResX = max(1, (srcResX >> 1));
-	int dstResY = max(1, (srcResY >> 1));
-	int dstOffset = GetTexelCount(srcResX, srcResY, false);
+	int dstResX = max( 1, ( srcResX >> 1 ) );
+	int dstResY = max( 1, ( srcResY >> 1 ) );
+	int dstOffset = GetTexelCount( srcResX, srcResY, false );
 
 	// Build mipmaps here, after being converted to linear space. 
 	// TODO: Should do better filtering for downsampling. But this will work for now.
-	while (srcResX > 1 || srcResY > 1)
+	while ( srcResX > 1 || srcResY > 1 )
 	{
-		for (int j = 0; j < srcResY; j += 2) {
-			for (int i = 0; i < srcResX; i += 2) {
+
+
+
+		for ( int j = 0; j < srcResY; j += 2 ) {
+			for ( int i = 0; i < srcResX; i += 2 ) {
 				int srcCol0 = i;
 				int srcCol1 = i + 1 > srcResX - 1 ? srcResX - 1 : i + 1;
 				int srcRow0 = j;
 				int srcRow1 = j + 1 > srcResY - 1 ? srcResY - 1 : j + 1;;
 
+
 				int dstCol = i >> 1;
 				int dstRow = j >> 1;
 
+				const Vector& tl = ( *_scratchLinear )[srcCol0 + ( srcRow0 * srcResX )];
+				const Vector& tr = ( *_scratchLinear )[srcCol1 + ( srcRow0 * srcResX )];
+				const Vector& bl = ( *_scratchLinear )[srcCol0 + ( srcRow1 * srcResX )];
+				const Vector& br = ( *_scratchLinear )[srcCol1 + ( srcRow1 * srcResX )];
 
-				const Vector& tl = (*_scratchLinear)[srcCol0 + (srcRow0 * srcResX)];
-				const Vector& tr = (*_scratchLinear)[srcCol1 + (srcRow0 * srcResX)];
-				const Vector& bl = (*_scratchLinear)[srcCol0 + (srcRow1 * srcResX)];
-				const Vector& br = (*_scratchLinear)[srcCol1 + (srcRow1 * srcResX)];
+				Vector sample = ( tl + tr + bl + br ) / 4.0f;
 
-				Vector sample = (tl + tr + bl + br) / 4.0f;
-
-				ConvertLinearToRGBA8888(&sample, (unsigned char*)&(*_outTexelsRGB888)[dstOffset + dstCol + dstRow * dstResX]);
-
+				ConvertLinearToRGBA8888( &sample, (unsigned char*)&( *_outTexelsRGB888 )[dstOffset + dstCol + dstRow * dstResX] );
 				// Also overwrite the srcBuffer to filter the next loop. This is safe because we won't be reading this source value
 				// again during this mipmap level.
-				(*_scratchLinear)[dstCol + dstRow * dstResX] = sample;
+				( *_scratchLinear )[dstCol + dstRow * dstResX] = sample;
 			}
 		}
 
 		srcResX = dstResX;
 		srcResY = dstResY;
-		dstResX = max(1, (srcResX >> 1));
-		dstResY = max(1, (srcResY >> 1));
-		dstOffset += GetTexelCount(srcResX, srcResY, false);
+		dstResX = max( 1, ( srcResX >> 1 ) );
+		dstResY = max( 1, ( srcResY >> 1 ) );
+		dstOffset += GetTexelCount( srcResX, srcResY, false );
 	}
 }
 

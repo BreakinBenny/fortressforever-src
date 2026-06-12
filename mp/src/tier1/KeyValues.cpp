@@ -650,10 +650,6 @@ bool KeyValues::LoadFromFile( IBaseFileSystem *filesystem, const char *resourceN
 	Assert( IsX360() || ( IsPC() && _heapchk() == _HEAPOK ) );
 #endif
 
-#ifdef STAGING_ONLY
-	static bool s_bCacheEnabled = !!CommandLine()->FindParm( "-enable_keyvalues_cache" );
-	const bool bUseCache = s_bCacheEnabled && ( s_pfGetSymbolForString == KeyValues::GetSymbolForStringClassic );
-#else
 	/*
 	People are cheating with the keyvalue cache enabled by doing the below, so disable it.
 
@@ -679,7 +675,6 @@ bool KeyValues::LoadFromFile( IBaseFileSystem *filesystem, const char *resourceN
 	made of vmt files, so valve's sv_pure 1 bull is pretty redundant.
 	*/
 	const bool bUseCache = false;
-#endif
 
 	// If pathID is null, we cannot cache the result because that has a weird iterate-through-a-bunch-of-locations behavior.
 	const bool bUseCacheForRead = bUseCache && !refreshCache && pathID != NULL; 

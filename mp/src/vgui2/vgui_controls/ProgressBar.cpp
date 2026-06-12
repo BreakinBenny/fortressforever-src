@@ -404,7 +404,7 @@ void ContinuousProgressBar::Paint()
 	int wide, tall;
 	GetSize(wide, tall);
 
-	surface()->DrawSetColor(GetFgColor());
+	surface()->DrawSetColor( GetFgColor() );
 
 	switch( m_iProgressDirection )
 	{

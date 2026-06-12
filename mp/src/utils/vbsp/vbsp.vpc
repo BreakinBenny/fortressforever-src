@@ -23,7 +23,7 @@ $Configuration
 	}
 }
 
-$Project "Vbsp"
+$Project "VBSP"
 {
 	$Folder	"Source Files"
 	{

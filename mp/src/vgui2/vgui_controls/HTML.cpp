@@ -125,6 +125,7 @@ HTML::HTML(Panel *parent, const char *name, bool allowJavaScript, bool bPopupWin
 	SetPostChildPaintEnabled( true );
 
 	m_unBrowserHandle = INVALID_HTMLBROWSER;
+	
 	if ( SteamHTMLSurface() )
 	{
 		SteamHTMLSurface()->Init();
@@ -1170,7 +1171,11 @@ HTML::CHTMLFindBar::CHTMLFindBar( HTML *parent ) : EditablePanel( parent, "FindB
 	m_pFindBar->SendNewLine( true );
 	m_pFindCountLabel = new Label( this, "FindCount", "" );
 	m_pFindCountLabel->SetVisible( false );
-	LoadControlSettings( "resource/layout/htmlfindbar.layout" );
+
+	
+	
+		LoadControlSettings( "resource/layout/htmlfindbar.layout" );
+	
 }
 
 

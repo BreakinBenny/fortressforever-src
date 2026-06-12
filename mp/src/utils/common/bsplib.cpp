@@ -216,6 +216,7 @@ BEGIN_BYTESWAP_DATADESC( dfaceid_t )
 	DEFINE_FIELD( hammerfaceid, FIELD_SHORT ),
 END_BYTESWAP_DATADESC()
 
+
 BEGIN_BYTESWAP_DATADESC( dbrush_t )
 	DEFINE_FIELD( firstside, FIELD_INTEGER ),
 	DEFINE_FIELD( numsides, FIELD_INTEGER ),
@@ -628,6 +629,7 @@ dface_t		dfaces[MAX_MAP_FACES];
 
 int			numfaceids;
 CUtlVector<dfaceid_t>	dfaceids;
+
 
 int			numfaces_hdr;
 dface_t		dfaces_hdr[MAX_MAP_FACES];
@@ -2233,6 +2235,7 @@ void LoadBSPFile( const char *filename )
 
 	CopyOptionalLump( LUMP_FACEIDS, dfaceids );
 
+
 	g_numprimitives = CopyLump( LUMP_PRIMITIVES, g_primitives );
 	g_numprimverts = CopyLump( LUMP_PRIMVERTS, g_primverts );
 	g_numprimindices = CopyLump( FIELD_SHORT, LUMP_PRIMINDICES, g_primindices );
@@ -2287,12 +2290,12 @@ void LoadBSPFile( const char *filename )
 	CopyLump( FIELD_SHORT, LUMP_LEAFMINDISTTOWATER, g_LeafMinDistToWater );
 
 	/*
-	int crap;
-	for( crap = 0; crap < g_nBSPStringTable; crap++ )
+	int junk;
+	for( junk = 0; junk < g_nBSPStringTable; junk++ )
 	{
-		Msg( "stringtable %d", ( int )crap );
-		Msg( " %d:",  ( int )g_BSPStringTable[crap] );
-		puts( &g_BSPStringData[g_BSPStringTable[crap]] );
+		Msg( "stringtable %d", ( int )junk );
+		Msg( " %d:",  ( int )g_BSPStringTable[junk] );
+		puts( &g_BSPStringData[g_BSPStringTable[junk]] );
 		puts( "\n" );
 	}
 	*/
@@ -2357,6 +2360,7 @@ void UnloadBSPFile()
 	numfaces_hdr = 0;
 
 	dfaceids.Purge();
+
 
 	g_numprimitives = 0;
 	g_numprimverts = 0;
@@ -2661,6 +2665,7 @@ void WriteBSPFile( const char *filename, char *pUnused )
     if (numfaces_hdr)
 		AddLump( LUMP_FACES_HDR, dfaces_hdr, numfaces_hdr, LUMP_FACES_VERSION );
 	AddLump ( LUMP_FACEIDS, dfaceids, numfaceids );
+
 
 	AddLump( LUMP_ORIGINALFACES, dorigfaces, numorigfaces );     // original faces lump
 	AddLump( LUMP_BRUSHES, dbrushes, numbrushes );

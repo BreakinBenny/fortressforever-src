@@ -26,7 +26,7 @@ $Configuration
 	}
 }
 
-$Project "QC_Eyes"
+$Project "QC Eyes"
 {
 	$Folder	"Source Files"
 	{		

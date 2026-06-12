@@ -993,7 +993,7 @@ void CConsolePanel::AddToHistory( const char *commandText, const char *extraText
 		{
 			memset( extra, 0x0, strlen( extraText ) + 1 );
 			Q_strncpy( extra, extraText, strlen( extraText )); // +1 to dodge the starting quote
-			
+
 			// Strip trailing spaces
 			int i = strlen( extra ) - 1; 
 			while ( i >= 0 &&  // Check I before referencing i == -1 into the extra array!
@@ -1022,7 +1022,7 @@ void CConsolePanel::AddToHistory( const char *commandText, const char *extraText
 				continue;
 
 			// stricmp so two commands with the same starting text get added
-			if ( stricmp( item->GetExtra(), extra ) )	
+			if ( stricmp( item->GetExtra(), extra ) )
 				continue;
 		}
 		m_CommandHistory.Remove( i );

@@ -874,7 +874,7 @@ void Button::ApplySettings( KeyValues *inResourceData )
 		SetReleasedSound(sound);
 	}
 
-	_activationType = (ActivationType_t)inResourceData->GetInt( "button_activation_type", ACTIVATE_ONRELEASED );
+	_activationType = (ActivationType_t)inResourceData->GetInt( "button_activation_type",ACTIVATE_ONRELEASED );
 }
 
 
@@ -990,7 +990,7 @@ void Button::OnMouseReleased(MouseCode code)
 	if (!IsSelected() && _activationType == ACTIVATE_ONPRESSEDANDRELEASED)
 		return;
 
-	// it has to be both enabled and (mouse over the button or using a key) to fire
+	// It has to be both enabled and (mouse over the button or using a key) to fire
 	if ( IsEnabled() && ( GetVPanel() == input()->GetMouseOver() || _buttonFlags.IsFlagSet( BUTTON_KEY_DOWN ) ) )
 	{
 		DoClick();

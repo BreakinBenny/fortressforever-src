@@ -1024,7 +1024,7 @@ void Frame::LayoutProportional( FrameButton *bt )
 {
 	float scale = 1.0;
 
-	if( IsProportional() )
+	if ( IsProportional() )
 	{	
 		int screenW, screenH;
 		surface()->GetScreenSize( screenW, screenH );

@@ -5019,9 +5019,6 @@ int CBaseEntity::PrecacheModel( const char *name, bool bPreload )
 {
 	if ( !name || !*name )
 	{
-#ifdef STAGING_ONLY
-		Msg( "Attempting to precache model, but model name is NULL\n");
-#endif
 		return -1;
 	}
 

@@ -86,10 +86,6 @@ const float RUN_SPEED_ESTIMATE_SQR = 150.0f * 150.0f;
 static ConVar dbganimmodel( "dbganimmodel", "" );
 #endif
 
-#if defined( STAGING_ONLY )
-	static ConVar dbg_bonestack_perturb( "dbg_bonestack_perturb", "0", 0);
-	static CInterlockedInt dbg_bonestack_reentrant_count = 0;
-#endif // STAGING_ONLY
 
 mstudioevent_t *GetEventIndexForSequence( mstudioseqdesc_t &seqdesc );
 
@@ -584,7 +580,7 @@ void C_ClientRagdoll::ClientThink( void )
 	}
 
 	HandleAnimatedFriction();
-	
+
 	FadeOut();
 }
 

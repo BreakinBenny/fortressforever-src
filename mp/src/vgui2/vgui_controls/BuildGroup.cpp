@@ -877,17 +877,17 @@ void BuildGroup::LoadControlSettings(const char *controlResourceName, const char
 	if ( !rDat )
 	{
 		// load the resource data from the file
-		rDat  = new KeyValues(controlResourceName);
+		rDat = new KeyValues( controlResourceName );
 
 		// check the skins directory first, if an explicit pathID hasn't been set
 		bool bSuccess = false;
-		if (!pathID)
+		if ( !pathID )
 		{
-			bSuccess = rDat->LoadFromFile(g_pFullFileSystem, controlResourceName, "SKIN");
+			bSuccess = rDat->LoadFromFile( g_pFullFileSystem, controlResourceName, "SKIN" );
 		}
-		if (!bSuccess)
+		if ( !bSuccess )
 		{
-			bSuccess = rDat->LoadFromFile(g_pFullFileSystem, controlResourceName, pathID);
+			bSuccess = rDat->LoadFromFile( g_pFullFileSystem, controlResourceName, pathID );
 		}
 
 		if ( bSuccess )
@@ -907,7 +907,7 @@ void BuildGroup::LoadControlSettings(const char *controlResourceName, const char
 
 			if ( pConditions && pConditions->GetFirstSubKey() )
 			{
-				ProcessConditionalKeys( rDat, pConditions );			
+				ProcessConditionalKeys(rDat, pConditions);
 			}
 		}
 	}

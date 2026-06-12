@@ -96,9 +96,6 @@ static char *CopyString( const char *in )
 	return n;
 }
 
-#ifdef STAGING_ONLY
-ConVar tf_strict_mouse_up_events( "tf_strict_mouse_up_events", "0", FCVAR_ARCHIVE, "Only allow Mouse-Release events to happens on panels we also Mouse-Downed in" );
-#endif
 
 // Temporary convar to help debug why the MvMVictoryMannUpPanel TabContainer is sometimes way off to the left.
 ConVar tf_debug_tabcontainer( "tf_debug_tabcontainer", "0", FCVAR_HIDDEN, "Spew TabContainer dimensions." );
@@ -1933,25 +1930,7 @@ void Panel::InternalMousePressed(int code)
 		}
 	}
 
-#ifdef STAGING_ONLY
-	// If holding CTRL + ALT, invalidate layout.  For debugging purposes
-	if ( ( vgui::input()->IsKeyDown(KEY_LCONTROL) || vgui::input()->IsKeyDown(KEY_RCONTROL) ) 
-		&& ( vgui::input()->IsKeyDown(KEY_LALT) || vgui::input()->IsKeyDown(KEY_RALT) ) )
-	{
-		InvalidateLayout( true, true );
-	}
-#endif
 
-#ifdef STAGING_ONLY
-	const char *pGameDir = COM_GetModDirectory();
-	if ( Q_stristr( pGameDir, "tf" ) )
-	{
-		if ( code >= MOUSE_LEFT && code <= MOUSE_MIDDLE )
-		{
-			m_sMousePressedPanels[ code - MOUSE_LEFT ] = this;
-		}
-	}
-#endif
 
 	Panel *pMouseHandler = m_hMouseEventHandler.Get();
 	if ( pMouseHandler )
@@ -2048,7 +2027,7 @@ void Panel::InternalMouseTriplePressed( int code )
 		return;
 	}
 
-	OnMouseTriplePressed((MouseCode)code);
+		OnMouseTriplePressed((MouseCode)code);
 #if defined( VGUI_USEDRAGDROP )
 	DragDropStartDragging();
 #endif
@@ -2087,27 +2066,8 @@ void Panel::InternalMouseReleased(int code)
 		}
 	}
 
-#ifdef STAGING_ONLY
-	const char *pGameDir = COM_GetModDirectory();
-	if ( Q_stristr( pGameDir, "tf" ) && tf_strict_mouse_up_events.GetBool() )
-	{
-		// Only allow mouse release events to go to panels that we also
-		// first clicked into
-		if ( code >= MOUSE_LEFT && code <= MOUSE_MIDDLE )
-		{
-			const int nIndex = code - MOUSE_LEFT;
-			Panel* pPressedPanel = m_sMousePressedPanels[ nIndex ];
-			m_sMousePressedPanels[ nIndex ] = NULL;	// Clear out pressed panel
-			if ( pPressedPanel != this )
-			{
-				OnMouseMismatchedRelease( (MouseCode)code, pPressedPanel );
-				return;
-			}
-		}
-	}
-#endif
 
-	OnMouseReleased((MouseCode)code);
+		OnMouseReleased((MouseCode)code);
 }
 
 void Panel::InternalMouseWheeled(int delta)
@@ -2120,7 +2080,16 @@ void Panel::InternalMouseWheeled(int delta)
 	if ( !ShouldHandleInputMessage() )
 		return;
 
-	OnMouseWheeled(delta);
+	
+	
+	
+		
+	
+	
+	
+	
+		OnMouseWheeled(delta);
+	
 }
 
 void Panel::InternalKeyCodePressed(int code)
@@ -4508,16 +4477,16 @@ void Panel::ApplySettings(KeyValues *inResourceData)
 	InternalApplySettings( GetAnimMap(), inResourceData );
 
 	// clear any alignment flags
-	_buildModeFlags &= ~( BUILDMODE_SAVE_XPOS_RIGHTALIGNED 
-						| BUILDMODE_SAVE_XPOS_CENTERALIGNED 
-						| BUILDMODE_SAVE_YPOS_BOTTOMALIGNED 
-						| BUILDMODE_SAVE_YPOS_CENTERALIGNED 
-						| BUILDMODE_SAVE_WIDE_FULL 
-						| BUILDMODE_SAVE_TALL_FULL 
+	_buildModeFlags &= ~( BUILDMODE_SAVE_XPOS_RIGHTALIGNED
+						| BUILDMODE_SAVE_XPOS_CENTERALIGNED
+						| BUILDMODE_SAVE_YPOS_BOTTOMALIGNED
+						| BUILDMODE_SAVE_YPOS_CENTERALIGNED
+						| BUILDMODE_SAVE_WIDE_FULL
+						| BUILDMODE_SAVE_TALL_FULL
 						| BUILDMODE_SAVE_PROPORTIONAL_TO_PARENT
-						| BUILDMODE_SAVE_WIDE_PROPORTIONAL_TALL 
-						| BUILDMODE_SAVE_TALL_PROPORTIONAL_WIDE 
-						| BUILDMODE_SAVE_XPOS_PROPORTIONAL_PARENT 
+						| BUILDMODE_SAVE_WIDE_PROPORTIONAL_TALL
+						| BUILDMODE_SAVE_TALL_PROPORTIONAL_WIDE
+						| BUILDMODE_SAVE_XPOS_PROPORTIONAL_PARENT
 						| BUILDMODE_SAVE_YPOS_PROPORTIONAL_PARENT
 						| BUILDMODE_SAVE_XPOS_PROPORTIONAL_SELF
 						| BUILDMODE_SAVE_YPOS_PROPORTIONAL_SELF );
