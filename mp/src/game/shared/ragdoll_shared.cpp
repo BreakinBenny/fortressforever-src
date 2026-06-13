@@ -778,8 +778,11 @@ bool ShouldRemoveThisRagdoll( CBaseAnimating *pRagdoll )
 	{
 		if ( g_debug_ragdoll_removal.GetBool() )
 		{
-			debugoverlay->AddBoxOverlay( origin, vMins, vMaxs, QAngle( 0, 0, 0 ), 0, 0, 255, 16, 5 );
-			debugoverlay->AddLineOverlay( origin, origin + Vector( 0, 0, 64 ), 0, 0, 255, true, 5 );
+			
+			
+				debugoverlay->AddBoxOverlay( origin, vMins, vMaxs, QAngle( 0, 0, 0 ), 0, 0, 255, 16, 5 );
+				debugoverlay->AddLineOverlay( origin, origin + Vector( 0, 0, 64 ), 0, 0, 255, true, 5 );
+			
 		}
 
 		return true;

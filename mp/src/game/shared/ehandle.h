@@ -66,7 +66,6 @@ public:
 	T*		operator->() const;
 };
 
-
 // ----------------------------------------------------------------------- //
 // Inlines.
 // ----------------------------------------------------------------------- //
@@ -149,7 +148,7 @@ inline bool CHandle<T>::operator!=( T *val ) const
 template<class T>
 void CHandle<T>::Set( const T* pVal )
 {
-	CBaseHandle::Set( reinterpret_cast<const IHandleEntity*>(pVal) );
+	CBaseHandle::Set( reinterpret_cast< const IHandleEntity* >( pVal ) );
 }
 
 template<class T>

@@ -241,7 +241,7 @@ void CVoiceGameMgr::UpdateMasks()
 				CFFPlayer* pEnt = (CFFPlayer*)UTIL_PlayerByIndex(iOtherClient + 1);
 				// <-- Mirv: Need different cast
 				if(pEnt && pEnt->IsPlayer() && 
-					(bAllTalk || m_pHelper->CanPlayerHearPlayer(pPlayer, (CBasePlayer*)pEnt, bProximity)) &&
+					(bAllTalk || m_pHelper->CanPlayerHearPlayer(pPlayer, (CBasePlayer*)pEnt, bProximity )) &&
 					(pPlayer->m_iChannel == pEnt->m_iChannel)) // |-- Mirv: They are in the same v. group
 				{
 					gameRulesMask[iOtherClient] = true;

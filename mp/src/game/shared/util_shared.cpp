@@ -199,7 +199,7 @@ Vector SharedRandomVector( const char *sharedname, float minVal, float maxVal, i
 
 	int seed = SeedFileLineHash( CBaseEntity::GetPredictionRandomSeed(), sharedname, additionalSeed );
 	RandomSeed( seed );
-	return RandomVector(minVal, maxVal);
+	return RandomVector( minVal, maxVal );
 }
 
 QAngle SharedRandomAngle( const char *sharedname, float minVal, float maxVal, int additionalSeed /*=0*/ )
@@ -208,7 +208,7 @@ QAngle SharedRandomAngle( const char *sharedname, float minVal, float maxVal, in
 
 	int seed = SeedFileLineHash( CBaseEntity::GetPredictionRandomSeed(), sharedname, additionalSeed );
 	RandomSeed( seed );
-	return RandomAngle(minVal, maxVal);
+	return RandomAngle( minVal, maxVal );
 }
 
 
@@ -237,8 +237,8 @@ bool PassServerEntityFilter( const IHandleEntity *pTouch, const IHandleEntity *p
 	// don't clip against owner
 	if (!pEntPass->CanClipOwnerEntity())
 	{
-		if (pEntPass->GetOwnerEntity() == pEntTouch)
-			return false;
+		if ( pEntPass->GetOwnerEntity() == pEntTouch )
+			return false;	
 	}
 
 	if (!pEntPass->CanClipPlayer() && pEntTouch->IsPlayer())
@@ -601,7 +601,9 @@ bool CTraceFilterSimple::ShouldHitEntity( IHandleEntity *pHandleEntity, int cont
 	if ( m_pPassEnt )
 	{
 		if ( !PassServerEntityFilter( pHandleEntity, m_pPassEnt ) )
+		
 			return false;
+		
 	}
 
 	// Don't test if the game code tells us we should ignore this collision...
