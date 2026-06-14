@@ -149,7 +149,7 @@ protected:
 	void			AddGravity( void );
 
 	// Handle movement in noclip mode.
-	virtual void	FullNoClipMove( float factor, float maxacceleration ); 	// |-- Mirv: Made virtual
+	virtual void			FullNoClipMove( float factor, float maxacceleration ); 	// |-- Mirv: Made virtual
 
 	// Returns true if he started a jump (ie: should he play the jump animation)?
 	virtual bool	CheckJumpButton( void );	// Overridden by each game.

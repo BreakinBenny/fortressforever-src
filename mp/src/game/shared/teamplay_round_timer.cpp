@@ -1142,6 +1142,8 @@ void CTeamRoundTimer::SetTimeRemaining( int iTimerSeconds )
 	{
 		if ( iTimerSeconds > m_nTimerMaxLength )
 		{
+			
+			
 			iTimerSeconds = m_nTimerMaxLength;
 		}
 	}

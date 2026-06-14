@@ -235,7 +235,7 @@ bool PassServerEntityFilter( const IHandleEntity *pTouch, const IHandleEntity *p
 		return false;
 	
 	// don't clip against owner
-	if (!pEntPass->CanClipOwnerEntity())
+	if ( !pEntPass->CanClipOwnerEntity())
 	{
 		if ( pEntPass->GetOwnerEntity() == pEntTouch )
 			return false;	
@@ -601,9 +601,9 @@ bool CTraceFilterSimple::ShouldHitEntity( IHandleEntity *pHandleEntity, int cont
 	if ( m_pPassEnt )
 	{
 		if ( !PassServerEntityFilter( pHandleEntity, m_pPassEnt ) )
-		
+		{
 			return false;
-		
+		}
 	}
 
 	// Don't test if the game code tells us we should ignore this collision...
@@ -612,7 +612,7 @@ bool CTraceFilterSimple::ShouldHitEntity( IHandleEntity *pHandleEntity, int cont
 		return false;
 	if ( !pHandle->ShouldCollide( m_collisionGroup, contentsMask ) )
 		return false;
-	if (pHandle && !g_pGameRules->ShouldCollide( m_collisionGroup, pHandle->GetCollisionGroup() ) )
+	if ( pHandle && !g_pGameRules->ShouldCollide( m_collisionGroup, pHandle->GetCollisionGroup() ) )
 		return false;
 	if ( m_pExtraShouldHitCheckFunction &&
 		(! ( m_pExtraShouldHitCheckFunction( pHandleEntity, contentsMask ) ) ) )

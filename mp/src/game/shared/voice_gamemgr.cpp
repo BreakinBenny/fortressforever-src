@@ -210,7 +210,6 @@ void CVoiceGameMgr::UpdateMasks()
 		CBaseEntity *pEnt = UTIL_PlayerByIndex(iClient+1);
 		if(!pEnt || !pEnt->IsPlayer())
 			continue;
-
 		// --> Mirv: Need different cast
 		//CBasePlayer *pPlayer = (CBasePlayer*)pEnt;
 		CFFPlayer* pPlayer = (CFFPlayer*)pEnt;
@@ -235,8 +234,7 @@ void CVoiceGameMgr::UpdateMasks()
 		{
 			// Build a mask of who they can hear based on the game rules.
 			for(int iOtherClient=0; iOtherClient < m_nMaxPlayers; iOtherClient++)
-			{
-				// --> Mirv: Need different cast
+			{	// --> Mirv: Need different cast
 				//CBaseEntity *pEnt = UTIL_PlayerByIndex(iOtherClient+1);
 				CFFPlayer* pEnt = (CFFPlayer*)UTIL_PlayerByIndex(iOtherClient + 1);
 				// <-- Mirv: Need different cast

@@ -252,7 +252,7 @@ void PrecacheStandardParticleSystems( )
 			PrecacheParticleSystem( pParticleSystemName );
 		}
 	}
-#endif
+#endif // GAME_DLL
 }
 
 

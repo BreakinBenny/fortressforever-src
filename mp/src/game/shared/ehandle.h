@@ -49,6 +49,14 @@ public:
 			CHandle( const CBaseHandle &handle );
 			CHandle( T *pVal );
 
+	
+	
+	
+	
+	
+
+	
+
 	// The index should have come from a call to ToInt(). If it hasn't, you're in trouble.
 	static CHandle<T> FromIndex( int index );
 
@@ -96,7 +104,6 @@ CHandle<T>::CHandle( T *pObj )
 	Term();
 	Set( pObj );
 }
-
 
 template<class T>
 inline CHandle<T> CHandle<T>::FromIndex( int index )
