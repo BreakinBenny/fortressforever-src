@@ -377,7 +377,7 @@ void CTeamMenu::OnKeyCodeReleased(KeyCode code)
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Show the panel or whatever
+// Purpose: shows the team menu
 //-----------------------------------------------------------------------------
 void CTeamMenu::ShowPanel(bool bShow)
 {
@@ -401,8 +401,8 @@ void CTeamMenu::ShowPanel(bool bShow)
 	}
 	else
 	{
-		SetVisible(false);
-		SetMouseInputEnabled(false);
+		SetVisible( false );
+		SetMouseInputEnabled( false );
 		SetKeyBoardInputEnabled(false);
 	}
 }
@@ -410,7 +410,7 @@ void CTeamMenu::ShowPanel(bool bShow)
 //-----------------------------------------------------------------------------
 // Purpose: Don't need anything yet
 //-----------------------------------------------------------------------------
-void CTeamMenu::Reset() 
+void CTeamMenu::Reset()
 {
 	Q_strcpy( m_szServerName, "Fortress Forever" );
 }

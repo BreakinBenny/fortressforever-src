@@ -642,11 +642,14 @@ bool CRopeManager::IsHolidayLightMode( void )
 	}
 
 #ifdef TF_CLIENT_DLL
-	if ( TFGameRules() && TFGameRules()->IsPowerupMode() )
+	if ( TFGameRules() )
 	{
 		// We don't want to draw the lights for the grapple.
 		// They get left behind for a while and look bad.
-		return false;
+		if ( TFGameRules()->IsPowerupMode() || !TFGameRules()->GetRopesHolidayLightsAllowed() )
+		{
+			return false;
+		}
 	}
 #endif
 
@@ -1701,6 +1704,8 @@ void C_RopeKeyframe::BuildRope( RopeSegData_t *pSegmentData, const Vector &vCurr
 
 		if ( !bQueued && RopeManager()->IsHolidayLightMode() && r_rope_holiday_light_scale.GetFloat() > 0.0f )
 		{
+			
+			
 			data.m_nMaterial = reinterpret_cast< int >( this );
 			data.m_nHitBox = ( iNode << 8 );
 			data.m_flScale = r_rope_holiday_light_scale.GetFloat();

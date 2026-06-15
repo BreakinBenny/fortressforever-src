@@ -673,7 +673,7 @@ void CZipFile::ParseFromBuffer( void *buffer, int bufferlength )
 		}
 	}
 	Assert( bFoundEndOfCentralDirRecord );
-	
+
 	// Make sure there are some files to parse
 	int numzipfiles = rec.nCentralDirectoryEntries_Total;
 	if ( numzipfiles <= 0 )

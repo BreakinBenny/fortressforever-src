@@ -690,7 +690,7 @@ void C_HLTVCamera::SpecNextPlayer( bool bInverse )
 			continue;
 
 		// only follow living players 
-		if (!IsValidObserverTarget(index))
+		if ( !IsValidObserverTarget(index) )
 			continue;
 
 		break; // found a new player

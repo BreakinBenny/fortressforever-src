@@ -52,7 +52,7 @@
 			void* operator new( size_t nSize, int blah, const char *pFileName, int nLine );
 			void* operator new[]( size_t nSize, int blah, const char *pFileName, int nLine );
 		#endif
-	
+
 	#else // defined(POSIX)
 	
 		// Include crtdbg.h and make sure _DEBUG is set to 1.

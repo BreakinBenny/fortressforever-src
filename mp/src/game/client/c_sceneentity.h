@@ -80,6 +80,8 @@ private:
 	void					ClearSceneEvents( CChoreoScene *scene, bool canceled );
 	void					SetCurrentTime( float t, bool forceClientSync );
 
+
+	
 	bool					GetHWMorphSceneFileName( const char *pFilename, char *pHWMFilename );
 
 private:

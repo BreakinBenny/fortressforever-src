@@ -340,7 +340,7 @@ public:
 
 	// Tells the engine we can immdiately re-use all edict indices
 	// even though we may not have waited enough time
-	virtual void			AllowImmediateEdictReuse( ) = 0;
+	virtual void			AllowImmediateEdictReuse( ) = 0;	
 
 	// Returns true if the engine is an internal build. i.e. is using the internal bugreporter.
 	virtual bool		IsInternalBuild( void ) = 0;
@@ -443,6 +443,8 @@ public:
 		eFindMap_PossiblyAvailable
 	};
 	virtual eFindMapResult FindMap( /* in/out */ char *pMapName, int nMapNameMax ) = 0;
+	
+	
 };
 
 // These only differ in new items added to the end
@@ -736,6 +738,9 @@ public:
 
 	// Hook for player spawning
 	virtual void			ClientSpawned( edict_t *pPlayer ) = 0;
+
+	
+	
 };
 
 typedef IServerGameClients IServerGameClients003;
@@ -820,6 +825,9 @@ public:
 	virtual bool SteamIDAllowedToConnect( const CSteamID &steamId ) const = 0;
 	virtual void UpdateServerDetails(void) = 0;
 	virtual bool ShouldHibernate() = 0;
+
+	
+	
 };
 
 #endif // EIFACE_H

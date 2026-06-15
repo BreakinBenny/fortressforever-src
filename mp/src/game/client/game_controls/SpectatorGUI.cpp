@@ -67,14 +67,14 @@ CSpectatorGUI *g_pSpectatorGUI = NULL;
 // NB disconnect between localization text and observer mode enums
 static const char *s_SpectatorModes[] =
 {
-	"#Spec_Mode0",	// 	OBS_MODE_NONE = 0,
-	"#Spec_Mode1",	// 	OBS_MODE_DEATHCAM,
-	"",				// 	OBS_MODE_FREEZECAM,
-	"#Spec_Mode2",	// 	OBS_MODE_FIXED,
-	"#Spec_Mode3",	// 	OBS_MODE_IN_EYE,
-	"#Spec_Mode4",	// 	OBS_MODE_CHASE,
-	"#Spec_Mode5",	// 	OBS_MODE_ROAMING,
+	"#Spec_Mode0",	// 	OBS_MODE_NONE = 0,	
+	"#Spec_Mode1",	// 	OBS_MODE_DEATHCAM,	
+	"",				// 	OBS_MODE_FREEZECAM,	
+	"#Spec_Mode2",	// 	OBS_MODE_FIXED,		
+	"#Spec_Mode3",	// 	OBS_MODE_IN_EYE,	
+	"#Spec_Mode4",	// 	OBS_MODE_CHASE,		
 	"#Spec_Mode_POI",	// 	OBS_MODE_POI, PASSTIME
+	"#Spec_Mode5",	// 	OBS_MODE_ROAMING,	
 };
 
 using namespace vgui;
@@ -155,7 +155,7 @@ CSpectatorMenu::CSpectatorMenu( IViewPort *pViewPort ) : Frame( NULL, PANEL_SPEC
 	}
 
 	m_pViewOptions = new CSpecComboBox(this, "viewcombo", 10 , false );
-	//m_pConfigSettings = new CSpecComboBox(this, "settingscombo", 10 , false );
+	//m_pConfigSettings = new CSpecComboBox(this, "settingscombo", 10 , false );	
 
 	m_pLeftButton = new CSpecButton( this, "specprev");
 	m_pLeftButton->SetText("3");
@@ -180,7 +180,8 @@ CSpectatorMenu::CSpectatorMenu( IViewPort *pViewPort ) : Frame( NULL, PANEL_SPEC
 	menu->LoadFromFile("Resource/spectatormodes.res");
 	m_pViewOptions->SetMenu( menu );	// attach menu to combo box
 
-	LoadControlSettings("Resource/UI/BottomSpectator.res");
+	LoadControlSettings( "Resource/UI/BottomSpectator.res" );
+
 	ListenForGameEvent( "spec_target_updated" );
 }
 
@@ -222,7 +223,7 @@ void CSpectatorMenu::OnTextChanged(KeyValues *data)
 
 	vgui::ComboBox *box = dynamic_cast<vgui::ComboBox *>( panel );
 
-	/*if (box == m_pConfigSettings) // don't change the text in the config setting combo
+	/*if ( box == m_pConfigSettings) // don't change the text in the config setting combo
 	{
 		m_pConfigSettings->SetText("#Spec_Options");
 	}
@@ -303,7 +304,7 @@ void CSpectatorMenu::OnKeyCodePressed(KeyCode code)
 	if ( code == m_iDuckKey )
 	{
 		// hide if DUCK is pressed again
-		m_pViewPort->ShowPanel(this, false);
+		m_pViewPort->ShowPanel( this, false );
 	}
 }
 
@@ -650,7 +651,9 @@ void CSpectatorGUI::ShowPanel(bool bShow)
 	{
 		m_bSpecScoreboard = false;
 	}
+
 	SetVisible( bShow );
+
 	if ( !bShow && m_bSpecScoreboard )
 	{
 		gViewPortInterface->ShowPanel( PANEL_SCOREBOARD, false );
@@ -774,6 +777,7 @@ static void ForwardSpecCmdToServer( const CCommand &args )
 	else if ( args.ArgC() == 2 )
 	{
 		// forward the command with parameter
+		// XXX(JohnS): Whyyyyy
 		char command[128];
 		Q_snprintf( command, sizeof(command), "%s \"%s\"", args[ 0 ], args[ 1 ] );
 		engine->ServerCmd( command );
@@ -879,7 +883,10 @@ CON_COMMAND_F( spec_player, "Spectate player by name", FCVAR_CLIENTCMD_CAN_EXECU
 		return;
 
 	if ( args.ArgC() != 2 )
+	
+		
 		return;
+	
 
 	if ( engine->IsHLTV() )
 	{

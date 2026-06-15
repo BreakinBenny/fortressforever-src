@@ -307,7 +307,7 @@ bool C_SoundscapeSystem::Init()
 	char mapSoundscapeFilename[256] = { 0 };
 	char mapSoundscapeFilenameFF[256] = { 0 }; // for the FF method of using maps/mapname_soundscapes.txt
 
-	if (mapname && *mapname)
+	if ( mapname && *mapname )
 	{
 		// Jon - 2/14/2007: Let's support both methods.
 		//mapSoundscapeFilename = VarArgs( "scripts/soundscapes_%s.txt", mapname )

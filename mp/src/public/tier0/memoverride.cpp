@@ -76,29 +76,29 @@ const char* MakeModuleFileName()
     return NULL;
 }
 
-static void* AllocUnattributed(size_t nSize)
+static void *AllocUnattributed( size_t nSize )
 {
 #if _MSC_VER < 1900
-    static const char* pszOwner = MakeModuleFileName();
+	static const char *pszOwner = MakeModuleFileName();
 
-    if (!pszOwner)
-        return g_pMemAlloc->Alloc(nSize);
-    else
-        return g_pMemAlloc->Alloc(nSize, pszOwner, 0);
+	if ( !pszOwner )
+		return g_pMemAlloc->Alloc(nSize);
+	else
+		return g_pMemAlloc->Alloc(nSize, pszOwner, 0);
 #else
     return g_pMemAlloc->Alloc(nSize);
 #endif
 }
 
-static void* ReallocUnattributed(void* pMem, size_t nSize)
+static void *ReallocUnattributed( void *pMem, size_t nSize )
 {
 #if _MSC_VER < 1900
-    static const char* pszOwner = MakeModuleFileName();
+	static const char *pszOwner = MakeModuleFileName();
 
-    if (!pszOwner)
-        return g_pMemAlloc->Realloc(pMem, nSize);
-    else
-        return g_pMemAlloc->Realloc(pMem, nSize, pszOwner, 0);
+	if ( !pszOwner )
+		return g_pMemAlloc->Realloc(pMem, nSize);
+	else
+		return g_pMemAlloc->Realloc(pMem, nSize, pszOwner, 0);
 #else
     return g_pMemAlloc->Realloc(pMem, nSize);
 #endif
@@ -106,14 +106,14 @@ static void* ReallocUnattributed(void* pMem, size_t nSize)
 
 #else
 #define MakeModuleFileName() NULL
-inline void* AllocUnattributed(size_t nSize)
+inline void *AllocUnattributed( size_t nSize )
 {
-    return g_pMemAlloc->Alloc(nSize);
+	return g_pMemAlloc->Alloc(nSize);
 }
 
-inline void* ReallocUnattributed(void* pMem, size_t nSize)
+inline void *ReallocUnattributed( void *pMem, size_t nSize )
 {
-    return g_pMemAlloc->Realloc(pMem, nSize);
+	return g_pMemAlloc->Realloc(pMem, nSize);
 }
 #endif
 
@@ -128,8 +128,8 @@ inline void* ReallocUnattributed(void* pMem, size_t nSize)
 #define _CRTNOALIAS
 #endif
 #if _MSC_VER >= 1400
-#define ALLOC_CALL _CRTNOALIAS _CRTRESTRICT
-#define FREE_CALL _CRTNOALIAS
+#define ALLOC_CALL _CRTNOALIAS _CRTRESTRICT 
+#define FREE_CALL _CRTNOALIAS 
 #else
 #define ALLOC_CALL
 #define FREE_CALL
@@ -137,28 +137,28 @@ inline void* ReallocUnattributed(void* pMem, size_t nSize)
 
 extern "C"
 {
+	
+ALLOC_CALL void *malloc( size_t nSize )
+{
+	return AllocUnattributed( nSize );
+}
 
-    ALLOC_CALL void* malloc(size_t nSize)
-    {
-        return AllocUnattributed(nSize);
-    }
+FREE_CALL void free( void *pMem )
+{
+	g_pMemAlloc->Free(pMem);
+}
 
-    FREE_CALL void free(void* pMem)
-    {
-        g_pMemAlloc->Free(pMem);
-    }
+ALLOC_CALL void *realloc( void *pMem, size_t nSize )
+{
+	return ReallocUnattributed( pMem, nSize );
+}
 
-    ALLOC_CALL void* realloc(void* pMem, size_t nSize)
-    {
-        return ReallocUnattributed(pMem, nSize);
-    }
-
-    ALLOC_CALL void* calloc(size_t nCount, size_t nElementSize)
-    {
-        void* pMem = AllocUnattributed(nElementSize * nCount);
-        memset(pMem, 0, nElementSize * nCount);
-        return pMem;
-    }
+ALLOC_CALL void *calloc( size_t nCount, size_t nElementSize )
+{
+	void *pMem = AllocUnattributed( nElementSize * nCount );
+	memset(pMem, 0, nElementSize * nCount);
+	return pMem;
+}
 
 } // end extern "C"
 
@@ -168,7 +168,7 @@ extern "C"
 extern "C"
 {
 
-    // 64-bit
+// 64-bit
 #ifdef _WIN64
     ALLOC_CALL void* __cdecl _malloc_base(size_t nSize)
     {
@@ -1566,10 +1566,10 @@ namespace _NATIVE_STARTUP_NAMESPACE
     class NativeDll
     {
     private:
-        static const unsigned int ProcessDetach = 0;
-        static const unsigned int ProcessAttach = 1;
-        static const unsigned int ThreadAttach = 2;
-        static const unsigned int ThreadDetach = 3;
+        static const unsigned int ProcessDetach   = 0;
+        static const unsigned int ProcessAttach   = 1;
+        static const unsigned int ThreadAttach    = 2;
+        static const unsigned int ThreadDetach    = 3;
         static const unsigned int ProcessVerifier = 4;
 
     public:

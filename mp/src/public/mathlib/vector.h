@@ -70,7 +70,7 @@ public:
 	vec_t x, y, z;
 
 	// Construction/destruction:
-	Vector(void); 
+	Vector(void);
 	Vector(vec_t X, vec_t Y, vec_t Z);
 	explicit Vector(vec_t XYZ); ///< broadcast initialize
 
@@ -504,7 +504,7 @@ float RandomVectorInUnitCircle( Vector2D *pVector );
 // constructors
 //-----------------------------------------------------------------------------
 inline Vector::Vector(void)									
-{ 
+{
 #ifdef _DEBUG
 #ifdef VECTOR_PARANOIA
 	// Initialize to NAN to catch errors

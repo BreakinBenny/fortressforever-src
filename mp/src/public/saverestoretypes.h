@@ -224,7 +224,7 @@ public:
 		for ( i = 0; i < nEntities; i++ )
 		{
 			m_pTable = GetEntityInfo( i );
-			m_EntityToIndex.Insert(  CHashElement(m_pTable->hEnt.Get(), i ) );
+			m_EntityToIndex.Insert(  CHashElement( m_pTable->hEnt.Get(), i ) );
 		}
 #endif
 	}
@@ -270,7 +270,7 @@ public:
 	
 private:
 	int			m_iTableCount;		// Number of elements in the entity table
-	entitytable_t	* m_pTable;		// Array of entitytable_t elements (1 for each entity)
+	entitytable_t	*m_pTable;		// Array of entitytable_t elements (1 for each entity)
 	CBaseEntity		*m_pCurrentEntity; // only valid during the save functions of this entity, NULL otherwise
 
 

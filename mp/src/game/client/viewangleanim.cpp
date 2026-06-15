@@ -100,6 +100,8 @@ CON_COMMAND( viewanim_save, "Save current animation to file" )
 
 	if ( g_pTestAnimation )
 	{	
+		
+		
 		g_pTestAnimation->SaveAsAnimFile( args[1] );
 	}
 	else

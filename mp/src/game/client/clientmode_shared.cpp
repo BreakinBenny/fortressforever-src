@@ -85,7 +85,7 @@ static vgui::HContext s_hVGuiContext = vgui::DEFAULT_VGUI_CONTEXT;
 
 
 // Yeah, don't want this to be a cheat
-ConVar cl_drawhud("cl_drawhud", "1", FCVAR_CLIENTDLL | FCVAR_ARCHIVE, "Enable the rendering of the hud");
+ConVar cl_drawhud( "cl_drawhud", "1", FCVAR_CLIENTDLL | FCVAR_ARCHIVE, "Enable the rendering of the hud" );
 ConVar hud_takesshots( "hud_takesshots", "0", FCVAR_CLIENTDLL | FCVAR_ARCHIVE, "Auto-save a scoreboard screenshot at the end of a map." );
 ConVar hud_freezecamhide( "hud_freezecamhide", "0", FCVAR_CLIENTDLL | FCVAR_ARCHIVE, "Hide the HUD during freeze-cam" );
 ConVar cl_show_num_particle_systems( "cl_show_num_particle_systems", "0", FCVAR_CLIENTDLL, "Display the number of active particle systems." );
@@ -673,7 +673,7 @@ int	ClientModeShared::KeyInput( int down, ButtonCode_t keynum, const char *pszCu
 		return 1;
 	
 	// Should we start typing a message?
-	if (pszCurrentBinding)
+	if ( pszCurrentBinding)
 	{
 		//////////////////////////////////////////////////////////////////////////
 		// Say
@@ -686,7 +686,7 @@ int	ClientModeShared::KeyInput( int down, ButtonCode_t keynum, const char *pszCu
 				if (bMessageMode)
 					StartMessageMode(MM_MESSAGEMODE);
 				else
-					StartMessageMode(MM_SAY);
+					StartMessageMode( MM_SAY );
 			}
 			return 0;
 
@@ -705,9 +705,9 @@ int	ClientModeShared::KeyInput( int down, ButtonCode_t keynum, const char *pszCu
 		bool bSayTeam = !Q_strcmp(pszCurrentBinding, "say_team");
 		if (bSayTeam)
 		{
-			if (down)
+			if ( down )
 			{
-				StartMessageMode(MM_SAY_TEAM);
+				StartMessageMode( MM_SAY_TEAM );
 			}
 			return 0;
 		}
@@ -1043,14 +1043,14 @@ class CHudChat;
 
 bool PlayerNameNotSetYet( const char *pszName )
 {
-	if ( pszName && pszName[0] )
-	{
-		// Don't show "unconnected" if we haven't got the players name yet
-		if ( Q_strnicmp(pszName,"unconnected",11) == 0 )
-			return true;
-		if ( Q_strnicmp(pszName,"NULLNAME",11) == 0 )
-			return true;
-	}
+	if ( !pszName || !pszName[0] )
+		return true;
+
+	// Don't show "unconnected" if we haven't got the players name yet
+	if ( Q_strnicmp(pszName,"unconnected",11) == 0 )
+		return true;
+	if ( Q_strnicmp(pszName,"NULLNAME",11) == 0 )
+		return true;
 
 	return false;
 }
@@ -1071,9 +1071,10 @@ void ClientModeShared::FireGameEvent( IGameEvent *event )
 		if ( !IsInCommentaryMode() )
 		{
 			wchar_t wszLocalized[100];
-			wchar_t wszPlayerName[MAX_PLAYER_NAME_LENGTH];
+			wchar_t wszPlayerName[ MAX_PLAYER_NAME_LENGTH ];
 			g_pVGuiLocalize->ConvertANSIToUnicode( event->GetString("name"), wszPlayerName, sizeof(wszPlayerName) );
 			g_pVGuiLocalize->ConstructString( wszLocalized, sizeof( wszLocalized ), g_pVGuiLocalize->Find( "#game_player_joined_game" ), 1, wszPlayerName );
+			
 
 			char szLocalized[100];
 			g_pVGuiLocalize->ConvertUnicodeToANSI( wszLocalized, szLocalized, sizeof(szLocalized) );
@@ -1216,10 +1217,12 @@ void ClientModeShared::FireGameEvent( IGameEvent *event )
 		if ( PlayerNameNotSetYet(pszOldName) )
 			return;
 
-		wchar_t wszOldName[MAX_PLAYER_NAME_LENGTH];
+		
+
+		wchar_t wszOldName[ MAX_PLAYER_NAME_LENGTH ];
 		g_pVGuiLocalize->ConvertANSIToUnicode( pszOldName, wszOldName, sizeof(wszOldName) );
 
-		wchar_t wszNewName[MAX_PLAYER_NAME_LENGTH];
+		wchar_t wszNewName[ MAX_PLAYER_NAME_LENGTH ];
 		g_pVGuiLocalize->ConvertANSIToUnicode( event->GetString( "newname" ), wszNewName, sizeof(wszNewName) );
 
 		wchar_t wszLocalized[100];
@@ -1232,7 +1235,7 @@ void ClientModeShared::FireGameEvent( IGameEvent *event )
 		hudChat->SetCustomColor( col );
 		hudChat->Printf( CHAT_FILTER_NAMECHANGE, "%s", szLocalized );
 	}
-	else if (Q_strcmp( "teamplay_broadcast_audio", eventname ) == 0 )
+	else if ( Q_strcmp( "teamplay_broadcast_audio", eventname ) == 0 )
 	{
 		int team = event->GetInt( "team" );
 
@@ -1248,7 +1251,7 @@ void ClientModeShared::FireGameEvent( IGameEvent *event )
 		{
 			CBasePlayer *pSpectatorTarget = UTIL_PlayerByIndex( GetSpectatorTarget() );
 
-			if ( pSpectatorTarget && (GetSpectatorMode() == OBS_MODE_IN_EYE || GetSpectatorMode() == OBS_MODE_CHASE || GetSpectatorMode() == OBS_MODE_POI) )
+			if ( pSpectatorTarget && ( GetSpectatorMode() == OBS_MODE_IN_EYE || GetSpectatorMode() == OBS_MODE_CHASE || GetSpectatorMode() == OBS_MODE_POI ) )
 			{
 				if ( pSpectatorTarget->GetTeamNumber() == team )
 				{
@@ -1270,8 +1273,8 @@ void ClientModeShared::FireGameEvent( IGameEvent *event )
 		if ( bValidTeam == true )
 		{
 			EmitSound_t et;
-			et.m_pSoundName = event->GetString("sound");
-			et.m_nFlags = event->GetInt("additional_flags");
+			et.m_pSoundName = event->GetString( "sound" );
+			et.m_nFlags = event->GetInt( "additional_flags" );
 
 			CLocalPlayerFilter filter;
 			C_BaseEntity::EmitSound( filter, SOUND_FROM_LOCAL_PLAYER, et );
@@ -1635,4 +1638,6 @@ void ClientModeShared::DeactivateInGameVGuiContext()
 {
 	vgui::ivgui()->ActivateContext( vgui::DEFAULT_VGUI_CONTEXT );
 }
+
+
 

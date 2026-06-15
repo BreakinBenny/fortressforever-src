@@ -536,7 +536,7 @@ void CLCD::ShowItems_R( CLCDPage *page, unsigned int dwCurTime, CUtlVector< CLCD
 
 							case LCDITEM_TEXT:
 								{
-									CLCDItemText *text = static_cast< CLCDItemText * >( itemLocl );
+									CLCDItemText *text = static_cast< CLCDItemText * >(itemLocl);
 									CUtlString s;
 									s = text->m_OriginalText;
 									Replace( s, prefix, s1 );
@@ -564,7 +564,7 @@ void CLCD::ShowItems_R( CLCDPage *page, unsigned int dwCurTime, CUtlVector< CLCD
 								break;
 							case LCDITEM_ICON:
 								{
-									CLCDItemIcon *icon = static_cast< CLCDItemIcon * >( itemLocl );
+									CLCDItemIcon *icon = static_cast< CLCDItemIcon * >(itemLocl);
 									CLCDItemIcon *copy = static_cast< CLCDItemIcon * >( page->Alloc( itemLocl->m_Type ) );
 									*copy = *icon;
 									copy->m_bActive = true;
@@ -1178,8 +1178,10 @@ void CLCD::DumpPlayer()
 
 	Msg( "(localplayer)\n\n" );
 
-	CDescribeData helper( player );
-	helper.DumpDescription( player->GetPredDescMap() );
+	
+		CDescribeData helper( player );
+		helper.DumpDescription( player->GetPredDescMap() );
+	
 
 	Msg( "(localteam)\n\n" );
 

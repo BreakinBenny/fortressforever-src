@@ -240,7 +240,7 @@ public:
 };
 
 /*
-  NOTE:  So the only crappy thing about using a CUtlTSHash here is that the KEYTYPE is a CUtlSymbolTableLargeBaseTreeEntry_t ptr which has both the 
+  NOTE:  So the only bad thing about using a CUtlTSHash here is that the KEYTYPE is a CUtlSymbolTableLargeBaseTreeEntry_t ptr which has both the 
    hash and the string since with strings there is a good chance of hash collision after you have a fair number of strings so we have to implement
    a Compare method (above) which falls back to strcmp/stricmp if the hashes are equal.  This means that all of the data is in the KEYTYPE of the hash and the 
    payload doesn't matter.  So I made the payload also be a pointer to a CUtlSymbolTableLargeBaseTreeEntry_t since that makes using the API more convenient

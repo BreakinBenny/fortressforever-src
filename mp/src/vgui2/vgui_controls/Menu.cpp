@@ -834,8 +834,27 @@ void Menu::PerformLayout()
 			child->SetFont( m_hItemFont );
 		}
 
+		
+
 		// take into account inset
 		child->SetPos (0, menuTall);
+
+		
+		
+		
+			
+			
+			
+
+			
+			
+			
+				
+			
+		
+
+		
+
 		child->SetTall( m_iMenuItemHeight ); // Width is set in a second pass
 		menuTall += m_iMenuItemHeight;
 		totalTall += m_iMenuItemHeight;
@@ -950,9 +969,9 @@ void Menu::CalculateWidth()
 		{		
 			int wide, tall;
 			m_MenuItems[i]->GetContentSize(wide, tall);
-			if (wide > _menuWide - Label::Content)
+			if (wide > _menuWide - Label::Content )
 			{
-				_menuWide =  wide + Label::Content;	
+				_menuWide =  wide + Label::Content ;	
 			}
 		}	
 	}
@@ -2362,12 +2381,15 @@ int Menu::GetCurrentlyHighlightedItem()
 void Menu::OnCursorEnteredMenuItem(int VPanel)
 {
 	VPANEL menuItem = (VPANEL)VPanel;
+
 	// if we are in mouse mode
 	if (m_iInputMode == MOUSE)
 	{
 		MenuItem *item = static_cast<MenuItem *>(ipanel()->GetPanel(menuItem, GetModuleName()));
 		// arm the menu
 		item->ArmItem();
+		
+
 		// open the cascading menu if there is one.
 		item->OpenCascadeMenu();
 		SetCurrentlySelectedItem(item);
@@ -2377,9 +2399,10 @@ void Menu::OnCursorEnteredMenuItem(int VPanel)
 //-----------------------------------------------------------------------------
 // Purpose: Respond to cursor exiting a menuItem
 //-----------------------------------------------------------------------------
-void Menu::OnCursorExitedMenuItem(int VPanel)
+void Menu::OnCursorExitedMenuItem( int VPanel )
 {
-	VPANEL menuItem = (VPANEL)VPanel;
+	VPANEL menuItem = (VPANEL) VPanel;
+
 	// only care if we are in mouse mode
 	if (m_iInputMode == MOUSE)
 	{

@@ -101,6 +101,7 @@ skipwhite:
 			}
 			pTokenOut[len] = c;
 			len += ( len < nMaxTokenLen-1 ) ? 1 : 0;
+			
 		}
 	}
 
@@ -119,6 +120,7 @@ skipwhite:
 		pTokenOut[len] = c;
 		pFileBytes++;
 		len += ( len < nMaxTokenLen-1 ) ? 1 : 0;
+		
 		c = *pFileBytes;
 		if ( IN_CHARACTERSET( breaks, c ) )
 			break;

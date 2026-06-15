@@ -526,7 +526,7 @@ public:
 	template <typename HashData>
 	struct HashFastData_t_
 	{
-		unsigned int	m_uiKey;
+		unsigned int		m_uiKey;
 		HashData	m_Data;
 	};
 

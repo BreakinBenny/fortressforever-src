@@ -39,7 +39,7 @@
 #define CHAT_WIDTH_PERCENTAGE 0.6f
 
 #ifndef _XBOX
-ConVar hud_saytext_time("hud_saytext_time", "12", FCVAR_ARCHIVE);
+ConVar hud_saytext_time( "hud_saytext_time", "12", FCVAR_ARCHIVE );
 ConVar cl_showtextmsg( "cl_showtextmsg", "1", 0, "Enable/disable text messages printing on the screen." );
 ConVar cl_chatfilters( "cl_chatfilters", "63", FCVAR_CLIENTDLL | FCVAR_ARCHIVE, "Stores the chat filter settings " );
 ConVar cl_mute_all_comms("cl_mute_all_comms", "1", FCVAR_ARCHIVE, "If 1, then all communications from a player will be blocked when that player is muted, including chat messages.");
@@ -883,7 +883,7 @@ void CBaseHudChat::MsgFunc_SayText2( bf_read &msg )
 	g_pVGuiLocalize->ConstructString( szBuf[5], sizeof( szBuf[5] ), msg_text, 4, szBuf[1], szBuf[2], szBuf[3], szBuf[4] );
 
 	char ansiString[512];
-	g_pVGuiLocalize->ConvertUnicodeToANSI( ConvertCRtoNL( szBuf[5] ), ansiString, sizeof( ansiString ) );
+	g_pVGuiLocalize->ConvertUnicodeToANSI( ConvertCRtoNL( szBuf[ 5 ] ), ansiString, sizeof( ansiString ) );
 
 	if ( bWantsToChat )
 	{
@@ -904,7 +904,7 @@ void CBaseHudChat::MsgFunc_SayText2( bf_read &msg )
 	else
 	{
 		// print raw chat text
-		ChatPrintf( client, GetFilterForString( untranslated_msg_text), "%s", ansiString );
+		ChatPrintf( client, GetFilterForString( untranslated_msg_text ), "%s", ansiString );
 	}
 }
 

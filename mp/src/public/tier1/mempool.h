@@ -135,20 +135,33 @@ template< class T >
 class CClassMemoryPool : public CUtlMemoryPool
 {
 public:
-	CClassMemoryPool(int numElements, int growMode = GROW_FAST, int nAlignment = 0 ) :
-		CUtlMemoryPool( sizeof(T), numElements, growMode, MEM_ALLOC_CLASSNAME(T), nAlignment ) {
-			#ifdef PLATFORM_64BITS 
-				COMPILE_TIME_ASSERT( sizeof(CUtlMemoryPool) == 64 );
-			#else
-				COMPILE_TIME_ASSERT( sizeof(CUtlMemoryPool) == 48 );
-			#endif
-		}
+	
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
 
-	T*		Alloc();
-	T*		AllocZero();
-	void	Free( T *pMem );
+    CClassMemoryPool(int numElements, int growMode = GROW_FAST, int nAlignment = 0 ) :
+        CUtlMemoryPool( sizeof(T), numElements, growMode, MEM_ALLOC_CLASSNAME(T), nAlignment ) {
+            #ifdef PLATFORM_64BITS 
+                COMPILE_TIME_ASSERT( sizeof(CUtlMemoryPool) == 64 );
+            #else
+                COMPILE_TIME_ASSERT( sizeof(CUtlMemoryPool) == 48 );
+            #endif
+        }
 
-	void	Clear();
+    T*        Alloc();
+    T*        AllocZero();
+    void    Free( T *pMem );
+
+    void    Clear();
 };
 
 
@@ -315,7 +328,8 @@ inline void CClassMemoryPool<T>::Clear()
 
 	for( CBlob *pCur=m_BlobHead.m_pNext; pCur != &m_BlobHead; pCur=pCur->m_pNext )
 	{
-		T *p = (T *)pCur->m_Data;
+		
+		T *p = ( T * ) pCur->m_Data;
 		T *pLimit = (T *)(pCur->m_Data + pCur->m_NumBytes);
 		while ( p < pLimit )
 		{
@@ -328,6 +342,7 @@ inline void CClassMemoryPool<T>::Clear()
 	}
 
 	CUtlMemoryPool::Clear();
+
 }
 
 
@@ -458,7 +473,7 @@ inline void CAlignedMemPool<ITEM_SIZE, ALIGNMENT, CHUNK_SIZE, CAllocator, COMPAC
 template <int ITEM_SIZE, int ALIGNMENT, int CHUNK_SIZE, class CAllocator, int COMPACT_THRESHOLD >
 inline int __cdecl CAlignedMemPool<ITEM_SIZE, ALIGNMENT, CHUNK_SIZE, CAllocator, COMPACT_THRESHOLD>::CompareChunk( void * const *ppLeft, void * const *ppRight )
 {
-	return ((unsigned)*ppLeft) - ((unsigned)*ppRight);
+	return ( (unsigned)*ppLeft )- ((unsigned)*ppRight );
 }
 
 template <int ITEM_SIZE, int ALIGNMENT, int CHUNK_SIZE, class CAllocator, int COMPACT_THRESHOLD >

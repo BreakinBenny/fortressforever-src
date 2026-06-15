@@ -31,6 +31,7 @@ enum VGuiPanel_t
 	PANEL_INGAMESCREENS,
 	PANEL_GAMEDLL,
 	PANEL_CLIENTDLL_TOOLS
+	
 };
 
 // In-game panels are cropped to the current engine viewport size
@@ -49,6 +50,8 @@ public:
 	virtual vgui::VPANEL	GetPanel( VGuiPanel_t type ) = 0;
 
 	virtual bool			IsGameUIVisible() = 0;
+
+	
 };
 
 #define VENGINE_VGUI_VERSION	"VEngineVGui001"

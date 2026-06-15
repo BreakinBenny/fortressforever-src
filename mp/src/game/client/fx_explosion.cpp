@@ -193,8 +193,11 @@ void C_BaseExplosionEffect::Create( const Vector &position, float force, float s
 	GetForceDirection( m_vecOrigin, force, &m_vecDirection, &m_flForce );
 
 #if __EXPLOSION_DEBUG
-	debugoverlay->AddBoxOverlay( m_vecOrigin, -Vector(32,32,32), Vector(32,32,32), vec3_angle, 255, 0, 0, 64, 5.0f );
-	debugoverlay->AddLineOverlay( m_vecOrigin, m_vecOrigin+(m_vecDirection*force*m_flForce), 0, 0, 255, false, 3 );
+	
+	
+		debugoverlay->AddBoxOverlay( m_vecOrigin, -Vector(32,32,32), Vector(32,32,32), vec3_angle, 255, 0, 0, 64, 5.0f );
+		debugoverlay->AddLineOverlay( m_vecOrigin, m_vecOrigin+(m_vecDirection*force*m_flForce), 0, 0, 255, false, 3 );
+	
 #endif
 
 	PlaySound();
@@ -242,7 +245,7 @@ void C_BaseExplosionEffect::Create( const Vector &position, float force, float s
 //-----------------------------------------------------------------------------
 void C_BaseExplosionEffect::CreateCore( void )
 {
-	if (m_fFlags & TE_EXPLFLAG_NOFIREBALL)
+	if ( m_fFlags & TE_EXPLFLAG_NOFIREBALL )
 		return;
 
 	Vector	offset;
@@ -254,53 +257,53 @@ void C_BaseExplosionEffect::CreateCore( void )
 
 	// --> Mirv: Remove the cap for now
 	//Cap our force
-	/*if (force < EXPLOSION_FORCE_MIN)
+	/*if ( force < EXPLOSION_FORCE_MIN )
 		force = EXPLOSION_FORCE_MIN;
-
-	if (force > EXPLOSION_FORCE_MAX)
+	
+	if ( force > EXPLOSION_FORCE_MAX )
 		force = EXPLOSION_FORCE_MAX;*/
 		// <--
 
-	float spread = 1.0f - (0.15f * force);
+	float spread = 1.0f - (0.15f*force);
 
-	SimpleParticle* pParticle;
+	SimpleParticle	*pParticle;
 
-	CSmartPtr<CExplosionParticle> pSimple = CExplosionParticle::Create("exp_smoke");
-	pSimple->SetSortOrigin(m_vecOrigin);
-	pSimple->SetNearClip(64, 128);
+	CSmartPtr<CExplosionParticle> pSimple = CExplosionParticle::Create( "exp_smoke" );
+	pSimple->SetSortOrigin( m_vecOrigin );
+	pSimple->SetNearClip( 64, 128 );
 
-	pSimple->GetBinding().SetBBox(m_vecOrigin - Vector(128, 128, 128), m_vecOrigin + Vector(128, 128, 128));
-
-	if (m_Material_Smoke == NULL)
+	pSimple->GetBinding().SetBBox( m_vecOrigin - Vector( 128, 128, 128 ), m_vecOrigin + Vector( 128, 128, 128 ) );
+	
+	if ( m_Material_Smoke == NULL )
 	{
 		m_Material_Smoke = g_Mat_DustPuff[1];
 	}
 
 	//FIXME: Better sampling area
-	offset = m_vecOrigin + (m_vecDirection * 32.0f);
+	offset = m_vecOrigin + ( m_vecDirection * 32.0f );
 
 	//Find area ambient light color and use it to tint smoke
-	Vector worldLight = WorldGetLightForPoint(offset, true);
-
+	Vector worldLight = WorldGetLightForPoint( offset, true );
+	
 	Vector	tint;
 	float	luminosity;
-	if (worldLight == vec3_origin)
+	if ( worldLight == vec3_origin )
 	{
 		tint = vec3_origin;
 		luminosity = 0.0f;
 	}
 	else
 	{
-		UTIL_GetNormalizedColorTintAndLuminosity(worldLight, &tint, &luminosity);
+		UTIL_GetNormalizedColorTintAndLuminosity( worldLight, &tint, &luminosity );
 	}
 
 	// We only take a portion of the tint
-	tint = (tint * 0.25f) + (Vector(0.75f, 0.75f, 0.75f));
-
+	tint = (tint * 0.25f)+(Vector(0.75f,0.75f,0.75f));
+	
 	// Rescale to a character range
 	luminosity *= 255;
 
-	if ((m_fFlags & TE_EXPLFLAG_NOFIREBALLSMOKE) == 0)
+	if ( (m_fFlags & TE_EXPLFLAG_NOFIREBALLSMOKE) == 0 )
 	{
 		//
 		// Smoke - basic internal filler
@@ -308,58 +311,59 @@ void C_BaseExplosionEffect::CreateCore( void )
 		//
 		number = (int)ceil(4 * g_flFractional);
 
-		for (i = 0; i < number; i++)
+		for ( i = 0; i < number; i++ )
 		{
-			pParticle = (SimpleParticle*)pSimple->AddParticle(sizeof(SimpleParticle), m_Material_Smoke, m_vecOrigin);
+			pParticle = (SimpleParticle *) pSimple->AddParticle( sizeof( SimpleParticle ), m_Material_Smoke, m_vecOrigin );
 
-			if (pParticle != NULL)
+			if ( pParticle != NULL )
 			{
 				pParticle->m_flLifetime = 0.0f;
 
 				// --> Mirv: Use TF2 length smoke but scale it so that it hovers up slowly
 //#ifdef INVASION_CLIENT_DLL
-				pParticle->m_flDieTime = random->RandomFloat(0.5f, 1.0f) * (m_flScale * m_flScale * m_flScale);
+				pParticle->m_flDieTime	= random->RandomFloat( 0.5f, 1.0f ) * (m_flScale * m_flScale * m_flScale);
 //#else
 				//pParticle->m_flDieTime	= random->RandomFloat( 2.0f, 3.0f );
 //#endif
 				// <-- Mirv
 
-				pParticle->m_vecVelocity.Random(-spread, spread);
-				pParticle->m_vecVelocity += (m_vecDirection * random->RandomFloat(1.0f, 6.0f));
+				pParticle->m_vecVelocity.Random( -spread, spread );
+				pParticle->m_vecVelocity += ( m_vecDirection * random->RandomFloat( 1.0f, 6.0f ) );
+				
+				VectorNormalize( pParticle->m_vecVelocity );
 
-				VectorNormalize(pParticle->m_vecVelocity);
-
-				float	fForce = random->RandomFloat(1, 750) * force;
+				float	fForce = random->RandomFloat( 1, 750 ) * force;
 
 				//Scale the force down as we fall away from our main direction
-				ScaleForceByDeviation(pParticle->m_vecVelocity, m_vecDirection, spread, &fForce);
+				ScaleForceByDeviation( pParticle->m_vecVelocity, m_vecDirection, spread, &fForce );
 
 				pParticle->m_vecVelocity *= fForce;
-
+				
 				// --> Mirv: Reduce velocity for scale
 				if (m_flScale < 1.0f)
 					pParticle->m_vecVelocity *= m_flScale;
 				// <-- Mirv
+				#if __EXPLOSION_DEBUG
+				
+				
+					debugoverlay->AddLineOverlay( m_vecOrigin, m_vecOrigin + pParticle->m_vecVelocity, 255, 0, 0, false, 3 );
+				
+				#endif
 
-#if __EXPLOSION_DEBUG
-				debugoverlay->AddLineOverlay(m_vecOrigin, m_vecOrigin + pParticle->m_vecVelocity, 255, 0, 0, false, 3);
-#endif
-
-				int nColor = random->RandomInt(luminosity * 0.5f, luminosity);
-				pParticle->m_uchColor[0] = (worldLight[0] * nColor);
-				pParticle->m_uchColor[1] = (worldLight[1] * nColor);
-				pParticle->m_uchColor[2] = (worldLight[2] * nColor);
-
+				int nColor = random->RandomInt( luminosity*0.5f, luminosity );
+				pParticle->m_uchColor[0] = ( worldLight[0] * nColor );
+				pParticle->m_uchColor[1] = ( worldLight[1] * nColor );
+				pParticle->m_uchColor[2] = ( worldLight[2] * nColor );
+				
 				// --> Mirv: Scale the size of the rising smoke too
-				pParticle->m_uchStartSize = clamp(72 * m_flScale, 20, 126);
-				pParticle->m_uchEndSize = pParticle->m_uchStartSize * 2;
+				pParticle->m_uchStartSize	= clamp(72 * m_flScale, 20, 126);
+				pParticle->m_uchEndSize		= pParticle->m_uchStartSize * 2;
 				// <-- Mirv
-
-				pParticle->m_uchStartAlpha = 255;
-				pParticle->m_uchEndAlpha = 0;
-
-				pParticle->m_flRoll = random->RandomInt(0, 360);
-				pParticle->m_flRollDelta = random->RandomFloat(-2.0f, 2.0f);
+				pParticle->m_uchStartAlpha	= 255;
+				pParticle->m_uchEndAlpha	= 0;
+				
+				pParticle->m_flRoll			= random->RandomInt( 0, 360 );
+				pParticle->m_flRollDelta	= random->RandomFloat( -2.0f, 2.0f );
 			}
 		}
 
@@ -371,60 +375,59 @@ void C_BaseExplosionEffect::CreateCore( void )
 #ifndef _XBOX
 		number = (int)ceil(8 * g_flFractional);
 
-		for (i = 0; i < number; i++)
+		for ( i = 0; i < number; i++ )
 		{
-			offset.Random(-16.0f, 16.0f);
+			offset.Random( -16.0f, 16.0f );
 			offset *= m_flScale;	// |-- Mirv: Scale offset
 			offset += m_vecOrigin;
 
-			pParticle = (SimpleParticle*)pSimple->AddParticle(sizeof(SimpleParticle), m_Material_Smoke, offset);
+			pParticle = (SimpleParticle *) pSimple->AddParticle( sizeof( SimpleParticle ), m_Material_Smoke, offset );
 
-			if (pParticle != NULL)
+			if ( pParticle != NULL )
 			{
 				pParticle->m_flLifetime = 0.0f;
-
-				// --> Mirv: Use quicker TF2 style smoke time again, but don't modify for scale
-//#ifdef INVASION_CLIENT_DLL
-				pParticle->m_flDieTime = random->RandomFloat(0.5f, 1.0f);
-//#else
+// --> Mirv: Use quicker TF2 style smoke time again, but don't modify for scale
+	//#ifdef INVASION_CLIENT_DLL
+				pParticle->m_flDieTime	= random->RandomFloat( 0.5f, 1.0f );
+	//#else
 				//pParticle->m_flDieTime	= random->RandomFloat( 0.5f, 1.0f );
-//#endif
-				// <-- Mirv
+	//#endif
+// <-- Mirv
+				pParticle->m_vecVelocity.Random( -spread, spread );
+				pParticle->m_vecVelocity += ( m_vecDirection * random->RandomFloat( 1.0f, 6.0f ) );
+				
+				VectorNormalize( pParticle->m_vecVelocity );
 
-				pParticle->m_vecVelocity.Random(-spread, spread);
-				pParticle->m_vecVelocity += (m_vecDirection * random->RandomFloat(1.0f, 6.0f));
-
-				VectorNormalize(pParticle->m_vecVelocity);
-
-				float	fForce = random->RandomFloat(1, 2000) * force;
+				float	fForce = random->RandomFloat( 1, 2000 ) * force;
 
 				//Scale the force down as we fall away from our main direction
-				ScaleForceByDeviation(pParticle->m_vecVelocity, m_vecDirection, spread, &fForce);
+				ScaleForceByDeviation( pParticle->m_vecVelocity, m_vecDirection, spread, &fForce );
 
 				pParticle->m_vecVelocity *= fForce;
-
 				// --> Mirv: Reduce velocity for scale
 				if (m_flScale < 1.0f)
 					pParticle->m_vecVelocity *= m_flScale;
 				// <-- Mirv
+				#if __EXPLOSION_DEBUG
+				
+				
+					debugoverlay->AddLineOverlay( m_vecOrigin, m_vecOrigin + pParticle->m_vecVelocity, 255, 0, 0, false, 3 );
+				
+				#endif
 
-#if __EXPLOSION_DEBUG
-				debugoverlay->AddLineOverlay(m_vecOrigin, m_vecOrigin + pParticle->m_vecVelocity, 255, 0, 0, false, 3);
-#endif
+				int nColor = random->RandomInt( luminosity*0.5f, luminosity );
+				pParticle->m_uchColor[0] = ( worldLight[0] * nColor );
+				pParticle->m_uchColor[1] = ( worldLight[1] * nColor );
+				pParticle->m_uchColor[2] = ( worldLight[2] * nColor );
+						
+				pParticle->m_uchStartSize	= random->RandomInt( 32, 64 ) * m_flScale;
+				pParticle->m_uchEndSize		= clamp(pParticle->m_uchStartSize * 2, 32, 255);
 
-				int nColor = random->RandomInt(luminosity * 0.5f, luminosity);
-				pParticle->m_uchColor[0] = (worldLight[0] * nColor);
-				pParticle->m_uchColor[1] = (worldLight[1] * nColor);
-				pParticle->m_uchColor[2] = (worldLight[2] * nColor);
-
-				pParticle->m_uchStartSize = random->RandomInt(32, 64) * m_flScale;
-				pParticle->m_uchEndSize = clamp(pParticle->m_uchStartSize * 2, 32, 255);
-
-				pParticle->m_uchStartAlpha = random->RandomFloat(128, 255);
-				pParticle->m_uchEndAlpha = 0;
-
-				pParticle->m_flRoll = random->RandomInt(0, 360);
-				pParticle->m_flRollDelta = random->RandomFloat(-8.0f, 8.0f);
+				pParticle->m_uchStartAlpha	= random->RandomFloat( 128, 255 );
+				pParticle->m_uchEndAlpha	= 0;
+				
+				pParticle->m_flRoll			= random->RandomInt( 0, 360 );
+				pParticle->m_flRollDelta	= random->RandomFloat( -8.0f, 8.0f );
 			}
 		}
 #endif // !_XBOX
@@ -513,18 +516,18 @@ void C_BaseExplosionEffect::CreateCore( void )
 
 		number = (int)ceil(16 * g_flFractional);
 
-		for (i = 0; i < number; i++)
+		for ( i = 0; i < number; i++ )
 		{
 			offset.Random(-32.0f, 32.0f);
 			offset *= m_flScale;	// |-- Mirv: Scale offset
 			offset += m_vecOrigin;
 
-			pParticle = (SimpleParticle*)pSimple->AddParticle(sizeof(SimpleParticle), m_Material_Embers[random->RandomInt(0, 1)], offset);
+			pParticle = (SimpleParticle *) pSimple->AddParticle( sizeof( SimpleParticle ), m_Material_Embers[random->RandomInt(0, 1)], offset );
 
-			if (pParticle != NULL)
+			if ( pParticle != NULL )
 			{
 				pParticle->m_flLifetime = 0.0f;
-				pParticle->m_flDieTime = random->RandomFloat(2.0f, 3.0f);
+				pParticle->m_flDieTime	= random->RandomFloat( 2.0f, 3.0f );
 
 				pParticle->m_vecVelocity.Random(-spread * 2, spread * 2);
 				pParticle->m_vecVelocity += m_vecDirection;
@@ -649,7 +652,7 @@ void C_BaseExplosionEffect::CreateDebris( void )
 	// Sparks
 	//
 
-	/*CSmartPtr<CTrailParticles> pSparkEmitter = CTrailParticles::Create("CreateDebris 1");
+	/*CSmartPtr<CTrailParticles> pSparkEmitter	= CTrailParticles::Create( "CreateDebris 1" );
 	if ( pSparkEmitter == NULL )
 	{
 		assert(0);
@@ -719,13 +722,13 @@ void C_BaseExplosionEffect::CreateDebris( void )
 
 	// Setup our collision information
 	fleckEmitter->m_ParticleCollision.Setup( m_vecOrigin, &m_vecDirection, 0.9f, 512, 1024, 800, 0.5f );
-
+	
 	int number = (int)ceil(16 * g_flFractional);
 
 #ifdef _XBOX
 	int	numFlecks = random->RandomInt( 8, 16 );
 #else	
-	int	numFlecks = random->RandomInt(number, number * 2);
+	int	numFlecks = random->RandomInt( number, number * 2 );
 #endif // _XBOX
 
 
@@ -848,7 +851,10 @@ float C_BaseExplosionEffect::Probe( const Vector &origin, Vector *vecDirection, 
 	(*vecDirection) = -(*vecDirection) * (1.0f-tr.fraction);
 
 #if __EXPLOSION_DEBUG
-	debugoverlay->AddLineOverlay( m_vecOrigin, endpos, (255*(1.0f-tr.fraction)), (255*tr.fraction), 0, false, 3 );
+	
+	
+		debugoverlay->AddLineOverlay( m_vecOrigin, endpos, (255*(1.0f-tr.fraction)), (255*tr.fraction), 0, false, 3 );
+	
 #endif
 
 	assert(( 1.0f - tr.fraction ) >= 0.0f );
@@ -1236,7 +1242,10 @@ void C_WaterExplosionEffect::CreateDebris( void )
 			pParticle->m_vecVelocity *= fForce;
 			
 			#if __EXPLOSION_DEBUG
-			debugoverlay->AddLineOverlay( m_vecOrigin, m_vecOrigin + pParticle->m_vecVelocity, 255, 0, 0, false, 3 );
+			
+			
+				debugoverlay->AddLineOverlay( m_vecOrigin, m_vecOrigin + pParticle->m_vecVelocity, 255, 0, 0, false, 3 );
+			
 			#endif
 
 			pParticle->m_uchColor[0] = m_vecColor.x * 255;
@@ -1489,7 +1498,10 @@ void C_MegaBombExplosionEffect::CreateCore( void )
 			pParticle->m_vecVelocity *= fForce * ( 16.0f * (vDev*vDev*0.5f) );
 
 			#if __EXPLOSION_DEBUG
-			debugoverlay->AddLineOverlay( m_vecOrigin, m_vecOrigin + pParticle->m_vecVelocity, 255, 0, 0, false, 3 );
+			
+			
+				debugoverlay->AddLineOverlay( m_vecOrigin, m_vecOrigin + pParticle->m_vecVelocity, 255, 0, 0, false, 3 );
+			
 			#endif
 
 			int nColor = random->RandomInt( 128, 255 );

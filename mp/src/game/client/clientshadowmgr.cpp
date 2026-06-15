@@ -2387,7 +2387,10 @@ void CClientShadowMgr::BuildOrthoShadow( IClientRenderable* pRenderable,
 // Visualization....
 //-----------------------------------------------------------------------------
 void CClientShadowMgr::DrawRenderToTextureDebugInfo( IClientRenderable* pRenderable, const Vector& mins, const Vector& maxs )
-{   
+{
+	
+		
+
 	// Get the object's basis
 	Vector vec[3];
 	AngleVectors( pRenderable->GetRenderAngles(), &vec[0], &vec[1], &vec[2] );
@@ -2569,8 +2572,11 @@ static void LineDrawHelper( const Vector &startShadowSpace, const Vector &endSha
 	Vector3DMultiplyPositionProjective( shadowToWorld, startShadowSpace, startWorldSpace );
 	Vector3DMultiplyPositionProjective( shadowToWorld, endShadowSpace, endWorldSpace );
 
-	debugoverlay->AddLineOverlay( startWorldSpace + Vector( 0.0f, 0.0f, 1.0f ), 
-		endWorldSpace + Vector( 0.0f, 0.0f, 1.0f ), r, g, b, false, -1 );
+	
+	
+		debugoverlay->AddLineOverlay( startWorldSpace + Vector( 0.0f, 0.0f, 1.0f ), 
+			endWorldSpace + Vector( 0.0f, 0.0f, 1.0f ), r, g, b, false, -1 );
+	
 }
 
 static void DebugDrawFrustum( const Vector &vOrigin, const VMatrix &matWorldToFlashlight )
@@ -3934,11 +3940,11 @@ void CClientShadowMgr::ComputeShadowDepthTextures( const CViewSetup &viewSetup )
 		if ( !bGotShadowDepthTexture )
 		{
 			// If we don't get one, that means we have too many this frame so bind no depth texture
-			static int bitchCount = 0;
-			if( bitchCount < 10 )
+			static int mapCount = 0;
+			if( mapCount < 10 )
 			{
 				Warning( "Too many shadow maps this frame!\n"  );
-				bitchCount++;
+				mapCount++;
 			}
 
 			Assert(0);

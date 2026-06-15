@@ -210,7 +210,7 @@ void C_BaseAnimatingOverlay::CheckForLayerChanges( CStudioHdr *hdr, float curren
 
 	bool bLayersChanged = false;
 	
-	// FIXME: damn, there has to be a better way than this.
+	// FIXME: there has to be a better way than this.
 	int i;
 	for (i = 0; i < m_iv_AnimOverlay.Count(); i++)
 	{

@@ -222,11 +222,11 @@ void CTextWindow::ShowURL( const char *URL, bool bAllowUserToDisable )
 
 void CTextWindow::ShowIndex( const char *entry )
 {
-	if (NULL == g_pStringTableInfoPanel)
-		return;
-
 	const char *data = NULL;
 	int length = 0;
+
+	if ( NULL == g_pStringTableInfoPanel )
+		return;
 
 	int index = g_pStringTableInfoPanel->FindStringIndex( m_szMessage );
 		

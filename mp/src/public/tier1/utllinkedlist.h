@@ -390,7 +390,6 @@ class CUtlFixedLinkedList : public CUtlLinkedList< T, int, true, int, CUtlFixedM
 public:
 	CUtlFixedLinkedList( int growSize = 0, int initSize = 0 )
 		: CUtlLinkedList< T, int, true, int, CUtlFixedMemory< UtlLinkedListElem_t< T, int > > >( growSize, initSize ) {}
-
 	typedef CUtlLinkedList< T, int, true, int, CUtlFixedMemory< UtlLinkedListElem_t< T, int > > > BaseClass;
 	bool IsValidIndex( int i ) const
 	{
@@ -434,7 +433,10 @@ CUtlLinkedList<T,S,ML,I,M>::CUtlLinkedList( int growSize, int initSize ) :
 	m_Memory( growSize, initSize ), m_LastAlloc( m_Memory.InvalidIterator() )
 {
 	// Prevent signed non-int datatypes
-	COMPILE_TIME_ASSERT( sizeof(S) == 4 || ( ( (S)-1 ) > 0 ) );
+
+	
+	COMPILE_TIME_ASSERT( sizeof( S ) == 4 || ( ( (S) -1 ) > 0 ) );
+
 	ConstructList();
 	ResetDbgInfo();
 }

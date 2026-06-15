@@ -178,5 +178,8 @@ IDebugOverlayPanel *debugoverlaypanel =  ( IDebugOverlayPanel * )&g_DebugOverlay
 
 void DebugDrawLine( const Vector& vecAbsStart, const Vector& vecAbsEnd, int r, int g, int b, bool test, float duration )
 {
-	debugoverlay->AddLineOverlay( vecAbsStart + Vector( 0,0,0.1), vecAbsEnd + Vector( 0,0,0.1), r,g,b, test, duration );
+	
+	
+		debugoverlay->AddLineOverlay( vecAbsStart + Vector( 0,0,0.1), vecAbsEnd + Vector( 0,0,0.1), r,g,b, test, duration );
+	
 }

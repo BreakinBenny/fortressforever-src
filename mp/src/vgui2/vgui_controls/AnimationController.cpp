@@ -765,6 +765,7 @@ void AnimationController::UpdateActiveAnimations(bool bRunToCompletion)
 	{
 		ActiveAnimation_t &anim = m_ActiveAnimations[i];
 
+
 		// see if the anim is ready to start
 		if (m_flCurrentTime < anim.startTime && !bRunToCompletion)
 			continue;
@@ -1077,9 +1078,12 @@ void AnimationController::RunAnimationCommand(vgui::Panel *panel,
 											   Interpolators_e interpolator,
 											   float animParameter /* = 0 */ )
 {
-	// clear any previous animations of this variable
 	UtlSymId_t var = g_ScriptSymbols.AddString(variable);
-	RemoveQueuedAnimationByType(panel, var, UTL_INVAL_SYMBOL);
+	
+	
+		// clear any previous animations of this variable
+		RemoveQueuedAnimationByType(panel, var, UTL_INVAL_SYMBOL);
+	
 
 	// build a new animation
 	AnimCmdAnimate_t animateCmd;
@@ -1090,7 +1094,7 @@ void AnimationController::RunAnimationCommand(vgui::Panel *panel,
 	animateCmd.interpolationFunction = interpolator;
 	animateCmd.interpolationParameter = animParameter;
 	animateCmd.startTime = startDelaySeconds;
-	animateCmd.duration = duration;
+	animateCmd.duration = duration; 
 
 	// start immediately
 	StartCmd_Animate(panel, 0, animateCmd);
@@ -1107,9 +1111,13 @@ void AnimationController::RunAnimationCommand(vgui::Panel *panel,
 											   Interpolators_e interpolator,
 											   float animParameter /* = 0 */ )
 {
-	// clear any previous animations of this variable
 	UtlSymId_t var = g_ScriptSymbols.AddString(variable);
-	RemoveQueuedAnimationByType(panel, var, UTL_INVAL_SYMBOL);
+
+	
+	
+		// clear any previous animations of this variable
+		RemoveQueuedAnimationByType(panel, var, UTL_INVAL_SYMBOL);
+	
 
 	// build a new animation
 	AnimCmdAnimate_t animateCmd;
@@ -1259,6 +1267,10 @@ void AnimationController::StartCmd_Animate(UtlSymId_t seqName, AnimCmdAnimate_t 
 	}
 	if (!panel)
 		return;
+
+	
+	
+		
 
 	StartCmd_Animate(panel, seqName, cmd);
 }

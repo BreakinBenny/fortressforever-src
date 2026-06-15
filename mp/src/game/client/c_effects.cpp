@@ -1885,7 +1885,10 @@ void CSnowFallManager::FindSnowVolumes( Vector &vecCenter, float flRadius, Vecto
 			vecCenter = ( m_aSnow[iSnow].m_vecMin, m_aSnow[iSnow].m_vecMax ) * 0.5;
 			vecMin = m_aSnow[iSnow].m_vecMin - vecCenter;
 			vecMax = m_aSnow[iSnow].m_vecMax - vecCenter;
-			debugoverlay->AddBoxOverlay( vecCenter, vecMin, vecMax, QAngle( 0, 0, 0 ), 200, 0, 0, 25, r_SnowDebugBox.GetFloat() );
+			
+			
+				debugoverlay->AddBoxOverlay( vecCenter, vecMin, vecMax, QAngle( 0, 0, 0 ), 200, 0, 0, 25, r_SnowDebugBox.GetFloat() );
+			
 		}
 	}
 #endif

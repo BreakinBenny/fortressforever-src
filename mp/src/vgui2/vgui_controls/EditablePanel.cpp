@@ -870,7 +870,7 @@ Panel *EditablePanel::HasHotkey(wchar_t key)
 //-----------------------------------------------------------------------------
 // Purpose: Shortcut function to setting enabled state of control
 //-----------------------------------------------------------------------------
-void EditablePanel::SetControlEnabled(const char *controlName, bool enabled)
+void EditablePanel::SetControlEnabled(const char *controlName, bool enabled )
 {
 	Panel *control = FindChildByName(controlName);
 	if (control)
@@ -882,7 +882,7 @@ void EditablePanel::SetControlEnabled(const char *controlName, bool enabled)
 //-----------------------------------------------------------------------------
 // Purpose: Shortcut function to setting visibility state of control
 //-----------------------------------------------------------------------------
-void EditablePanel::SetControlVisible(const char *controlName, bool visible)
+void EditablePanel::SetControlVisible(const char *controlName, bool visible )
 {
 	Panel *control = FindChildByName(controlName);
 	if (control)

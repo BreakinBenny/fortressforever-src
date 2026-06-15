@@ -593,7 +593,7 @@ public:
 	virtual void AcquireThreadOwnership() = 0;
 	virtual void ReleaseThreadOwnership() = 0;
 
-	virtual bool SupportsNormalMapCompression() const = 0;
+	virtual bool SupportsNormalMapCompression() const { Assert( !"This has all been removed." ); return false; }
 
 	// Only does anything on XBox360. This is useful to eliminate stalls
 	virtual void EnableBuffer2FramesAhead( bool bEnable ) = 0;
@@ -611,6 +611,7 @@ public:
 
 	//extended clear buffers function with alpha independent from color
 	virtual void ClearBuffersObeyStencilEx( bool bClearColor, bool bClearAlpha, bool bClearDepth ) = 0;
+
 
 	// Allows copying a render target to another texture by specifying them both.
 	virtual void CopyRenderTargetToScratchTexture( ShaderAPITextureHandle_t srcRt, ShaderAPITextureHandle_t dstTex, Rect_t *pSrcRect = NULL, Rect_t *pDstRect = NULL ) = 0;

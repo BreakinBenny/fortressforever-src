@@ -570,9 +570,9 @@ void CMapOverview::DrawMapPlayerTrails()
 				break;
 
 			Vector2D pos1 = MapToPanel( player->trail[i] );
-			Vector2D pos2 = MapToPanel( player->trail[i+1] );
+			Vector2D pos2 = MapToPanel( player->trail[i +1] );
 
-			int intensity = 255 - float(255.0f * i) / MAX_TRAIL_LENGTH;
+			int intensity = 255 - float(255.0f * i ) / MAX_TRAIL_LENGTH;
 
 			Vector2D dist = pos1 - pos2;
 			

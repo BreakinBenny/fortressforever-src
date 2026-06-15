@@ -43,13 +43,13 @@ public:
 inline bool StringLessThan( const char * const &lhs, const char * const &rhs)			{ 
 	if ( !lhs ) return false;
 	if ( !rhs ) return true;
-	return ( V_strcmp( lhs, rhs) < 0 );  
+	return ( V_strcmp( lhs, rhs) < 0 );
 }
 
 inline bool CaselessStringLessThan( const char * const &lhs, const char * const &rhs )	{ 
 	if ( !lhs ) return false;
 	if ( !rhs ) return true;
-	return ( V_stricmp( lhs, rhs) < 0 ); 
+	return ( V_stricmp( lhs, rhs) < 0 );
 }
 
 
@@ -168,7 +168,7 @@ public:
 	// Max "size" of the vector
 	// it's not generally safe to iterate from index 0 to MaxElement()-1
 	// it IS safe to do so when using CUtlMemory as the allocator,
-	// but we should really remove patterns using this anyways, for safety and generality
+	//  but we should really remove patterns using this anyways, for safety and generality
 	I  MaxElement() const;
 
 	// Gets the children                               
@@ -217,10 +217,10 @@ public:
 	void     RemoveAll( );
 	void	 Purge();
 
-	bool HasElement( T const &search ) const { return Find( search ) != InvalidIndex(); }
-
 	// Allocation, deletion
 	void  FreeNode( I i );
+
+	bool HasElement( T const &search ) const { return Find( search ) != InvalidIndex( ); }
 
 	// Iteration
 	I  FirstInorder() const;
@@ -376,8 +376,8 @@ protected:
 
 template < class T, class I, typename L, class M >
 inline CUtlRBTree<T, I, L, M>::CUtlRBTree( int growSize, int initSize, const LessFunc_t &lessfunc ) : 
-m_Elements( growSize, initSize ),
 m_LessFunc( lessfunc ),
+m_Elements( growSize, initSize ),
 m_Root( InvalidIndex() ),
 m_NumElements( 0 ),
 m_FirstFree( InvalidIndex() ),
@@ -430,13 +430,15 @@ inline void CUtlRBTree<T, I, L, M>::CopyFrom( const CUtlRBTree<T, I, L, M> &othe
 
 template < class T, class I, typename L, class M >
 inline T &CUtlRBTree<T, I, L, M>::Element( I i )        
-{ 
+{
+	
 	return m_Elements[i].m_Data; 
 }
 
 template < class T, class I, typename L, class M >
 inline T const &CUtlRBTree<T, I, L, M>::Element( I i ) const  
 { 
+	
 	return m_Elements[i].m_Data; 
 }
 
@@ -496,19 +498,19 @@ inline	I  CUtlRBTree<T, I, L, M>::MaxElement() const
 template < class T, class I, typename L, class M >
 inline	I CUtlRBTree<T, I, L, M>::Parent( I i ) const      
 { 
-	return Links(i).m_Parent; 
+	return Links(i).m_Parent;
 }
 
 template < class T, class I, typename L, class M >
 inline	I CUtlRBTree<T, I, L, M>::LeftChild( I i ) const   
 { 
-	return Links(i).m_Left; 
+	return Links(i).m_Left;
 }
 
 template < class T, class I, typename L, class M >
 inline	I CUtlRBTree<T, I, L, M>::RightChild( I i ) const  
 { 
-	return Links(i).m_Right; 
+	return Links(i).m_Right;
 }
 
 //-----------------------------------------------------------------------------
@@ -615,7 +617,10 @@ inline typename CUtlRBTree<T, I, L, M>::Links_t const &CUtlRBTree<T, I, L, M>::L
 	// Sentinel node, makes life easier
 	static Links_t s_Sentinel = 
 	{ 
-		InvalidIndex(), InvalidIndex(), InvalidIndex(), CUtlRBTree<T, I, L, M>::BLACK 
+		
+		
+		
+		InvalidIndex(), InvalidIndex(), InvalidIndex(), CUtlRBTree<T, I, L, M>::BLACK
 	};
 
 	return (i != InvalidIndex()) ? *(Links_t*)&m_Elements[i] : *(Links_t*)&s_Sentinel;
@@ -705,6 +710,7 @@ I  CUtlRBTree<T, I, L, M>::NewNode()
 	node.m_Left = node.m_Right = node.m_Parent = InvalidIndex();
 #endif
 
+	
 	Construct( &Element( elem ) );
 	ResetDbgInfo();
 
@@ -1149,7 +1155,7 @@ void CUtlRBTree<T, I, L, M>::RemoveAll()
 	}
 
 	// Clear everything else out
-	m_Root = InvalidIndex(); 
+	m_Root = InvalidIndex();
 	// Technically, this iterator could become invalid. It will not, because it's 
 	// always the same iterator. If we don't clear this here, the state of this
 	// container will be invalid after we start inserting elements again.
@@ -1180,6 +1186,7 @@ template < class T, class I, typename L, class M >
 I CUtlRBTree<T, I, L, M>::FirstInorder() const
 {
 	I i = m_Root;
+	
 	while (LeftChild(i) != InvalidIndex())
 		i = LeftChild(i);
 	return i;
@@ -1193,8 +1200,10 @@ I CUtlRBTree<T, I, L, M>::NextInorder( I i ) const
  	if ( !IsValidIndex(i) )
  		return InvalidIndex();
 
+	
 	if (RightChild(i) != InvalidIndex())
 	{
+		
 		i = RightChild(i);
 		while (LeftChild(i) != InvalidIndex())
 			i = LeftChild(i);
@@ -1219,6 +1228,7 @@ I CUtlRBTree<T, I, L, M>::PrevInorder( I i ) const
 	if ( !IsValidIndex(i) )
 		return InvalidIndex();
 
+	
 	if (LeftChild(i) != InvalidIndex())
 	{
 		i = LeftChild(i);
@@ -1241,6 +1251,7 @@ template < class T, class I, typename L, class M >
 I CUtlRBTree<T, I, L, M>::LastInorder() const
 {
 	I i = m_Root;
+	
 	while (RightChild(i) != InvalidIndex())
 		i = RightChild(i);
 	return i;
@@ -1255,6 +1266,7 @@ I CUtlRBTree<T, I, L, M>::FirstPreorder() const
 template < class T, class I, typename L, class M >
 I CUtlRBTree<T, I, L, M>::NextPreorder( I i ) const
 {
+	
 	if (LeftChild(i) != InvalidIndex())
 		return LeftChild(i);
 
@@ -1285,6 +1297,7 @@ I CUtlRBTree<T, I, L, M>::LastPreorder() const
 	I i = m_Root;
 	while (1)
 	{
+		
 		while (RightChild(i) != InvalidIndex())
 			i = RightChild(i);
 
@@ -1302,6 +1315,7 @@ I CUtlRBTree<T, I, L, M>::FirstPostorder() const
 	I i = m_Root;
 	while (!IsLeaf(i))
 	{
+		
 		if (LeftChild(i))
 			i = LeftChild(i);
 		else
@@ -1326,6 +1340,7 @@ I CUtlRBTree<T, I, L, M>::NextPostorder( I i ) const
 	i = RightChild(parent);
 	while (!IsLeaf(i))
 	{
+		
 		if (LeftChild(i))
 			i = LeftChild(i);
 		else
@@ -1355,7 +1370,7 @@ int CUtlRBTree<T, I, L, M>::Depth( I node ) const
 
 	int depthright = Depth( RightChild(node) );
 	int depthleft = Depth( LeftChild(node) );
-	return Max(depthright, depthleft) + 1;
+	return Max( depthright, depthleft ) + 1;
 }
 
 

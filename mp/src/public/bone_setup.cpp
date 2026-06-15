@@ -992,9 +992,10 @@ static void CalcVirtualAnimation( virtualmodel_t *pVModel, const CStudioHdr *pSt
 		matrix3x4_t *boneToWorld = g_MatrixPool.Alloc();
 		CBoneBitList boneComputed;
 
+		
 		for (int l = 0; l < animdesc.numlocalhierarchy; l++)
 		{
-			mstudiolocalhierarchy_t *pHierarchy = animdesc.pHierarchy(l);
+			mstudiolocalhierarchy_t *pHierarchy = animdesc.pHierarchy( l );
 
 			if ( !pHierarchy )
 				break;
@@ -1135,6 +1136,7 @@ static void CalcAnimation( const CStudioHdr *pStudioHdr,	Vector *pos, Quaternion
 		matrix3x4_t *boneToWorld = g_MatrixPool.Alloc();
 		CBoneBitList boneComputed;
 
+		
 		for (int j = 0; j < animdesc.numlocalhierarchy; j++)
 		{
 			mstudiolocalhierarchy_t *pHierarchy = animdesc.pHierarchy( j );
@@ -3276,7 +3278,7 @@ void CIKContext::AddDependencies( mstudioseqdesc_t &seqdesc, int iSequence, floa
 		}
 		else
 		{
-			flCycle = max( 0.0, min( flCycle, 0.9999 ) );
+			flCycle = max( 0.f, min( flCycle, 0.9999f ) );
 		}
 	}
 
@@ -4725,7 +4727,7 @@ void DoQuatInterpBone(
 			// FIXME: a fast acos should be acceptable
 			dot = clamp( dot, -1.f, 1.f );
 			weight[i] = 1 - (2 * acos( dot ) * pProc->pTrigger( i )->inv_tolerance );
-			weight[i] = max( 0, weight[i] );
+			weight[i] = max( 0.f, weight[i] );
 			scale += weight[i];
 		}
 
@@ -5603,7 +5605,7 @@ bool Studio_AnimPosition( mstudioanimdesc_t *panim, float flCycle, Vector &vecPo
 			vecAngle.y = vecAngle.y * (1 - f) + pmove->angle * f;
 			if (iLoops != 0)
 			{
-				mstudiomovement_t* pmoveLocl = panim->pMovement(panim->nummovements - 1);
+				mstudiomovement_t *pmoveLocl = panim->pMovement( panim->nummovements - 1 );
 				vecPos = vecPos + iLoops * pmoveLocl->position;
 				vecAngle.y = vecAngle.y + iLoops * pmoveLocl->angle;
 			}

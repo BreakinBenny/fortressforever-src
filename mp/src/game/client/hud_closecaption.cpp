@@ -954,8 +954,10 @@ void CHudCloseCaption::Paint( void )
 	rcOutput.right = w;
 	rcOutput.bottom = h;
 	rcOutput.top = m_nTopOffset;
-
+		
 	wrect_t rcText = rcOutput;
+
+	
 
 	int avail_width = rcText.right - rcText.left - 2 * CC_INSET;
 	int avail_height = rcText.bottom - rcText.top - 2 * CC_INSET;
@@ -1307,7 +1309,7 @@ bool CHudCloseCaption::SplitCommand( wchar_t const **ppIn, wchar_t *cmd, wchar_t
 	}
 
 	args[ 0 ] = 0;
-	cmd[ 0 ]= 0;
+	cmd[ 0 ] = 0;
 	wchar_t *out = cmd;
 	in++;
 	while ( *in != L'\0' && *in != L':' && *in != L'>' && !isspace( *in ) )

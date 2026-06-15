@@ -72,6 +72,7 @@ BEGIN_SIMPLE_DATADESC( CRagdoll )
 
 END_DATADESC()
 
+
 IPhysicsObject *CRagdoll::GetElement( int elementNum )
 { 
 	return m_ragdoll.list[elementNum].pObject;
@@ -588,7 +589,7 @@ void C_ServerRagdoll::BuildTransformations( CStudioHdr *hdr, Vector *pos, Quater
 		int index = m_boneIndex[i];
 		if ( index >= 0 )
 		{
-			if ( hdr->boneFlags(index) & boneMask )
+			if ( hdr->boneFlags( index ) & boneMask )
 			{
 				boneSimulated[index] = true;
 				matrix3x4_t &matrix = GetBoneForWrite( index );
@@ -703,7 +704,7 @@ public:
 		{
 			// HACKHACK: Force the attached bone to be set up
 			int index = m_boneIndex[m_ragdollAttachedObjectIndex];
-			int boneFlags = GetModelPtr()->boneFlags(index);
+			int boneFlags = GetModelPtr()->boneFlags( index );
 			if ( !(boneFlags & boneMask) )
 			{
 				// BUGBUG: The attached bone is required and this call is going to skip it, so force it

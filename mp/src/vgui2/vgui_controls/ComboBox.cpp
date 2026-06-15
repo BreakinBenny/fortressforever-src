@@ -43,7 +43,7 @@ void ComboBoxButton::ApplySchemeSettings(IScheme *pScheme)
 #ifdef OSX
 	SetTextInset(-3, 0);
 #else
-	SetTextInset(3, 0);
+	SetTextInset( 3, 0 );
 #endif
 	SetDefaultBorder(pScheme->GetBorder("ScrollBarButtonBorder"));
 	
@@ -908,7 +908,9 @@ void ComboBox::OnKeyCodeTyped(KeyCode code)
 				int itemToSelect = m_pDropDown->GetCurrentlyHighlightedItem();
 
 				// Now set the text in the combo box to match
-				SelectMenuItem(itemToSelect);
+				
+					SelectMenuItem(itemToSelect);
+				
 				break;
 			}
 

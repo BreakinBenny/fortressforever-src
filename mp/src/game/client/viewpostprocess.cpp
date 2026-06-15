@@ -2820,7 +2820,7 @@ void DoImageSpaceMotionBlur( const CViewSetup &view, int x, int y, int w, int h 
 			//====================//
 			// Compute horizontal and vertical fov
 			float flHorizontalFov = view.fov;
-			float flVerticalFov = ( view.m_flAspectRatio <= 0.0f ) ? ( view.fov ) : ( view.fov  / view.m_flAspectRatio );
+			float flVerticalFov = (view.m_flAspectRatio <= 0.0f ) ? (view.fov ) : (view.fov  / view.m_flAspectRatio );
 			//engine->Con_NPrintf( 2, "Horizontal Fov: %6.2f   Vertical Fov: %6.2f", flHorizontalFov, flVerticalFov );
 
 			//=====================//

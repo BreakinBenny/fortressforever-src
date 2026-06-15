@@ -1040,7 +1040,7 @@ void CConsolePanel::AddToHistory( const char *commandText, const char *extraText
 
 void CConsolePanel::GetConsoleText( char *pchText, size_t bufSize ) const
 {
-	wchar_t *temp = new wchar_t[ bufSize ];
+	wchar_t *temp = new wchar_t[bufSize];
 	m_pHistory->GetText( 0, temp, bufSize * sizeof( wchar_t ) );
 	g_pVGuiLocalize->ConvertUnicodeToANSI( temp, pchText, bufSize );
 	delete[] temp;

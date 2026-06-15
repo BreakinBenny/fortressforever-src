@@ -17,7 +17,8 @@ DECLARE_BUILD_FACTORY( CBaseModelPanel );
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-CBaseModelPanel::CBaseModelPanel( vgui::Panel *pParent, const char *pName ): BaseClass( pParent, pName )
+CBaseModelPanel::CBaseModelPanel( vgui::Panel *pParent, const char *pName )
+	: BaseClass( pParent, pName )
 {
 	m_bForcePos = false;
 	m_bMousePressed = false;

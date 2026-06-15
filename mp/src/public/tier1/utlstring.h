@@ -1,8 +1,4 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-//=============================================================================
+//====== Copyright Valve Corporation, All rights reserved. =======
 
 #ifndef UTLSTRING_H
 #define UTLSTRING_H
@@ -77,11 +73,13 @@ public:
 	CUtlString& operator=( CUtlString&& rhs )
 	{
 		// Move the string pointer from the source to this -- be sure to
-		// zero out the source to avoid double frees.
+		// zero out the source to avoid double frees. 
+		
 		m_pString = rhs.m_pString;
 		rhs.m_pString = 0;
 		return *this;
 	}
+
 #endif
 
 	~CUtlString();
@@ -182,6 +180,9 @@ public:
 
 	// Replace all instances of specified string with another.
 	CUtlString Replace( const char *pszFrom, const char *pszTo ) const;
+
+	
+	
 
 	// Get this string as an absolute path (calls right through to V_MakeAbsolutePath).
 	CUtlString AbsPath( const char *pStartingDir=NULL ) const;	

@@ -395,12 +395,12 @@ public:
 
 	bool operator==( const Type &val ) const 
 	{ 
-		return CNetworkVectorBase<Type,Changer>::m_Value == (Type)val; 
+		return CNetworkVectorBase<Type,Changer>::m_Value == ( Type )val;
 	}
 
 	bool operator!=( const Type &val ) const 
 	{
-		return CNetworkVectorBase<Type,Changer>::m_Value != (Type)val; 
+		return CNetworkVectorBase<Type,Changer>::m_Value != ( Type )val;
 	}
 
 	const Type operator+( const Type &val ) const 

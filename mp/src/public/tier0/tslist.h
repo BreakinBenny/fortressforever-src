@@ -39,12 +39,16 @@
 #define TSLIST_HEAD_ALIGNMENT 16
 #define TSLIST_NODE_ALIGNMENT 16
 inline bool ThreadInterlockedAssignIf64x128( volatile int128 *pDest, const int128 &value, const int128 &comperand )
-	{ return ThreadInterlockedAssignIf128( pDest, value, comperand ); }
+{
+	return ThreadInterlockedAssignIf128( pDest, value, comperand );
+}
 #else
 #define TSLIST_HEAD_ALIGNMENT 8
 #define TSLIST_NODE_ALIGNMENT 8
 inline bool ThreadInterlockedAssignIf64x128( volatile int64 *pDest, const int64 value, const int64 comperand )
-	{ return ThreadInterlockedAssignIf64( pDest, value, comperand ); }
+{
+	return ThreadInterlockedAssignIf64( pDest, value, comperand );
+}
 #endif
 
 #ifdef _MSC_VER
@@ -57,15 +61,6 @@ inline bool ThreadInterlockedAssignIf64x128( volatile int64 *pDest, const int64 
 #define TSLIST_NODE_ALIGN 
 #define TSLIST_HEAD_ALIGN_POST DECL_ALIGN(TSLIST_HEAD_ALIGNMENT)
 #define TSLIST_NODE_ALIGN_POST DECL_ALIGN(TSLIST_NODE_ALIGNMENT)
-#elif defined( _PS3 )
-#define TSLIST_HEAD_ALIGNMENT 8
-#define TSLIST_NODE_ALIGNMENT 8
-
-#define TSLIST_HEAD_ALIGN ALIGN8
-#define TSLIST_NODE_ALIGN ALIGN8
-#define TSLIST_HEAD_ALIGN_POST ALIGN8_POST
-#define TSLIST_NODE_ALIGN_POST ALIGN8_POST
-
 #else
 #error
 #endif

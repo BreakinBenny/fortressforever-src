@@ -329,7 +329,7 @@ CClassMenu::CClassMenu(IViewPort *pViewPort) : Frame(NULL, PANEL_CLASS)
 	SetProportional(true);
 
 	// hide the system buttons
-	SetTitleBarVisible(false);
+	SetTitleBarVisible( false );
 
 	m_pClassInfo = new RichText(this, "ClassInfo");
 	m_pClassInfo->SetVerticalScrollbar(false);
@@ -487,10 +487,11 @@ void CClassMenu::Update()
 //-----------------------------------------------------------------------------
 void CClassMenu::OnCommand( const char *command )
 {
-	if (Q_stricmp(command, "cancel"))
-		engine->ClientCmd(VarArgs("class %s", command));
+	if ( Q_stricmp( command, "cancel" ) )
+	
+		engine->ClientCmd( VarArgs("class %s", command ) );
 
-	m_pViewPort->ShowPanel(this, false);
+	m_pViewPort->ShowPanel( this, false );
 
 	BaseClass::OnCommand( command );
 }
@@ -602,7 +603,7 @@ void CClassMenu::OnKeyCodePressed(KeyCode code)
 	// Support bring the team menu back up if the class menu is showing
 	if (gameuifuncs->GetButtonCodeForBind("changeteam") == code)
 	{
-		m_pViewPort->ShowPanel(this, false);
+		m_pViewPort->ShowPanel( this, false );
 		engine->ClientCmd("changeteam");
 	}
 
@@ -635,7 +636,7 @@ void CClassMenu::OnMouseOverMessage(KeyValues *data)
 	// Get the command from this button and parse accordingly
 	if (data->GetInt("event") == MouseOverButton::MOUSE_ENTERED)
 	{
-		UpdateClassInfo(pButton->GetCommand()->GetString("command"));
+		UpdateClassInfo( pButton->GetCommand()->GetString("command") );
 	}
 }
 

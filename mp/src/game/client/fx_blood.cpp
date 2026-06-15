@@ -511,8 +511,8 @@ void BloodImpactCallback( const CEffectData & data )
 			if (bloodCallbacks[i].nColor == data.m_nColor)
 			{
 				QAngle	vecAngles;
-				VectorAngles(-data.m_vNormal, vecAngles);
-				DispatchParticleEffect(bloodCallbacks[i].lpszParticleSystemName, data.m_vOrigin, vecAngles);
+				VectorAngles( -data.m_vNormal, vecAngles );
+				DispatchParticleEffect( bloodCallbacks[i].lpszParticleSystemName, data.m_vOrigin, vecAngles );
 				bFoundBlood = true;
 				break;
 			}

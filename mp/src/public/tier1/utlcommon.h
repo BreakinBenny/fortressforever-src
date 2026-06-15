@@ -127,7 +127,11 @@ struct CaselessStringHashFunctor { unsigned int operator()( const char* s ) cons
 
 struct PointerLessFunctor { bool operator()( const void *a, const void *b ) const { return a < b; } };
 struct PointerEqualFunctor { bool operator()( const void *a, const void *b ) const { return a == b; } };
-struct PointerHashFunctor { unsigned int operator()( const void* s ) const { return Mix32HashFunctor()((uint32)POINTER_TO_INT(s)); } };
+
+
+
+struct PointerHashFunctor { unsigned int operator()( const void* s ) const { return Mix32HashFunctor()( ( uint32 ) POINTER_TO_INT(s) ); } };
+
 
 
 // Generic implementation of Less and Equal functors

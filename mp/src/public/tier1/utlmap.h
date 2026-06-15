@@ -38,10 +38,7 @@ public:
 	// The check for IsUtlMap being true should be free.
 	// Using an enum rather than a static const bool ensures that this trick works even
 	// with optimizations disabled on gcc.
-	enum CompileTimeCheck
-	{
-		IsUtlMap = 1
-	};
+	enum CompileTimeCheck { IsUtlMap = 1 };
 };	
 
 template <typename K, typename T, typename I = unsigned short> 
@@ -61,10 +58,10 @@ public:
 	// at each increment.
 	// LessFunc_t is required, but may be set after the constructor using SetLessFunc() below
 	CUtlMap( int growSize = 0, int initSize = 0, LessFunc_t lessfunc = 0 )
-	 : m_Tree( growSize, initSize, CKeyLess( lessfunc ) )
+		: m_Tree( growSize, initSize, CKeyLess( lessfunc ) )
 	{
 	}
-	
+
 	CUtlMap( LessFunc_t lessfunc )
 	 : m_Tree( CKeyLess( lessfunc ) )
 	{
@@ -225,7 +222,7 @@ inline void CUtlMap<K, T, I>::PurgeAndDeleteElements()
 	{
 		if ( !IsValidIndex( i ) ) 
 			continue; 
-		
+
 		delete Element( i );
 	}
 
@@ -248,5 +245,4 @@ void DeepCopyMap( const CUtlMap<K,T,I>& pmapIn, CUtlMap<K,T,I> *out_pmapOut )
 		out_pmapOut->Insert( pmapIn.Key( i ), pmapIn.Element( i ) );
 	}
 }
-
 #endif // UTLMAP_H

@@ -41,6 +41,7 @@ public:
 	void SetMode(int iMode);
 	void SetChaseCamParams( float flOffset, float flDistance, float flTheta, float flPhi  );
 	void SpecNextPlayer( bool bInverse );
+	
 	void SpecNamedPlayer( const char *szPlayerName );
 	bool IsPVSLocked();
 	void SetAutoDirector( bool bActive );

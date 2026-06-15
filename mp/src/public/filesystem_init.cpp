@@ -284,6 +284,8 @@ KeyValues* ReadKeyValuesFile( const char *pFilename )
 	return kv;
 }
 
+
+
 static bool Sys_GetExecutableName( char *out, int len )
 {
 #if defined( _WIN32 )
@@ -344,7 +346,7 @@ bool FileSystem_GetExecutableDir( char *exedir, int exeDirLen )
 	// Return the bin directory as the executable dir if it's not in there
 	// because that's really where we're running from...
 	char ext[MAX_PATH];
-	Q_StrRight( exedir, 4, ext, sizeof( ext ) );
+	Q_StrRight( exedir, 4, ext, sizeof(ext));
 	if ( ext[0] != CORRECT_PATH_SEPARATOR || Q_stricmp( ext+1, "bin" ) != 0 )
 	{
 		Q_strncat( exedir, CORRECT_PATH_SEPARATOR_S, exeDirLen, COPY_ALL_CHARACTERS );
@@ -360,6 +362,8 @@ static bool FileSystem_GetBaseDir( char *baseDir, int baseDirLen )
 	if ( FileSystem_GetExecutableDir( baseDir, baseDirLen ) )
 	{
 		Q_StripFilename( baseDir );
+		
+			
 		return true;
 	}
 	
@@ -571,6 +575,7 @@ FSReturnCode_t FileSystem_LoadSearchPaths( CFSSearchPathsInit &initInfo )
 	bool bLowViolence = initInfo.m_bLowViolence;
 	for ( KeyValues *pCur=pSearchPaths->GetFirstValue(); pCur; pCur=pCur->GetNextValue() )
 	{
+		
 		const char *pLocation = pCur->GetString();
 		const char *pszBaseDir = baseDir;
 
@@ -944,7 +949,7 @@ FSReturnCode_t LocateGameInfoFile( const CFSSteamSetupInfo &fsInfo, char *pOutDi
 ShowError:
 	return SetupFileSystemError( true, FS_MISSING_GAMEINFO_FILE, 
 		"Unable to find %s. Solutions:\n\n"
-		"1. Read http://www.valve-erc.com/srcsdk/faq.html#NoGameDir\n"
+		"1. Read https://developer.valvesoftware.com/wiki/Gameinfo.txt\n"
 		"2. Run vconfig to specify which game you're working on.\n"
 		"3. Add -game <path> on the command line where <path> is the directory that %s is in.\n",
 		GAMEINFO_FILENAME, GAMEINFO_FILENAME );

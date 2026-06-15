@@ -832,6 +832,7 @@ void Button::GetSettings( KeyValues *outResourceData )
 //-----------------------------------------------------------------------------
 void Button::ApplySettings( KeyValues *inResourceData )
 {
+
 	BaseClass::ApplySettings(inResourceData);
 
 	const char *cmd = inResourceData->GetString("command", "");
@@ -874,7 +875,9 @@ void Button::ApplySettings( KeyValues *inResourceData )
 		SetReleasedSound(sound);
 	}
 
-	_activationType = (ActivationType_t)inResourceData->GetInt( "button_activation_type",ACTIVATE_ONRELEASED );
+	_activationType = (ActivationType_t)inResourceData->GetInt( "button_activation_type",
+		ACTIVATE_ONRELEASED
+	);
 }
 
 
@@ -990,8 +993,12 @@ void Button::OnMouseReleased(MouseCode code)
 	if (!IsSelected() && _activationType == ACTIVATE_ONPRESSEDANDRELEASED)
 		return;
 
+	
+
 	// It has to be both enabled and (mouse over the button or using a key) to fire
-	if ( IsEnabled() && ( GetVPanel() == input()->GetMouseOver() || _buttonFlags.IsFlagSet( BUTTON_KEY_DOWN ) ) )
+	
+	if ( IsEnabled() && ( GetVPanel() == input()->GetMouseOver() || _buttonFlags.IsFlagSet( BUTTON_KEY_DOWN ) 
+ 		 ) )
 	{
 		DoClick();
 	}
@@ -1078,10 +1085,10 @@ void Button::OnKeyCodeReleased( KeyCode keycode )
 void Button::DrawFocusBorder(int tx0, int ty0, int tx1, int ty1)
 {
 	surface()->DrawSetColor(_keyboardFocusColor);
-	DrawDashedLine(tx0, ty0, tx1, ty0+1, 1, 1);		// top
-	DrawDashedLine(tx0, ty0, tx0+1, ty1, 1, 1);		// left
-	DrawDashedLine(tx0, ty1-1, tx1, ty1, 1, 1);		// bottom
-	DrawDashedLine(tx1-1, ty0, tx1, ty1, 1, 1);		// right
+	DrawDashedLine(tx0, ty0, tx1, ty0+1, 1, 1 );		// top
+	DrawDashedLine(tx0, ty0, tx0+1, ty1, 1, 1 );		// left
+	DrawDashedLine(tx0, ty1-1, tx1, ty1, 1, 1 );		// bottom
+	DrawDashedLine(tx1-1, ty0, tx1, ty1, 1, 1 );		// right
 }
 
 //-----------------------------------------------------------------------------
@@ -1091,5 +1098,7 @@ void Button::SizeToContents()
 {
 	int wide, tall;
 	GetContentSize(wide, tall);
+
+	
 	SetSize(wide + Label::Content, tall + Label::Content);
 }

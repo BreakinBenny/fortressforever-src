@@ -18,7 +18,7 @@ char* AllocateStringHelper2( const char *pFormat, va_list marker )
 	char str[512];
 	_vsnprintf( str, sizeof( str ), pFormat, marker );
 	str[ ARRAYSIZE(str) - 1 ] = 0;
-	
+
 	int len = strlen( str ) + 1;
 	char *pRet = new char[len];
 	memcpy( pRet, str, len );

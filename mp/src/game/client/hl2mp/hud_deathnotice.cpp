@@ -178,7 +178,7 @@ void CHudDeathNotice::Paint()
 
 		// Get the local position for this notice
 		int len = UTIL_ComputeStringWidth( m_hTextFont, victim );
-		int y = yStart + (m_flLineHeight * i);
+		int y = yStart + ( m_flLineHeight * i);
 
 		int iconWide;
 		int iconTall;

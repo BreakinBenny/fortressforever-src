@@ -25,8 +25,8 @@
 class IFileReadBinary
 {
 public:
-	virtual int open( const char *pFileName ) = 0;
-	virtual int read( void *pOutput, int size, int file ) = 0;
+	virtual int open( const char* pFileName ) = 0;
+	virtual int read( void* pOutput, int size, int file ) = 0;
 	virtual void close( int file ) = 0;
 	virtual void seek( int file, int pos ) = 0;
 	virtual unsigned int tell( int file ) = 0;
@@ -99,12 +99,13 @@ private:
 class IFileWriteBinary
 {
 public:
-	virtual int create( const char *pFileName ) = 0;
-	virtual int write( void *pData, int size, int file ) = 0;
+	virtual int create( const char* pFileName ) = 0;
+	virtual int write( void* pData, int size, int file ) = 0;
 	virtual void close( int file ) = 0;
 	virtual void seek( int file, int pos ) = 0;
 	virtual unsigned int tell( int file ) = 0;
 };
+
 //-----------------------------------------------------------------------------
 // Purpose: Used to write a RIFF format file
 //-----------------------------------------------------------------------------

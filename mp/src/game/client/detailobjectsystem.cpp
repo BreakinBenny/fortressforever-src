@@ -2322,8 +2322,8 @@ void CDetailObjectSystem::RenderFastSprites( const Vector &viewOrigin, const Vec
 					FastSpriteQuadBuildoutBufferNonSIMDView_t const *pquad = pQuadBuffer+nSIMDIdx;
 
 					// voodoo - since everything is in 4s, offset structure pointer by a couple of floats to handle sub-index
-					pquad = (FastSpriteQuadBuildoutBufferNonSIMDView_t const *) ( ( (int) ( pquad ) )+ ( nSubIdx << 2 ) );
-					uint8 const *pColorsCasted = reinterpret_cast<uint8 const *> ( pquad->m_Alpha );
+					pquad = (FastSpriteQuadBuildoutBufferNonSIMDView_t const*) ( ( (int) ( pquad ) ) + ( nSubIdx << 2 ) );
+					uint8 const* pColorsCasted = reinterpret_cast<uint8 const*> ( pquad->m_Alpha );
 
 					uint8 color[4];
 					color[0] = pquad->m_RGBColor[0][0];

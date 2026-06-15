@@ -1446,3 +1446,4 @@ KeyValues *BuildGroup::GetDialogVariables()
 
 	return NULL;
 }
+

@@ -729,7 +729,6 @@ bool IsEngineThreaded()
 	return false;
 }
 
-
 //-----------------------------------------------------------------------------
 // Constructor
 //-----------------------------------------------------------------------------
@@ -842,7 +841,8 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 #endif
 
 	// it's ok if this is NULL. That just means the sourcevr.dll wasn't found
-	g_pSourceVR = (ISourceVirtualReality *)appSystemFactory(SOURCE_VIRTUAL_REALITY_INTERFACE_VERSION, NULL);
+	
+		g_pSourceVR = (ISourceVirtualReality *)appSystemFactory(SOURCE_VIRTUAL_REALITY_INTERFACE_VERSION, NULL);
 
 	factorylist_t factories;
 	factories.appSystemFactory = appSystemFactory;
@@ -920,7 +920,7 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 	ApplyShaderConstantHack();
 #endif
 
-#if defined( TF_CLIENT_DLL )
+	#if defined( TF_CLIENT_DLL )
 	IGameSystem::Add( CustomTextureToolCacheGameSystem() );
 	IGameSystem::Add( TFSharedContentManager() );
 	#endif
@@ -1145,6 +1145,7 @@ void CHLClient::Shutdown( void )
 //-----------------------------------------------------------------------------
 int CHLClient::HudVidInit( void )
 {
+	
 	gHUD.VidInit();
 
 	GetClientVoiceMgr()->VidInit();

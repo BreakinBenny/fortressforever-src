@@ -56,7 +56,10 @@ void DrawBones( matrix3x4_t const* pBones, int nNumBones, ragdoll_t const* pRagd
 		MatrixPosition( pBones[ iParentIndex ], from );
 		MatrixPosition( pBones[ iBoneIndex   ], to );
 
-		debugoverlay->AddLineOverlay( from, to, nRed, nGreen, nBlue, true, 0.0f );
+		
+		
+			debugoverlay->AddLineOverlay( from, to, nRed, nGreen, nBlue, true, 0.0f );
+		
 	}
 }
 

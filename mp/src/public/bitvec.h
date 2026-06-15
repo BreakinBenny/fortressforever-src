@@ -1068,10 +1068,14 @@ inline int CFixedBitVecBase<NUM_BITS>::FindNextSetBit( int startBit ) const
 			do 
 			{
 				if ( elem )
+				{
 					return FirstBitInWord(elem, wordIndex << 5);
-				++pCurElem;
-				elem = *pCurElem;
-				++wordIndex;
+				}
+				
+				
+					++pCurElem;
+					elem = *pCurElem;
+					++wordIndex;
 			} while( wordIndex <= NUM_INTS-1);
 		}
 

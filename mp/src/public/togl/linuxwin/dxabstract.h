@@ -796,6 +796,7 @@ FORCEINLINE HRESULT TOGLMETHODCALLTYPE IDirect3DDevice9::SetSamplerState( DWORD 
 FORCEINLINE void TOGLMETHODCALLTYPE IDirect3DDevice9::SetSamplerStates(
 	DWORD Sampler, DWORD AddressU, DWORD AddressV, DWORD AddressW,
 	DWORD MinFilter, DWORD MagFilter, DWORD MipFilter )
+	
 {
 #if GLMDEBUG || GL_BATCH_PERF_ANALYSIS
 	SetSamplerStatesNonInline( Sampler, AddressU, AddressV, AddressW, MinFilter, MagFilter, MipFilter );
@@ -1167,6 +1168,10 @@ FORCEINLINE HRESULT TOGLMETHODCALLTYPE IDirect3DDevice9::SetRenderStateInline( D
 			m_ctx->WritePolygonMode( &gl.m_PolygonMode );
 			break;
 		}
+		
+		
+			
+		
 	}
 		
 	return S_OK;

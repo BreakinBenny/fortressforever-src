@@ -383,7 +383,7 @@ void MenuItem::ApplySchemeSettings(IScheme *pScheme)
 	SetArmedColor(GetSchemeColor("Menu.ArmedTextColor", GetFgColor(), pScheme), GetSchemeColor("Menu.ArmedBgColor", GetBgColor(), pScheme));
 	SetDepressedColor(GetSchemeColor("Menu.ArmedTextColor", GetFgColor(), pScheme), GetSchemeColor("Menu.ArmedBgColor", GetBgColor(), pScheme));
 
-	SetTextInset(atoi(pScheme->GetResourceString("Menu.TextInset")), 0);
+	SetTextInset( atoi(pScheme->GetResourceString("Menu.TextInset")) , 0);
 	
 	// reload images since applyschemesettings in label wipes them out.
 	if ( m_pCascadeArrow )
@@ -636,6 +636,11 @@ void MenuItem::Paint()
 void MenuItem::GetContentSize( int& cw, int &ch )
 {
 	BaseClass::GetContentSize( cw, ch );
+	
+	
+		
+	
+	
 	if ( !m_pCurrentKeyBinding )
 		return;
 

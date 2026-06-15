@@ -559,7 +559,6 @@ public:
 #define SCOPE_MSG( msg )
 #endif
 
-
 //-----------------------------------------------------------------------------
 // Macro to assist in asserting constant invariants during compilation
 

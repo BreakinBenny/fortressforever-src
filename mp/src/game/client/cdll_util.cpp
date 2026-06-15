@@ -935,6 +935,10 @@ const char * UTIL_SafeName( const char *oldName )
 //			for consistency with other APIs.  If inbufsizebytes is 0 a NULL-terminated
 //			input buffer is assumed, or you can pass the size of the input buffer if
 //			not NULL-terminated.
+//
+//			If actionset is other than GAME_ACTION_SET_NONE (the default), then a lookup is first
+//			attempted for a Steam Controller binding in the given action set. If none if found, fallback
+//			is to the usual keyboard binding path.
 //-----------------------------------------------------------------------------
 void UTIL_ReplaceKeyBindings( const wchar_t *inbuf, int inbufsizebytes, OUT_Z_BYTECAP(outbufsizebytes) wchar_t *outbuf, int outbufsizebytes )
 {
@@ -999,7 +1003,7 @@ void UTIL_ReplaceKeyBindings( const wchar_t *inbuf, int inbufsizebytes, OUT_Z_BY
 				}
 				Q_strupr( friendlyName );
 
-				wchar_t *locName = g_pVGuiLocalize->Find( friendlyName );
+				wchar_t* locName = g_pVGuiLocalize->Find( friendlyName );
 				if ( !locName || wcslen(locName) <= 0)
 				{
 					g_pVGuiLocalize->ConvertANSIToUnicode( friendlyName, token, sizeof(token) );

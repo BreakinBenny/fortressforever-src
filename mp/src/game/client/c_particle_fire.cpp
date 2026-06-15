@@ -227,7 +227,7 @@ void C_ParticleFire::Update(float fTimeDelta)
 				static int nTries = 50;
 				for(int iTry=0; iTry < nTries; iTry++)
 				{
-					FireEmitter* pSourceEmitter = &m_Emitters[RandomInt(0, m_nEmitters - 1)];
+					FireEmitter *pSourceEmitter = &m_Emitters[RandomInt(0, m_nEmitters - 1)];
 					
 					int iOffset = RandomInt(0, NUM_FIREGRID_OFFSETS - 1);
 					if(pSourceEmitter->m_DirectionsTested & (1 << iOffset))

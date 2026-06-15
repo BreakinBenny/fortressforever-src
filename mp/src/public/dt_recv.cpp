@@ -135,7 +135,7 @@ CStandardRecvProxies::CStandardRecvProxies()
 }
 
 CStandardRecvProxies g_StandardRecvProxies;
-	
+
 
 // ---------------------------------------------------------------------- //
 // RecvProp.

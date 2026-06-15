@@ -1905,6 +1905,9 @@ class GLMContext
 		
 		CFlushDrawStatesStats m_FlushStats;
 #endif
+
+	
+	
 };
 
 #ifndef OSX

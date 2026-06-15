@@ -562,7 +562,7 @@ void CDebugViewRender::Draw2DDebuggingInfo( const CViewSetup &view )
 	// Draw debugging lightmaps
 	if ( mat_showlightmappage.GetInt() != -1 )
 	{
-		CLightmapDebugView clientView( assert_cast<CViewRender *>( ::view ) );
+		CLightmapDebugView clientView( assert_cast<CViewRender *>( ::view) );
 		clientView.Setup( view );
 		clientView.Draw();
 	}
@@ -631,6 +631,7 @@ CON_COMMAND_F( r_screenoverlay, "Draw specified material as an overlay", FCVAR_C
 {
 	if( args.ArgC() == 2 )
 	{
+		
 		if ( !Q_stricmp( "off", args[1] ) )
 		{
 			view->SetScreenOverlayMaterial( NULL );

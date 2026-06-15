@@ -220,7 +220,7 @@ private:
 
 //-----------------------------------------------------------------------------
 // The CUtlVectorFixed class:
-// A array class with a fixed allocation scheme
+// An array class with a fixed allocation scheme
 //-----------------------------------------------------------------------------
 
 template< class BASE_UTLVECTOR, class MUTEX_TYPE = CThreadFastMutex >
@@ -322,6 +322,10 @@ template <typename T, typename A = CUtlVectorUltraConservativeAllocator >
 class CUtlVectorUltraConservative : private A
 {
 public:
+	
+	
+	
+
 	CUtlVectorUltraConservative()
 	{
 		m_pData = StaticData();
@@ -409,6 +413,7 @@ public:
 		{
 			for (int i = m_pData->m_Size; --i >= 0; )
 			{
+				
 				Destruct(&m_pData->m_Elements[i]);
 			}
 		}
@@ -436,6 +441,7 @@ public:
 	{
 		Assert( IsValidIndex(elem) );
 
+		
 		Destruct( &Element(elem) );
 		if (Count() > 0)
 		{
@@ -452,6 +458,7 @@ public:
 
 	void Remove( int elem )
 	{
+		
 		Destruct( &Element(elem) );
 		ShiftElementsLeft(elem);
 		--m_pData->m_Size;
@@ -586,19 +593,7 @@ inline CUtlVector<T, A>& CUtlVector<T, A>::operator=( const CUtlVector<T, A> &ot
 	return *this;
 }
 
-#ifdef STAGING_ONLY
-inline void StagingUtlVectorBoundsCheck( int i, int size )
-{
-	if ( (unsigned)i >= (unsigned)size )
-	{
-		Msg( "Array access error: %d / %d\n", i, size );
-		DebuggerBreak();
-	}
-}
-
-#else
 #define StagingUtlVectorBoundsCheck( _i, _size )
-#endif
 
 //-----------------------------------------------------------------------------
 // element access
@@ -810,7 +805,9 @@ template< typename T, class A >
 void CUtlVector<T, A>::EnsureCount( int num )
 {
 	if (Count() < num)
+	{
 		AddMultipleToTail( num - Count() );
+	}
 }
 
 
@@ -1000,11 +997,11 @@ int CUtlVector<T, A>::AddVectorToTail( CUtlVector const &src )
 	AddMultipleToTail( src.Count() );
 
 	// Copy the elements.	
+	
 	for ( int i=0; i < src.Count(); i++ )
 	{
 		(*this)[base + i] = src[i];
 	}
-
 	return base;
 }
 
@@ -1022,7 +1019,9 @@ inline int CUtlVector<T, A>::InsertMultipleBefore( int elem, int num, const T *p
 
 	// Invoke default constructors
 	for (int i = 0; i < num; ++i )
+	{
 		Construct( &Element( elem+i ) );
+	}
 
 	// Copy stuff in?
 	if ( pToInsert )
@@ -1066,6 +1065,7 @@ void CUtlVector<T, A>::FastRemove( int elem )
 {
 	Assert( IsValidIndex(elem) );
 
+	
 	Destruct( &Element(elem) );
 	if (m_Size > 0)
 	{
@@ -1078,6 +1078,7 @@ void CUtlVector<T, A>::FastRemove( int elem )
 template< typename T, class A >
 void CUtlVector<T, A>::Remove( int elem )
 {
+	
 	Destruct( &Element(elem) );
 	ShiftElementsLeft(elem);
 	--m_Size;
@@ -1113,6 +1114,7 @@ void CUtlVector<T, A>::RemoveMultiple( int elem, int num )
 	Assert( elem >= 0 );
 	Assert( elem + num <= Count() );
 
+	
 	for (int i = elem + num; --i >= elem; )
 		Destruct(&Element(i));
 
@@ -1125,6 +1127,7 @@ void CUtlVector<T, A>::RemoveMultipleFromHead( int num )
 {
 	Assert( num <= Count() );
 
+	
 	for (int i = num; --i >= 0; )
 		Destruct(&Element(i));
 
@@ -1137,6 +1140,7 @@ void CUtlVector<T, A>::RemoveMultipleFromTail( int num )
 {
 	Assert( num <= Count() );
 
+	
 	for (int i = m_Size-num; i < m_Size; i++)
 		Destruct(&Element(i));
 
@@ -1148,6 +1152,7 @@ void CUtlVector<T, A>::RemoveAll()
 {
 	for (int i = m_Size; --i >= 0; )
 	{
+		
 		Destruct(&Element(i));
 	}
 

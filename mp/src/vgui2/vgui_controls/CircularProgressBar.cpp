@@ -230,6 +230,7 @@ void CircularProgressBar::DrawCircleSegment( Color c, float flEndProgress, bool 
 
 	// TODO - if we want to progress CCW, reverse a few things
 
+
 	float flEndProgressRadians = flEndProgress * M_PI * 2;
 
 	int cur_wedge = m_iStartSegment;

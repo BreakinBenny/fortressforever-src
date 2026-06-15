@@ -17,7 +17,7 @@
 
 #define TYPE_NOTEAM			0	// NOTEAM must be zero :)
 #define TYPE_UNASSIGNED		0
-#define TYPE_TEAM			1	// a section for a single team
+#define TYPE_TEAM			1	// a section for a single team	
 #define TYPE_SPECTATORS		2	// a section for a spectator group
 #define TYPE_BLANK			3	// a blank section
 #define TYPE_HEADER			4	// the main header
@@ -82,20 +82,19 @@ private:
 
 protected:
 // column widths at 640
-	enum {
+	enum { 
 		AVATAR_WIDTH		= 14, // unfinished avatar implementation
-		NAME_WIDTH			= 140, 
+		NAME_WIDTH = 140, 
 		CLASS_WIDTH			= 60, 
 		FORTPOINTS_WIDTH	= 60, 
-		SCORE_WIDTH			= 35,  
-		DEATH_WIDTH			= 35, 
+		SCORE_WIDTH = 35,
+		DEATH_WIDTH = 35,
 		ASSIST_WIDTH		= 35,
-		PING_WIDTH			= 30, 
-		VOICE_WIDTH			= 30, 
+		PING_WIDTH = 30, 
+		VOICE_WIDTH = 30,
 		CHANNEL_WIDTH		= 0, 
-		FRIENDS_WIDTH		= 0,
-	};
-	// total			   = 439  
+		FRIENDS_WIDTH = 0 };
+	// total = 439
 
 public:
 	CClientScoreBoardDialog( IViewPort *pViewPort );
@@ -163,7 +162,7 @@ protected:
 
 	// BEG: Added by Mulchman
 	// finds the player in the scoreboard
-	int FindItemIDForPlayerIndex( int playerIndex );
+	int FindItemIDForPlayerIndex(int playerIndex);
 	int FindPlayerIndexForItemID( int iItemID );
 	// END: Added by Mulchman
 

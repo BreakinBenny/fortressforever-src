@@ -85,12 +85,16 @@ bool CAvatarImage::SetAvatarSteamID( CSteamID steamIDUser, EAvatarSize avatarSiz
 	ClearAvatarSteamID();
 
 	m_SteamID = steamIDUser;
+	
 	m_AvatarSize = avatarSize;
 	m_bLoadPending = true;
 
 	m_sPersonaStateChangedCallback.Register( this, &CAvatarImage::OnPersonaStateChanged );
 
-	LoadAvatarImage();
+	
+	
+		LoadAvatarImage();
+	
 	UpdateFriendStatus();
 
 	return m_bValid;
@@ -219,6 +223,8 @@ void CAvatarImage::Paint( void )
 		posX += FRIEND_ICON_AVATAR_INDENT_X * m_avatarWide / DEFAULT_AVATAR_SIZE;
 		posY += FRIEND_ICON_AVATAR_INDENT_Y * m_avatarTall / DEFAULT_AVATAR_SIZE;
 	}
+
+	
 	
 	if ( m_bLoadPending )
 	{

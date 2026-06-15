@@ -360,7 +360,7 @@ public:
 	virtual void				SetValue( const char *value );
 	virtual void				SetValue( float value );
 	virtual void				SetValue( int value );
-	
+		
 	// Reset to default value
 	void						Revert( void );
 

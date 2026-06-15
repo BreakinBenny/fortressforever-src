@@ -132,7 +132,7 @@ void CheckButton::ApplySchemeSettings(IScheme *pScheme)
 
 	SetContentAlignment(Label::a_west);
 
-	_checkBoxImage->SetFont( pScheme->GetFont("Marlett", IsProportional()) );
+	_checkBoxImage->SetFont( pScheme->GetFont( "Marlett", IsProportional()) );
 	_checkBoxImage->ResizeImageToContent();
 	SetImageAtIndex(0, _checkBoxImage, CHECK_INSET);
 

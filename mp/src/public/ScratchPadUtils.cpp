@@ -144,8 +144,8 @@ void CScratchPadGraph::UpdateTicksAndStuff( float flTime, float flValue )
 			float flTimeLocl = m_flTimeOrigin + m_nTimeLabelsDrawn * m_flTimeLabelEveryNSeconds;
 
 			m_pPad->DrawLine(
-				CSPVert((const Vector&) GetSamplePosition(flTimeLocl, m_flHighestValue )),
-				CSPVert((const Vector&) GetSamplePosition(flTimeLocl, flValue ) )
+				CSPVert((const Vector&) GetSamplePosition( flTimeLocl, m_flHighestValue )),
+				CSPVert((const Vector&) GetSamplePosition( flTimeLocl, flValue ) )
 				);
 		}
 
@@ -161,7 +161,7 @@ void CScratchPadGraph::UpdateTicksAndStuff( float flTime, float flValue )
 		float flTimeLocl = m_flTimeOrigin + m_nTimeLabelsDrawn * m_flTimeLabelEveryNSeconds;
 
 		params.m_bSolidBackground = true;
-		params.m_vPos = GetSamplePosition(flTimeLocl, m_flValueOrigin-5 );
+		params.m_vPos = GetSamplePosition( flTimeLocl, m_flValueOrigin-5 );
 		params.m_bTwoSided = true;
 		
 		char str[512];
@@ -171,8 +171,8 @@ void CScratchPadGraph::UpdateTicksAndStuff( float flTime, float flValue )
 
 		// Now draw the vertical line for the value..
 		m_pPad->DrawLine(
-			CSPVert(  (const Vector&)GetSamplePosition(flTimeLocl, m_flValueOrigin ) ),
-			CSPVert( (const Vector&)GetSamplePosition(flTimeLocl, m_flHighestValue ) )
+			CSPVert(  (const Vector&)GetSamplePosition( flTimeLocl, m_flValueOrigin ) ),
+			CSPVert( (const Vector&)GetSamplePosition( flTimeLocl, m_flHighestValue ) )
 			);
 		
 

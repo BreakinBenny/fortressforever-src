@@ -270,6 +270,7 @@ struct GLMTexSamplingParams
 	};
 
 	uint32 m_borderColor;
+	
 
 	FORCEINLINE bool operator== (const GLMTexSamplingParams& rhs ) const
 	{
@@ -280,6 +281,7 @@ struct GLMTexSamplingParams
 	{
 		m_bits = 0;
 		m_borderColor = 0;
+		
 		m_packed.m_addressU = D3DTADDRESS_WRAP;
 		m_packed.m_addressV = D3DTADDRESS_WRAP;
 		m_packed.m_addressW = D3DTADDRESS_WRAP;
@@ -321,7 +323,9 @@ struct GLMTexSamplingParams
 		}
 		gGL->glSamplerParameterfv( nSamplerObject, GL_TEXTURE_BORDER_COLOR, flBorderColor ); // <-- this crashes ATI's driver, remark it out
 		gGL->glSamplerParameteri( nSamplerObject, GL_TEXTURE_MIN_LOD, m_packed.m_minLOD );
+		
 		gGL->glSamplerParameteri( nSamplerObject, GL_TEXTURE_COMPARE_MODE_ARB, m_packed.m_compareMode ? GL_COMPARE_R_TO_TEXTURE_ARB : GL_NONE );
+		
 		if ( m_packed.m_compareMode )
 		{
 			gGL->glSamplerParameteri( nSamplerObject, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL );
@@ -388,6 +392,12 @@ struct GLMTexSamplingParams
 		{
 			gGL->glTexParameteri( target, GL_TEXTURE_MIN_LOD, m_packed.m_minLOD );
 		}
+
+		
+		
+			
+			
+		
 
 		if ( m_packed.m_compareMode != curState.m_packed.m_compareMode )
 		{

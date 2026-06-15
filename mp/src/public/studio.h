@@ -1192,6 +1192,7 @@ struct mstudiotexture_t
 	int						flags;
 	int						used;
     int						unused1;
+
 	mutable IMaterial		*material;  // fixme: this needs to go away . .isn't used by the engine, but is used by studiomdl
 	mutable void			*clientmaterial;	// gary, replace with client material pointer if used
 	
@@ -3200,6 +3201,12 @@ inline int Studio_LoadVertexes( const vertexFileHeader_t *pTempVvdHdr, vertexFil
 		{
 			// working bottom up, skip over copying higher detail lods
 			continue;
+		
+
+		
+		
+			
+			
 		}
 
 		// copy vertexes

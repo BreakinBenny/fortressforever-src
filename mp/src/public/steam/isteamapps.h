@@ -110,7 +110,7 @@ public:
 	virtual bool BIsTimedTrial( uint32* punSecondsAllowed, uint32* punSecondsPlayed ) = 0; 
 
 	// set current DLC AppID being played (or 0 if none). Allows Steam to track usage of major DLC extensions
-	virtual bool SetDlcContext( AppId_t nAppID ) = 0;
+	virtual bool SetDlcContext( AppId_t nAppID ) = 0; 
 
 	// returns total number of known app beta branches (including default "public" branch )
 	virtual int  GetNumBetas( int *pnAvailable, int *pnPrivate ) = 0; //

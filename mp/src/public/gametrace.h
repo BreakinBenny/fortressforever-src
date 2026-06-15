@@ -96,6 +96,10 @@ typedef CGameTrace trace_t;
 #define TLD_DEF_LEAF_MAX	256
 #define TLD_DEF_ENTITY_MAX	1024
 
+
+
+
+
 class CTraceListData : public IPartitionEnumerator
 {
 public:

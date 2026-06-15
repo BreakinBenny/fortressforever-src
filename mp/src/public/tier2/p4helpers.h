@@ -35,12 +35,18 @@ public:
 
 	// Reverts the file
 	virtual bool Revert( void );
+	
+	
+	
 
 	// Is the file in perforce?
 	virtual bool IsFileInPerforce();
 
 	// Changes the file to the specified filetype.
 	virtual bool SetFileType( const CUtlString& desiredFileType );
+
+	
+	
 
 protected:
 	// The filename that this class instance represents

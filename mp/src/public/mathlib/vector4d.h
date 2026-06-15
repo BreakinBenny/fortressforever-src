@@ -64,7 +64,7 @@ public:
 	Vector4D&	operator*=(const Vector4D &v);			
 	Vector4D&	operator*=(float s);
 	Vector4D&	operator/=(const Vector4D &v);		
-	Vector4D&	operator/=(float s);					
+	Vector4D&	operator/=(float s);				
 
 	// negate the Vector4D components
 	void	Negate(); 

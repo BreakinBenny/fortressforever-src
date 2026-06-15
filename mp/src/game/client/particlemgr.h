@@ -370,7 +370,7 @@ public:
 	// structure in bytes
 	// Use the third argument to override the alloc size by specifying the size
 	// in bytes that you want to use instead of MAX_PARTICLE_SIZE (which is 96)
-	Particle* AddParticle(int sizeInBytes, PMaterialHandle pMaterial, int iMaxParticleSizeOverride = 0);
+	Particle*		AddParticle( int sizeInBytes, PMaterialHandle pMaterial, int iMaxParticleSizeOverride = 0 );
 
 	// This is an optional call you can make if you want to manually manage the effect's
 	// bounding box. Normally, the bounding box is managed automatically, but in certain

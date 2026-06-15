@@ -279,8 +279,8 @@ inline ClientEntityHandle_t CClientEntityList::EntIndexToHandle( int entnum )
 {
 	if ( entnum < -1 )
 		return INVALID_EHANDLE_INDEX;
-	IClientUnknown *pUnk = GetListedEntity( entnum );
-	return pUnk ? pUnk->GetRefEHandle() : INVALID_EHANDLE_INDEX; 
+	IClientUnknown* pUnk = GetListedEntity(entnum);
+	return pUnk ? pUnk->GetRefEHandle() : INVALID_EHANDLE_INDEX;
 }
 
 

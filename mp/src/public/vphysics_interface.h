@@ -1030,6 +1030,8 @@ struct fluidparams_t
 		torqueFactor = src.torqueFactor;
 		viscosityFactor = src.viscosityFactor;
 		contents = src.contents;
+		
+		
 	}
 };
 

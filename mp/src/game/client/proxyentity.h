@@ -27,6 +27,5 @@ protected:
 	virtual void OnBind( C_BaseEntity *pBaseEntity ) = 0;
 };
 
-
 #endif // PROXY_ENTITY_H
 

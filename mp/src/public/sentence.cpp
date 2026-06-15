@@ -570,8 +570,8 @@ void CSentence::ParseWords( CUtlBuffer& buf )
 			assert( pt );
 			pt->SetPhonemeCode( code );
 			pt->SetTag( phonemename );
-			pt->SetStartTime(startLocl);
-			pt->SetEndTime(endLocl);
+			pt->SetStartTime( startLocl );
+			pt->SetEndTime( endLocl );
 
 			AddPhonemeTag( wt, pt );
 		}
@@ -619,7 +619,7 @@ void CSentence::ParseCloseCaption( CUtlBuffer& buf )
 	char token[ 4096 ];
 	while ( 1 )
 	{
-		// Format is 
+		// Format is
 		// language_name
 		// {
 		//   PHRASE char streamlength "streambytes" starttime endtime
@@ -688,7 +688,7 @@ void CSentence::ParseCloseCaption( CUtlBuffer& buf )
 			buf.GetChar();
 			buf.Get( cc_stream, cc_length );
 			cc_stream[ cc_length ] = 0;
-			
+
 			// Skip space
 			buf.GetChar();
 		#ifdef SDK2013CE
@@ -1411,7 +1411,7 @@ void CSentence::Append( float starttime, const CSentence& src )
 
 		// Offset times
 		int c = newWord->m_Phonemes.Count();
-		for (int j = 0; j < c; ++j)
+		for ( int j = 0; j < c; ++j )
 		{
 			CPhonemeTag *tag = newWord->m_Phonemes[ j ];
 			tag->AddStartTime( starttime );

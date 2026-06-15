@@ -17,10 +17,10 @@
 
 class IHandleEntity;
 
-
 // -------------------------------------------------------------------------------------------------- //
 // CBaseHandle.
 // -------------------------------------------------------------------------------------------------- //
+
 
 class CBaseHandle
 {
@@ -32,6 +32,7 @@ public:
 	CBaseHandle( const CBaseHandle &other );
 	CBaseHandle( unsigned long value );
 	CBaseHandle( int iEntry, int iSerialNumber );
+
 
 	void Init( int iEntry, int iSerialNumber );
 	void Term();
@@ -75,6 +76,7 @@ inline CBaseHandle::CBaseHandle()
 	m_Index = INVALID_EHANDLE_INDEX;
 }
 
+
 inline CBaseHandle::CBaseHandle( const CBaseHandle &other )
 {
 	m_Index = other.m_Index;
@@ -89,6 +91,7 @@ inline CBaseHandle::CBaseHandle( int iEntry, int iSerialNumber )
 {
 	Init( iEntry, iSerialNumber );
 }
+
 
 inline void CBaseHandle::Init( int iEntry, int iSerialNumber )
 {

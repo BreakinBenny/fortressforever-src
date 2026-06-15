@@ -325,8 +325,6 @@ typedef unsigned int		uint;
 // you might typically want to use RAND_MAX
 #define VALVE_RAND_MAX 0x7fff
 
-
-
 /*
 FIXME: Enable this when we no longer fear change =)
 
@@ -430,18 +428,10 @@ typedef void * HINSTANCE;
 #endif
 #define	DebuggerBreakIfDebugging() if ( !Plat_IsInDebugSession() ) ; else DebuggerBreak()
 
-#ifdef STAGING_ONLY
-#define	DebuggerBreakIfDebugging_StagingOnly() if ( !Plat_IsInDebugSession() ) ; else DebuggerBreak()
-#else
 #define	DebuggerBreakIfDebugging_StagingOnly()
-#endif
 
 // Allows you to specify code that should only execute if we are in a staging build. Otherwise the code noops.
-#ifdef STAGING_ONLY
-#define STAGING_ONLY_EXEC( _exec ) do { _exec; } while (0)
-#else
 #define STAGING_ONLY_EXEC( _exec ) do { } while (0)
-#endif
 
 // C functions for external declarations that call the appropriate C++ methods
 #ifndef EXPORT
@@ -495,7 +485,7 @@ typedef void * HINSTANCE;
 #define ALIGN32_POST DECL_ALIGN(32)
 #define ALIGN128_POST DECL_ALIGN(128)
 #else
-#error
+#error "PORT: Code only tested with MSVC! Must validate with new compiler, and use built-in keyword if available."
 #endif
 
 // Pull in the /analyze code annotations.
@@ -1129,12 +1119,12 @@ FORCEINLINE void StoreLittleDWord( unsigned long *base, unsigned int dwordIndex,
 			__storewordbytereverse( dword, dwordIndex<<2, base );
 		}
 #else
-FORCEINLINE unsigned long LoadLittleDWord( const unsigned long *base, unsigned int dwordIndex )
+	FORCEINLINE unsigned long LoadLittleDWord( const unsigned long *base, unsigned int dwordIndex )
 	{
 		return LittleDWord( base[dwordIndex] );
 	}
 
-FORCEINLINE void StoreLittleDWord( unsigned long *base, unsigned int dwordIndex, unsigned long dword )
+	FORCEINLINE void StoreLittleDWord( unsigned long *base, unsigned int dwordIndex, unsigned long dword )
 	{
 		base[dwordIndex] = LittleDWord(dword);
 	}
@@ -1245,7 +1235,7 @@ struct CPUInformation
 
 	uint8 m_nLogicalProcessors;		// Number op logical processors.
 	uint8 m_nPhysicalProcessors;	// Number of physical processors
-	
+
 	bool m_bSSE3 : 1,
 		 m_bSSSE3 : 1,
 		 m_bSSE4a : 1,
@@ -1257,7 +1247,7 @@ struct CPUInformation
 	tchar* m_szProcessorID;				// Processor vendor Identification.
 
 	uint32 m_nModel;
-	uint32 m_nFeatures[3];
+	uint32 m_nFeatures[ 3 ];
 
 	CPUInformation(): m_Size(0){}
 };

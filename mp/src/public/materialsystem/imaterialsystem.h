@@ -18,11 +18,12 @@
 #define GAMMA 2.2f
 #define TEXGAMMA 2.2f
 
-#include "tier1/interface.h"
-#include "tier1/refcount.h"
+//#include "tier0/icommandline.h"
 #include "mathlib/vector.h"
 #include "mathlib/vector4d.h"
 #include "mathlib/vmatrix.h"
+#include "tier1/interface.h"
+#include "tier1/refcount.h"
 #include "appframework/IAppSystem.h"
 #include "bitmap/imageformat.h"
 #include "texture_group_names.h"

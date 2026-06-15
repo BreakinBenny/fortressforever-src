@@ -236,6 +236,8 @@ protected:
 	};
 	CUtlVector< particle_data_t* > m_particleList;
 
+	
+
 	particle_data_t *CreateParticleData( const char *pszParticleName );
 	bool SafeDeleteParticleData( particle_data_t **pData );
 
