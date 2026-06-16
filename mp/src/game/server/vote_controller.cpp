@@ -41,6 +41,7 @@ CVoteController *g_voteController = NULL;
 
 ConVar sv_vote_timer_duration( "sv_vote_timer_duration", "15", FCVAR_DEVELOPMENTONLY, "How long to allow voting on an issue" );
 ConVar sv_vote_command_delay( "sv_vote_command_delay", "2", FCVAR_DEVELOPMENTONLY, "How long after a vote passes until the action happens", false, 0.f, true, 4.5f );
+
 ConVar sv_allow_votes( "sv_allow_votes", "1", FCVAR_NONE, "Allow voting?" );
 ConVar sv_vote_failure_timer( "sv_vote_failure_timer", "300", FCVAR_NONE, "A vote that fails cannot be re-submitted for this long" );
 #ifdef TF_DLL
@@ -214,7 +215,7 @@ CON_COMMAND( callvote, "Start a vote on an issue." )
 	if ( !g_voteController )
 	{
 		DevMsg( "Vote Controller Not Found!\n" );
-			return;
+		return;
 	}
 
 	CBasePlayer *pVoteCaller = UTIL_GetCommandClient();
@@ -437,7 +438,7 @@ bool CVoteController::CreateVote( int iEntIndex, const char *pszTypeString, cons
 		CBaseIssue *pCurrentIssue = m_potentialIssues[issueIndex];
 		if ( !pCurrentIssue )
 			return false;
-		
+
 		if ( FStrEq( pszTypeString, pCurrentIssue->GetTypeString() ) )
 		{
 			vote_create_failed_t nErrorCode = VOTE_FAILED_GENERIC;
@@ -453,7 +454,7 @@ bool CVoteController::CreateVote( int iEntIndex, const char *pszTypeString, cons
 				{
 					m_iOnlyTeamToVote = ( pCurrentIssue->IsTeamRestrictedVote() ) ? GetVoterTeam( pVoteCaller ) : TEAM_UNASSIGNED;
 				}
-				
+
 				// Now get our choices
 				m_VoteOptions.RemoveAll();
 				pCurrentIssue->GetVoteOptions( m_VoteOptions );
@@ -608,7 +609,7 @@ CVoteController::TryCastVoteResult CVoteController::TryCastVote( int iEntIndex, 
 
 	if ( nCurrentVote < VOTE_OPTION1 || nCurrentVote > VOTE_OPTION5 )
 		return CAST_FAIL_SYSTEM_ERROR;
-	
+
 	// They're changing their vote
 #ifdef DEBUG
 	if ( nOldVote != VOTE_UNCAST )

@@ -1246,9 +1246,6 @@ float CTeamControlPointMaster::GetPartialCapturePointRate( void )
 	return m_flPartialCapturePointsRate;
 }
 
-#ifdef STAGING_ONLY
-//-----------------------------------------------------------------------------
-// Purpose: 
 //-----------------------------------------------------------------------------
 void CTeamControlPointMaster::ListRounds( void )
 {
@@ -1274,8 +1271,6 @@ void CTeamControlPointMaster::ListRounds( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------	
 void cc_ListRounds( void )
 {
 	CTeamControlPointMaster *pMaster = g_hControlPointMasters.Count() ? g_hControlPointMasters[0] : NULL;
@@ -1288,8 +1283,6 @@ void cc_ListRounds( void )
 static ConCommand listrounds( "listrounds", cc_ListRounds, "List the rounds for the current map", FCVAR_CHEAT );
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------	
 void cc_PlayRound( const CCommand& args )
 {
 	if ( args.ArgC() > 1 )
@@ -1323,4 +1316,3 @@ void cc_PlayRound( const CCommand& args )
 }
 
 static ConCommand playround( "playround", cc_PlayRound, "Play the selected round\n\tArgument: {round name given by \"listrounds\" command}", FCVAR_CHEAT );
-#endif

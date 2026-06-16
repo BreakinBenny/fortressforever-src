@@ -107,6 +107,8 @@ public:
 		m_iStopWatchTimer = pTimer ? pTimer->entindex() : 0;
 	}
 
+	
+
 	int GetTimerInHUD( void ) { return m_iTimerToShowInHUD; }
 
 	// Mini-rounds data

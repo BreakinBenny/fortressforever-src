@@ -352,7 +352,10 @@ public:
 		InitCommentary();
 
 		IGameEvent *event = gameeventmanager->CreateEvent( "playing_commentary" );
-		gameeventmanager->FireEventClientSide( event );
+		
+		
+			gameeventmanager->FireEventClientSide( event );
+		
 	}
 
 	CPointCommentaryNode *GetNodeUnderCrosshair()

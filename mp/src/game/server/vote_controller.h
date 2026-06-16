@@ -53,7 +53,7 @@ protected:
 	struct FailedVote
 	{
 		char	szFailedVoteParameter[MAX_VOTE_DETAILS_LENGTH];
-		float	flLockoutTime;					
+		float	flLockoutTime;
 	};
 
 	CUtlVector< FailedVote* > m_FailedVotes;
@@ -68,7 +68,7 @@ protected:
 class CVoteController : public CBaseEntity
 {
 	DECLARE_CLASS( CVoteController, CBaseEntity );
-	
+
 public:
 	DECLARE_SERVERCLASS();
 	DECLARE_DATADESC();
@@ -115,7 +115,7 @@ public:
 protected:
 	void			ResetData( void );
 	void			VoteControllerThink( void );
-	void			CheckForEarlyVoteClose( void ); // If everyone has voted (and changing votes is not allowed) then end early
+	void			CheckForEarlyVoteClose( void );				// If everyone has voted (and changing votes is not allowed) then end early
 
 	CNetworkVar( int, m_iActiveIssueIndex );					// Type of thing being voted on
 	CNetworkVar( int, m_iOnlyTeamToVote );						// If an Ally restricted vote, the team number that is allowed to vote
@@ -124,7 +124,7 @@ protected:
 	CNetworkVar( bool, m_bIsYesNoVote );						// Is the current issue Yes/No?
 	CountdownTimer	m_acceptingVotesTimer;						// How long from vote start until we count the ballots
 	CountdownTimer	m_executeCommandTimer;						// How long after end of vote time until we execute a passed vote
-	CountdownTimer	m_resetVoteTimer;							// when the current vote will end 
+	CountdownTimer	m_resetVoteTimer;							// when the current vote will end
 	int				m_nVotesCast[MAX_PLAYERS + 1];				// arrays are zero-based and player indices are one-based
 	int				m_iEntityHoldingVote;
 	

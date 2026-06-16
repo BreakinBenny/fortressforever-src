@@ -1804,10 +1804,17 @@ void CHL2_Player::SuitPower_Update( void )
 		{
 			if( SuitPower_IsDeviceActive(SuitDeviceSprint) )
 			{
-				if( !fabs(GetAbsVelocity().x) && !fabs(GetAbsVelocity().y) )
+				if ( !fabs( GetAbsVelocity().x ) && !fabs( GetAbsVelocity().y ) )
 				{
-					// If player's not moving, don't drain sprint juice.
-					flPowerLoad -= SuitDeviceSprint.GetDeviceDrainRate();
+					
+					
+						
+					
+					
+					
+						// If player's not moving, don't drain sprint juice.
+						flPowerLoad -= SuitDeviceSprint.GetDeviceDrainRate();
+					
 				}
 			}
 		}
@@ -1850,6 +1857,7 @@ void CHL2_Player::SuitPower_Update( void )
 #endif
 			}
 		}
+
 	}
 }
 

@@ -159,7 +159,8 @@ public:
 
 	virtual bool	CanHearAndReadChatFrom( CBasePlayer *pPlayer );
 
-		
+	
+	
 private:
 
 #ifdef SDK2013CE

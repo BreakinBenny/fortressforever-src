@@ -193,7 +193,7 @@ public:
 	bool m_fActive;		// only true when the entity is playing a looping sound
 	bool m_fLooping;		// true when the sound played will loop
 
-	string_t m_iszSound;			// Path/filename of WAV file to play.
+	string_t m_iszSound;			// Path/filename of WAV or MP3 file to play.
 	string_t m_sSourceEntName;
 	EHANDLE m_hSoundSource;	// entity from which the sound comes
 	int		m_nSoundSourceEntIndex; // In case the entity goes away before we finish stopping the sound...
@@ -425,9 +425,9 @@ void CAmbientGeneric::Precache( void )
 	char *szSoundFile = (char *)STRING( m_iszSound );
 	if ( m_iszSound != NULL_STRING && strlen( szSoundFile ) > 1 )
 	{
-		if (*szSoundFile != '!')
+		if ( *szSoundFile != '!' )
 		{
-			PrecacheScriptSound(szSoundFile);
+			PrecacheScriptSound( szSoundFile );
 		}
 	}
 
@@ -757,7 +757,7 @@ void CAmbientGeneric::RampThink( void )
 		if (pSoundSource)
 		{
 			UTIL_EmitAmbientSound(pSoundSource->GetSoundSourceIndex(), pSoundSource->GetAbsOrigin(), 
-				STRING( m_iszSound ), (vol * 0.01), m_iSoundLevel, flags, pitch);
+				STRING( m_iszSound ), ( vol * 0.01 ), m_iSoundLevel, flags, pitch );
 		}
 	}
 
@@ -883,12 +883,12 @@ void CAmbientGeneric::SendSound( SoundFlags_t flags)
 	{
 		if ( flags == SND_STOP )
 		{
-			UTIL_EmitAmbientSound(pSoundSource->GetSoundSourceIndex(), pSoundSource->GetAbsOrigin(), szSoundFile, 
+			UTIL_EmitAmbientSound( pSoundSource->GetSoundSourceIndex(), pSoundSource->GetAbsOrigin(), szSoundFile,
 						0, SNDLVL_NONE, flags, 0);
 		}
 		else
 		{
-			UTIL_EmitAmbientSound(pSoundSource->GetSoundSourceIndex(), pSoundSource->GetAbsOrigin(), szSoundFile, 
+			UTIL_EmitAmbientSound( pSoundSource->GetSoundSourceIndex(), pSoundSource->GetAbsOrigin(), szSoundFile,
 				(m_dpv.vol * 0.01), m_iSoundLevel, flags, m_dpv.pitch);
 		}
 	}	
@@ -897,7 +897,7 @@ void CAmbientGeneric::SendSound( SoundFlags_t flags)
 		if ( ( flags == SND_STOP ) && 
 			( m_nSoundSourceEntIndex != -1 ) )
 		{
-			UTIL_EmitAmbientSound(m_nSoundSourceEntIndex, GetAbsOrigin(), szSoundFile, 
+			UTIL_EmitAmbientSound( m_nSoundSourceEntIndex, GetAbsOrigin(), szSoundFile,
 					0, SNDLVL_NONE, flags, 0);
 		}
 	}
@@ -1384,7 +1384,7 @@ void UTIL_RestartAmbientSounds( void )
 	CAmbientGeneric *pAmbient = NULL;
 	while ( ( pAmbient = (CAmbientGeneric*) gEntList.FindEntityByClassname( pAmbient, "ambient_generic" ) ) != NULL )
 	{
-		if (pAmbient->m_fActive )
+		if ( pAmbient->m_fActive )
 		{
 			if ( strstr( STRING( pAmbient->m_iszSound ), "mp3" ) )
 			{

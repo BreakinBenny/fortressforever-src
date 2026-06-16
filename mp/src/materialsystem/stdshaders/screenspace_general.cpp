@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -153,7 +153,7 @@ BEGIN_VS_SHADER_FLAGS( SDK_screenspace_general_dx9, "Help for screenspace_genera
 				EnableAlphaBlending( SHADER_BLEND_ONE, SHADER_BLEND_ONE );
 			}
 
-			if( g_pHardwareConfig->SupportsPixelShaders_2_b() )
+			if ( g_pHardwareConfig->SupportsPixelShaders_2_b() )
 			{
 				const char *szPixelShader = params[PIXSHADER]->GetStringValue();
 				size_t iLength = Q_strlen( szPixelShader );

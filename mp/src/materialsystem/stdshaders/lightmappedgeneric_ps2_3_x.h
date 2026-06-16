@@ -25,10 +25,10 @@
 //	SKIP: !$BUMPMAP && ($NORMALMASK_DECODE_MODE == 2)
 //  NOSKIP: $FANCY_BLENDING && (!$FASTPATH)
 
-// 360 compiler craps out on some combo in this family.  Content doesn't use blendmode 10 anyway
+// 360 compiler fails on some combo in this family.  Content doesn't use blendmode 10 anyway
 //  SKIP: $FASTPATH && $PIXELFOGTYPE && $BASETEXTURE2 && $DETAILTEXTURE && $CUBEMAP && ($DETAIL_BLEND_MODE == 10 ) [XBOX]
 
-// debug crap:
+// debug :
 // NOSKIP: $DETAILTEXTURE
 // NOSKIP: $CUBEMAP
 // NOSKIP: $ENVMAPMASK

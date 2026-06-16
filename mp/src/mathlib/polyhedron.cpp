@@ -1018,7 +1018,7 @@ CPolyhedron *ClipLinkedGeometry( GeneratePolyhedronFromPlanes_UnorderedPolygonLL
 				GeneratePolyhedronFromPlanes_UnorderedPointLL * pActivePointWalkLocl = pAllPoints;
 				do
 				{
-					if(pActivePointWalkLocl->pPoint->planarity == POINT_ONPLANE )
+					if( pActivePointWalkLocl->pPoint->planarity == POINT_ONPLANE )
 					{
 						GeneratePolyhedronFromPlanes_LineLL *pOnPlaneLineWalk = pActivePointWalkLocl->pPoint->pConnectedLines;
 						GeneratePolyhedronFromPlanes_LineLL *pStartLineWalk = pOnPlaneLineWalk;
@@ -1060,7 +1060,7 @@ CPolyhedron *ClipLinkedGeometry( GeneratePolyhedronFromPlanes_UnorderedPolygonLL
 						}
 					}
 					pActivePointWalkLocl = pActivePointWalkLocl->pNext;
-				} while(pActivePointWalkLocl);
+				} while( pActivePointWalkLocl );
 			}
 #ifdef _DEBUG
 			PlaneCutHistory.AddToTail( &pOutwardFacingPlanes[iCurrentPlane * 4] );
@@ -1331,25 +1331,6 @@ CPolyhedron *ClipLinkedGeometry( GeneratePolyhedronFromPlanes_UnorderedPolygonLL
 						float fInvTotalDist = 1.0f/(pDeadPoint->fPlaneDist - pLivingPoint->fPlaneDist); //subtraction because the living index is known to be negative
 						pNewPoint->ptPosition = (pLivingPoint->ptPosition * (pDeadPoint->fPlaneDist * fInvTotalDist)) - (pDeadPoint->ptPosition * (pLivingPoint->fPlaneDist * fInvTotalDist));
 
-#if ( 0 && defined( _DEBUG ) )
-						float fDebugDist = vNormal.Dot( pNewPoint->ptPosition ) - fPlaneDist; //just for looking at in watch windows
-						AssertMsg_DumpPolyhedron( fabs( fDebugDist ) < fOnPlaneEpsilon, "Generated split point is far from plane" );
-
-						//verify that the new point isn't sitting on top of another
-						{
-							GeneratePolyhedronFromPlanes_UnorderedPointLL * pActivePointWalkLocl = pAllPoints;
-							do
-							{
-								if(pActivePointWalkLocl->pPoint != pNewPoint )
-								{
-									Vector vDiff = pActivePointWalkLocl->pPoint->ptPosition - pNewPoint->ptPosition;
-
-									AssertMsg_DumpPolyhedron( vDiff.Length() > fOnPlaneEpsilon, "Generated a point on top of another" );
-								}
-								pActivePointWalkLocl = pActivePointWalkLocl->pNext;
-							} while(pActivePointWalkLocl);
-						}
-#endif
 
 						pNewPoint->planarity = POINT_ONPLANE;
 						pNewPoint->fPlaneDist = 0.0f;

@@ -68,7 +68,7 @@ CNavMesh::CNavMesh( void )
 	LoadPlaceDatabase();
 
 	ListenForGameEvent( "round_start" );
-	//ListenForGameEvent( "round_start_pre_entity" );
+//	ListenForGameEvent( "round_start_pre_entity" );
 	ListenForGameEvent( "break_prop" );
 	ListenForGameEvent( "break_breakable" );
 	//ListenForGameEvent( "teamplay_round_start" );

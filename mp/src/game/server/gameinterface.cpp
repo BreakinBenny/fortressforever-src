@@ -1979,6 +1979,7 @@ const char *CServerGameDLL::GetServerBrowserGameData()
 	}
 	if ( TFGameRules() && TFGameRules()->IsMannVsMachineMode() )
 	{
+		
 		sResult.Append( CFmtStr( ",mannup:%d", ( pLobby && pLobby->GetPlayingForBraggingRights() ) ? 1 : 0  ) );
 	}
 #endif

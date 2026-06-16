@@ -737,6 +737,7 @@ END_DATADESC()
 
 const ConVar	*CSceneEntity::m_pcvSndMixahead = NULL;
 
+
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -772,6 +773,7 @@ CSceneEntity::CSceneEntity( void )
 		m_pcvSndMixahead	= cvar->FindVar( "snd_mixahead" );
 
 	m_BusyActor			= SCENE_BUSYACTOR_DEFAULT;
+
 }
 
 //-----------------------------------------------------------------------------

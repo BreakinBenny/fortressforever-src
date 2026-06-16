@@ -67,7 +67,7 @@ bool CFuncWall::CreateVPhysics( void )
 		int contents = modelinfo->GetModelContents( GetModelIndex() );
 		if ( ! (contents & (MASK_SOLID|MASK_PLAYERSOLID|MASK_NPCSOLID)) )
 		{
-			// leave the physics shadow there in case it has crap constrained to it
+			// leave the physics shadow there in case it has stuff constrained to it
 			// but disable collisions with it
 			pPhys->EnableCollisions( false );
 		}

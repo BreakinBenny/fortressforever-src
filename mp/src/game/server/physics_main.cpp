@@ -757,7 +757,8 @@ void CPhysicsPushedEntities::GenerateBlockingEntityListAddBox( const Vector &vec
 //-----------------------------------------------------------------------------
 void CPhysicsPushedEntities::SetupAllInHierarchy( CBaseEntity *pParent )
 {
-	if (!pParent)
+	
+	if ( !pParent )
 		return;
 
 	VPROF("CPhysicsPushedEntities::SetupAllInHierarchy");

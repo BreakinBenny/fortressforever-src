@@ -140,8 +140,6 @@ float4 main( PS_INPUT i ) : COLOR
 
 	// multiply the color by alpha.since we are using alpha blending to blend against dest alpha for borders.
 	
-	
-		
 #if (PIXELFOGTYPE == PIXEL_FOG_TYPE_RANGE)
 	float fogFactor = CalcRangeFog( i.vRefract_W_ProjZ.w, g_PixelFogParams.x, g_PixelFogParams.z, g_PixelFogParams.w );
 #else

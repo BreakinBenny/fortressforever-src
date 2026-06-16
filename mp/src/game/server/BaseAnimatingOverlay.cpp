@@ -110,7 +110,7 @@ void CAnimationLayer::Init( CBaseAnimatingOverlay *pOverlay )
 
 	m_flKillRate = 100.0;
 	m_flKillDelay = 0.0;
-	m_flPlaybackRate = 1.0;
+	m_flPlaybackRate = 1.0f;
 	m_flLastEventCheck = 0.0;
 	m_flLastAccess = gpGlobals->curtime;
 	m_flLayerAnimtime = 0;

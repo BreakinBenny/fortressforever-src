@@ -1136,7 +1136,7 @@ void CNPC_CombineDropship::Precache( void )
 	case CRATE_JEEP:
 		PrecacheModel("models/buggy.mdl");
 		break;
-		
+
 #ifdef SDK2013CE
 	case CRATE_JALOPY:
 		PrecacheModel("models/vehicle.mdl");

@@ -949,7 +949,7 @@ void CBasePlayer::TraceAttack( const CTakeDamageInfo &inputInfo, const Vector &v
 			//  If an NPC check if friendly fire is disallowed
 			// --------------------------------------------------
 			// --> Mirv: All this disabled so we can impact friendlies
-			/*CAI_BaseNPC* pNPC = info.GetAttacker()->MyNPCPointer();
+			/*CAI_BaseNPC *pNPC = info.GetAttacker()->MyNPCPointer();
 			if ( pNPC && (pNPC->CapabilitiesGet() & bits_CAP_NO_HIT_PLAYER) && pNPC->IRelationType( this ) != D_HT )
 				return;
 
@@ -964,7 +964,7 @@ void CBasePlayer::TraceAttack( const CTakeDamageInfo &inputInfo, const Vector &v
 		SetLastHitGroup( ptr->hitgroup );
 
 		// --> Mirv: No location damage please
-		/*switch (ptr->hitgroup)
+		/*switch ( ptr->hitgroup )
 		{
 		case HITGROUP_GENERIC:
 			break;
@@ -1000,7 +1000,7 @@ void CBasePlayer::TraceAttack( const CTakeDamageInfo &inputInfo, const Vector &v
 			if (g_pGameRules->FCanTakeDamage(ToFFPlayer(this), info.GetAttacker()))
 			{
 				SpawnBlood(ptr->endpos, vecDir, BloodColor(), info.GetDamage());// a little surface blood.
-				TraceBleed(info.GetDamage(), vecDir, ptr, info.GetDamageType());
+				TraceBleed( info.GetDamage(), vecDir, ptr, info.GetDamageType() );
 			}
 		}
 
@@ -1170,7 +1170,8 @@ int CBasePlayer::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 		return 0;
 	// go take the damage first
 
-	if ( !g_pGameRules->FCanTakeDamage(this, info.GetAttacker()/*, inputInfo*/))
+	
+	if ( !g_pGameRules->FCanTakeDamage( this, info.GetAttacker()/*, inputInfo*/ ) )
 	{
 		// Refuse the damage
 		return 0;
@@ -2011,7 +2012,7 @@ void CBasePlayer::WaterMove()
 		{
 			// --> Mirv: Fix the bubbly spawn start
 			if (GetTeamNumber() != TEAM_SPECTATOR && GetTeamNumber() != TEAM_UNASSIGNED)
-				EmitSound("Player.DrownStart");
+				EmitSound( "Player.DrownStart" );
 			// <-- Mirv: Fix the bubbly spawn start
 		}
 
@@ -2032,6 +2033,7 @@ void CBasePlayer::WaterMove()
 			m_bitsDamageType &= ~DMG_DROWN;
 			m_rgbTimeBasedDamage[itbd_DrownRecover] = 0;
 		}
+
 	}
 	else
 	{	// fully under water
@@ -2792,7 +2794,7 @@ bool CBasePlayer::IsValidObserverTarget(CBaseEntity * target)
 
 	// MOD AUTHORS: Add checks on target here or in derived method
 
-	if (target->IsPlayer())	// track players
+	if ( target->IsPlayer() )	// track players
 	{
 		CBasePlayer * player = ToBasePlayer( target );
 
@@ -2825,7 +2827,7 @@ bool CBasePlayer::IsValidObserverTarget(CBaseEntity * target)
 		// check forcecamera settings for active players
 		if ( GetTeamNumber() != TEAM_SPECTATOR )
 		{
-			switch ( mp_forcecamera.GetInt() )	
+			switch ( mp_forcecamera.GetInt() )
 			{
 				case OBS_ALLOW_ALL	:	break;
 				case OBS_ALLOW_TEAM :	if ( GetTeamNumber() != target->GetTeamNumber() )
@@ -4652,7 +4654,7 @@ void FixPlayerCrouchStuck( CBasePlayer *pPlayer )
 
 	// Move up as many as 18 pixels if the player is stuck.
 	int i;
-	Vector org = pPlayer->GetAbsOrigin();;
+	Vector org = pPlayer->GetAbsOrigin();
 	for ( i = 0; i < 18; i++ )
 	{
 		UTIL_TraceHull( pPlayer->GetAbsOrigin(), pPlayer->GetAbsOrigin(), 
@@ -5518,7 +5520,6 @@ void CBasePlayer::CommitSuicide( bool bExplode /*= false*/, bool bForce /*= fals
 
 	// don't let them suicide for 5 seconds after suiciding
 	m_fNextSuicideTime = gpGlobals->curtime + 5;
-
 	// C4189: local variable is initialized but not referenced
 	int fDamage = DMG_PREVENT_PHYSICS_FORCE | ( bExplode ? DMG_ALWAYSGIB : DMG_NEVERGIB );
 
@@ -6460,7 +6461,7 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		break;
 
 	case 103:
-		// What the hell are you doing?
+		// What are you doing?
 		pEntity = FindEntityForward( this, true );
 		if ( pEntity )
 		{
@@ -6756,7 +6757,7 @@ bool CBasePlayer::ClientCommand( const CCommand &args )
 		
 		return true;
 	}
-	else if ( stricmp( cmd, "spec_prev" ) == 0 ) // chase prevoius player
+	else if ( stricmp( cmd, "spec_prev" ) == 0 ) // chase previous player
 	{
 		if ( GetObserverMode() > OBS_MODE_FIXED )
 		{
@@ -6771,17 +6772,16 @@ bool CBasePlayer::ClientCommand( const CCommand &args )
 		{
 			AttemptToExitFreezeCam();
 		}
-		
+
 		return true;
 	}
-	
 	else if ( stricmp( cmd, "spec_player" ) == 0 ) // chase next player
 	{
 		if ( GetObserverMode() > OBS_MODE_FIXED && args.ArgC() == 2 )
 		{
 			int index = atoi( args[1] );
 
-			CBasePlayer * target;
+			CBasePlayer *target;
 
 			if ( index == 0 )
 			{
@@ -6849,7 +6849,17 @@ bool CBasePlayer::ClientCommand( const CCommand &args )
 			angle.y = atof( args[5] );
 			angle.z = 0.0f;
 
-			JumptoPosition( origin, angle );
+			
+			
+			
+			
+				
+				
+				
+				
+
+				JumptoPosition( origin, angle );
+			
 		}
 		
 		return true;
@@ -6985,7 +6995,7 @@ bool CBasePlayer::RemovePlayerItem( CBaseCombatWeapon *pItem )
 	{
 		ResetAutoaim( );
 		pItem->Holster( );
-		pItem->SetNextThink( TICK_NEVER_THINK );; // crowbar may be trying to swing again, etc
+		pItem->SetNextThink( TICK_NEVER_THINK ); // crowbar may be trying to swing again, etc
 		pItem->SetThink( NULL );
 	}
 
@@ -7225,6 +7235,7 @@ void CBasePlayer::RumbleEffect( unsigned char index, unsigned char rumbleData, u
 	return;
 #endif
 }
+
 void CBasePlayer::EnableControl(bool fControl)
 {
 	if (!fControl)
@@ -8295,7 +8306,7 @@ void SendProxy_CropFlagsToPlayerFlagBitsLength( const SendProp *pProp, const voi
 
 		SendPropFloat		( SENDINFO(m_flFriction),		8,	SPROP_ROUNDDOWN,	0.0f,	4.0f),
 
-		//SendPropArray3	( SENDINFO_ARRAY3(m_iAmmo), SendPropInt( SENDINFO_ARRAY(m_iAmmo), -1, SPROP_VARINT | SPROP_UNSIGNED ) ),
+//		SendPropArray3		( SENDINFO_ARRAY3(m_iAmmo), SendPropInt( SENDINFO_ARRAY(m_iAmmo), -1, SPROP_VARINT | SPROP_UNSIGNED ) ),
 			
 		SendPropInt			( SENDINFO( m_fOnTarget ), 2, SPROP_UNSIGNED ),
 
