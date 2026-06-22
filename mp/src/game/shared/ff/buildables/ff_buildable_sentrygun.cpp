@@ -2001,12 +2001,6 @@ void CFFSentryGun::SetFocusPoint( Vector &origin )
 	//if( SG_DEBUG && !engine->IsDedicatedServer()) 
 	//	NDebugOverlay::Line( EyePosition(), origin, 255, 0, 255, false, 5.0f );
 #endif
-
-	CFFPlayer *pOwner = static_cast<CFFPlayer*>(m_hOwner.Get());
-	if(pOwner)
-	{
-		Omnibot::Notify_SentryAimed(pOwner, this, dir);
-	}
 }
 
 // How much damage should be taken from an emp explosion

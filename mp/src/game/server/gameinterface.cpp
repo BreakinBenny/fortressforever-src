@@ -756,8 +756,6 @@ bool CServerGameDLL::DLLInit( CreateInterfaceFn appSystemFactory,
 	TheNavMesh = NavMeshFactory();
 #endif
 
-	Omnibot::omnibot_interface::OnDLLInit();
-
 	// init the gamestatsupload connection
 	gamestatsuploader->InitConnection();
 #endif
@@ -772,8 +770,6 @@ void CServerGameDLL::PostInit()
 
 void CServerGameDLL::DLLShutdown( void )
 {
-
-	Omnibot::omnibot_interface::OnDLLShutdown();
 
 	// Due to dependencies, these are not autogamesystems
 	ModelSoundsCacheShutdown();
@@ -990,8 +986,6 @@ bool CServerGameDLL::LevelInit( const char *pMapName, char const *pMapEntities, 
 	_timerman.Init();
 	_scriptman.LevelInit(pMapName);
 
-	Omnibot::omnibot_interface::LevelInit();
-
 	if ( IsX360() && !background && (gpGlobals->maxClients == 1) && (g_nCurrentChapterIndex >= 0) )
 	{
 		// Single player games tell xbox live what game & chapter the user is playing
@@ -1180,9 +1174,6 @@ void CServerGameDLL::ServerActivate( edict_t *pEdictList, int edictCount, int cl
 #endif
 #endif
 
-	// Omni-bot: Initialize the bot interface
-	Omnibot::omnibot_interface::InitBotInterface();
-
 #ifdef CSTRIKE_DLL // BOTPORT: TODO: move these ifdefs out
 	TheBots->ServerActivate();
 #endif
@@ -1276,9 +1267,6 @@ void CServerGameDLL::GameFrame( bool simulating )
 #ifdef USE_NAV_MESH
 	TheNavMesh->Update();
 #endif
-
-	// Omni-bot: Update the bot interface
-	Omnibot::omnibot_interface::UpdateBotInterface();
 
 #ifdef NEXT_BOT
 	TheNextBots().Update();
@@ -1419,9 +1407,6 @@ void CServerGameDLL::OnQueryCvarValueFinished( QueryCvarCookie_t iCookie, edict_
 // Called when a level is shutdown (including changing levels)
 void CServerGameDLL::LevelShutdown( void )
 {
-
-	// Omni-bot: Shut down the bot interface
-	Omnibot::omnibot_interface::ShutdownBotInterface();
 
 #ifndef NO_STEAM
 	IGameSystem::LevelShutdownPreClearSteamAPIContextAllSystems();

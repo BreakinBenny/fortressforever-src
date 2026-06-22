@@ -1093,7 +1093,6 @@ ConVarRef suitcharger( "sk_suitcharger" );
 				gameeventmanager->FireEvent(event);
 			}
 		}
-		Omnibot::Notify_Death(pVictim, pKiller, killer_weapon_name);
 	}
 
 	//=========================================================

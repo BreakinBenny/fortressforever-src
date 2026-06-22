@@ -295,10 +295,6 @@ void CFFWeaponFlamethrower::Fire()
 
 	lagcompensation->FinishLagCompensation(pPlayer);
 #endif
-
-#ifdef GAME_DLL
-	Omnibot::Notify_PlayerShoot(pPlayer, Omnibot::TF_WP_FLAMETHROWER, 0);
-#endif
 }
 
 //----------------------------------------------------------------------------

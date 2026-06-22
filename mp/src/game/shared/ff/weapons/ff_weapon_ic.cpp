@@ -93,8 +93,4 @@ void CFFWeaponIC::Fire()
 	//CFFProjectileIncendiaryRocket::CreateRocket(this, vecSrc, angAiming, pPlayer, pWeaponInfo.m_iDamage, pWeaponInfo.m_iSpeed);
 	CFFProjectileIncendiaryRocket *pRocket = CFFProjectileIncendiaryRocket::CreateRocket(this, vecSrc, pPlayer->EyeAngles(), pPlayer, pWeaponInfo.m_flDamage, pWeaponInfo.m_iDamageRadius, pWeaponInfo.m_iSpeed);
 	pRocket;
-
-#ifdef GAME_DLL
-	Omnibot::Notify_PlayerShoot(pPlayer, Omnibot::TF_WP_NAPALMCANNON, pRocket);
-#endif
 }

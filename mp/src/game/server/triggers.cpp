@@ -1321,7 +1321,6 @@ void CFuncFFScript::SetBotGoalInfo(int _type, int _team)
 		m_BotTeamFlags = iAllTeams & ~(1 << Omnibot::TF_TEAM_GREEN);
 		break;
 	}
-	Omnibot::Notify_GoalInfo(this, m_BotGoalType, m_BotTeamFlags);
 }
 
 // ##################################################################################

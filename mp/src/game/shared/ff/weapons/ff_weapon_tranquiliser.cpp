@@ -105,7 +105,4 @@ void CFFWeaponTranquiliser::Fire()
 
 	CFFProjectileDart *pDart = CFFProjectileDart::CreateDart(this, vecSrc, pPlayer->EyeAngles(), pPlayer, pWeaponInfo.m_flDamage, pWeaponInfo.m_iSpeed);
 	pDart;
-#ifdef GAME_DLL
-	Omnibot::Notify_PlayerShoot(pPlayer, Omnibot::TF_WP_DARTGUN, pDart);
-#endif
 }

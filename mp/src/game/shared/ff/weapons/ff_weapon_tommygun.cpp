@@ -103,8 +103,4 @@ void CFFWeaponTommygun::Fire()
 	info.m_flDamage = pWeaponInfo.m_flDamage;
 
 	pPlayer->FireBullets(info);
-
-#ifdef GAME_DLL
-	Omnibot::Notify_PlayerShoot(pPlayer, Omnibot::TF_WP_TOMMYGUN, 0);
-#endif
 }

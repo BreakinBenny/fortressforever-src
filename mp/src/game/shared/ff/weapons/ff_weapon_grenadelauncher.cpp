@@ -104,10 +104,6 @@ void CFFWeaponGrenadeLauncher::Fire()
 	CFFProjectileGrenade *pGrenade = CFFProjectileGrenade::CreateGrenade(this, vecSrc, pPlayer->EyeAngles() - QAngle(12.0f, 0.0f, 0.0f), pPlayer, pWeaponInfo.m_flDamage, pWeaponInfo.m_iDamageRadius, pWeaponInfo.m_iSpeed);
 	pGrenade;
 
-#ifdef GAME_DLL
-	Omnibot::Notify_PlayerShoot(pPlayer, Omnibot::TF_WP_GRENADE_LAUNCHER, pGrenade);
-#endif
-
 	// Synchronise with pipelauncher
 	Synchronise();
 }

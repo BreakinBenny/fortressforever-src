@@ -480,10 +480,6 @@ void CFFWeaponSniperRifle::Fire()
 	// TODO: Maybe FX_FireBullets is not a good idea
 
 	//WeaponSound(SINGLE);
-
-#ifdef GAME_DLL
-	Omnibot::Notify_PlayerShoot(pPlayer, Omnibot::TF_WP_SNIPER_RIFLE, 0);
-#endif
 }
 
 //-----------------------------------------------------------------------------

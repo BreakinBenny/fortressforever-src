@@ -832,8 +832,6 @@ void CFFInfoScript::Pickup( CBaseEntity *pEntity )
 	SetNextThink( gpGlobals->curtime );
 
 	PlayCarriedAnim();
-
-	Omnibot::Notify_ItemPickedUp(this, pEntity);
 }
 
 //-----------------------------------------------------------------------------
@@ -883,8 +881,6 @@ void CFFInfoScript::OnRespawn( void )
 	m_flThrowTime = 0.0f;
 
 	PlayReturnedAnim();
-
-	Omnibot::Notify_ItemRespawned(this);
 }
 
 //-----------------------------------------------------------------------------
@@ -1014,8 +1010,6 @@ void CFFInfoScript::Drop( float delay, Vector pos, Vector velocity )
 	CFFLuaSC hObject( 1, m_pLastOwner );
 	_scriptman.RunPredicates_LUA( this, &hObject, "ondrop" );
 	_scriptman.RunPredicates_LUA( this, &hObject, "onloseitem" );
-
-	Omnibot::Notify_ItemDropped(this);
 }
 
 void CFFInfoScript::Drop( float delay, float speed )
@@ -1085,8 +1079,6 @@ void CFFInfoScript::Return( void )
 	CreateItemVPhysicsObject();
 
 	PlayReturnedAnim();
-
-	Omnibot::Notify_ItemReturned(this);
 }
 
 //-----------------------------------------------------------------------------
@@ -1264,8 +1256,6 @@ void CFFInfoScript::LUA_Remove( void )
 	SetNextThink( gpGlobals->curtime );
 
 	SetRemoved();
-
-	Omnibot::Notify_ItemRemove(this);
 }
 
 //-----------------------------------------------------------------------------
@@ -1286,8 +1276,6 @@ void CFFInfoScript::LUA_Restore( void )
 
 	// Respawn the item back at it's starting spot
 	Respawn( 0.0f );
-
-	Omnibot::Notify_ItemRestore(this);
 }
 
 //-----------------------------------------------------------------------------

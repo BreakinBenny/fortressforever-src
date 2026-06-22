@@ -163,8 +163,4 @@ void CFFWeaponAutoRifle::Fire()
 	//info.m_flDamageForceScale = ffdev_ar_push.GetFloat();
 
 	pPlayer->FireBullets(info);
-
-#ifdef GAME_DLL
-	Omnibot::Notify_PlayerShoot(pPlayer, Omnibot::TF_WP_AUTORIFLE, 0);
-#endif
 }

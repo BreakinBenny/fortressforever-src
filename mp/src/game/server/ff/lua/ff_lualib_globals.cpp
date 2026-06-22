@@ -269,8 +269,6 @@ namespace FFLib
 			WRITE_BYTE(HUD_MESSAGE);
 			WRITE_STRING(szMessage);
 		MessageEnd();
-
-		Omnibot::omnibot_interface::Trigger(NULL,NULL,UTIL_VarArgs("broadcast_msg: %s", szMessage),"broadcast_msg");
 	}
 
 	void BroadcastMessage(const char* szMessage, float fDuration)
@@ -281,8 +279,6 @@ namespace FFLib
 			WRITE_STRING(szMessage);
 			WRITE_FLOAT(fDuration);
 		MessageEnd();
-
-		Omnibot::omnibot_interface::Trigger(NULL,NULL,UTIL_VarArgs("broadcast_msg: %s", szMessage),"broadcast_msg");
 	}
 
 	void BroadcastMessage(const char* szMessage, float fDuration, int iColorID)
@@ -294,8 +290,6 @@ namespace FFLib
 			WRITE_FLOAT(fDuration);
 			WRITE_SHORT(iColorID);
 		MessageEnd();
-
-		Omnibot::omnibot_interface::Trigger(NULL,NULL,UTIL_VarArgs("broadcast_msg: %s", szMessage),"broadcast_msg");
 	}
 	
 
@@ -318,8 +312,6 @@ namespace FFLib
 			WRITE_SHORT(g);
 			WRITE_SHORT(b);
 		MessageEnd();
-
-		Omnibot::omnibot_interface::Trigger(NULL,NULL,UTIL_VarArgs("broadcast_msg: %s", szMessage),"broadcast_msg");
 	}
 
 	void SendPlayerMessage(CFFPlayer* pPlayer, const char* szMessage)
@@ -392,9 +384,6 @@ namespace FFLib
 		CFFEntitySystemHelper* pHelperInst = CFFEntitySystemHelper::GetInstance();
 		if(pHelperInst)
 			pHelperInst->EmitSound( filter, pHelperInst->entindex(), szSound);
-
-		
-		Omnibot::omnibot_interface::Trigger(NULL,NULL,UTIL_VarArgs("broadcast_snd: %s", szSound),"broadcast_snd");
 	}
 
 	void SendPlayerSound(CFFPlayer* pPlayer, const char* szSound)
@@ -1715,8 +1704,6 @@ namespace FFLib
 		COutputEvent event;
 		event.ParseEventAction(szAction);
 		event.FireOutput(NULL, NULL);
-
-		Omnibot::Notify_FireOutput(szTargetEntityName, szTargetInputName);
 	}
 
 	void FireOutput(const char* szTargetEntityName,
@@ -1737,8 +1724,6 @@ namespace FFLib
 		COutputEvent event;
 		event.ParseEventAction(szAction);
 		event.FireOutput(NULL, NULL);
-
-		Omnibot::Notify_FireOutput(szTargetEntityName, szTargetInputName);
 	}
 
 	void FireOutput(const char* szTargetEntityName,
@@ -1761,8 +1746,6 @@ namespace FFLib
 		COutputEvent event;
 		event.ParseEventAction(szAction);
 		event.FireOutput(NULL, NULL, delay);
-
-		Omnibot::Notify_FireOutput(szTargetEntityName, szTargetInputName);
 	}
 
 	void FireOutput(const char* szTargetEntityName,
@@ -1787,8 +1770,6 @@ namespace FFLib
 		COutputEvent event;
 		event.ParseEventAction(szAction);
 		event.FireOutput(NULL, NULL, delay);
-
-		Omnibot::Notify_FireOutput(szTargetEntityName, szTargetInputName);
 	}
 
 	void AddHudIcon( CFFPlayer *pPlayer, const char *pszImage, const char *pszIdentifier, float x, float y )
@@ -3024,8 +3005,6 @@ namespace FFLib
 
 			SENTENCEG_PlaySentenceIndex(pPlayer->edict(), iSentence, 1.0f, SNDLVL_TALKING, 0, 100);
 		}
-
-		Omnibot::omnibot_interface::Trigger(NULL,NULL,UTIL_VarArgs("speak: %s", szSentenceName),"speak_all");
 	}
 
 	void SpeakPlayer(CFFPlayer *pPlayer, const char* szSentenceName)

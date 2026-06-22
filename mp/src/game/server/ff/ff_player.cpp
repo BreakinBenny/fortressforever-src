@@ -3197,8 +3197,6 @@ void CFFPlayer::FindRadioTaggedPlayers( void )
 		// Add player to a list and send off to client
 
 		m_hRadioTagData->Set( pPlayer->entindex(), true, pPlayer->GetClassSlot(), pPlayer->GetTeamNumber(), !!( pPlayer->GetFlags() & FL_DUCKING ), vecPlayerOrigin );
-
-		Omnibot::Notify_RadioTagUpdate(this, pPlayer);	
 	}
 }
 
@@ -3365,7 +3363,6 @@ void CFFPlayer::PreBuildGenericThink( void )
 			if (!m_bRequireRePressBuildable)
 			{
 				m_bRequireRePressBuildable = true;
-				Omnibot::Notify_Build_AlreadyBuilt(this, m_iWantBuild);
 
 				switch (m_iWantBuild)
 				{
@@ -3406,7 +3403,6 @@ void CFFPlayer::PreBuildGenericThink( void )
 		// TODO: need to check where the SG is being built, NOT where player is? - AfterShock
 		if (IsInNoBuild(hBuildInfo))
 		{
-			Omnibot::Notify_Build_CantBuild(this, m_iWantBuild);
 
 			// Re-initialize
 			m_iCurBuild = FF_BUILD_NONE;
@@ -3425,7 +3421,6 @@ void CFFPlayer::PreBuildGenericThink( void )
 			( (m_iWantBuild == FF_BUILD_DETPACK) && (GetAmmoCount( AMMO_DETPACK ) < 1 )) ||
 			( (m_iWantBuild == FF_BUILD_MANCANNON) && (GetAmmoCount( AMMO_MANCANNON ) < 1 )) )
 		{
-			Omnibot::Notify_Build_NotEnoughAmmo(this, m_iWantBuild);
 
 			switch( m_iWantBuild )
 			{
@@ -3447,8 +3442,6 @@ void CFFPlayer::PreBuildGenericThink( void )
 		// See if on ground...
 		if( !FBitSet( GetFlags(), FL_ONGROUND ) )
 		{
-			Omnibot::Notify_Build_MustBeOnGround(this, m_iWantBuild);
-
 			ClientPrint( this, HUD_PRINTCENTER, "#FF_BUILDERROR_MUSTBEONGROUND" );
 
 			// Re-initialize
@@ -3495,8 +3488,6 @@ void CFFPlayer::PreBuildGenericThink( void )
 					// Moved code to remove cells from CFFDispenser::GoLive() to here.  
 					// Leaving the remove armour code in that function as you can't fiddle with armour vals via this exploit -> Defrag
 					RemoveAmmo( FF_BUILDCOST_DISPENSER, AMMO_CELLS );
-
-					Omnibot::Notify_DispenserBuilding(this, pDispenser);
 					
 					//m_bStaticBuilding = false; // AfterShock - Uncomment this for testing drop-and-run SGs / Dispensers! (also need SG_BUILDTIME raising)
 				}
@@ -3546,8 +3537,6 @@ void CFFPlayer::PreBuildGenericThink( void )
 					// Moved code to remove cells from CFFSentryGun::GoLive() to here -> Defrag
 					RemoveAmmo( FF_BUILDCOST_SENTRYGUN, AMMO_CELLS );
 
-					Omnibot::Notify_SentryBuilding(this, pSentryGun);
-
 					//m_bStaticBuilding = false; // AfterShock - Uncomment this for testing drop-and-run SGs / Dispensers! (also need SG_BUILDTIME raising)
 				}
 				break;
@@ -3571,8 +3560,6 @@ void CFFPlayer::PreBuildGenericThink( void )
 
 					// Set time it takes to build
 					m_flBuildTime = gpGlobals->curtime + 3.0f; // mulch: bug 0000337: build time 3 seconds for detpack
-
-					Omnibot::Notify_DetpackBuilding(this, pDetpack);
 				}
 				break;
 
@@ -3586,8 +3573,6 @@ void CFFPlayer::PreBuildGenericThink( void )
 
 					m_hManCannon = pManCannon;
 					m_flBuildTime = gpGlobals->curtime + 3.5f; // 3.5 seconds to build?
-
-					// TODO: Omnibot::Notify_ManCannonBuilding( this, pManCannon );
 				}
 				break;
 			}
@@ -3631,7 +3616,6 @@ void CFFPlayer::PreBuildGenericThink( void )
 			if (!m_bRequireRePressBuildable)
 			{
 				m_bRequireRePressBuildable = true;
-				Omnibot::Notify_Build_BuildCancelled(this, m_iCurBuild);
 				CFFBuildableObject* pBuildable = GetBuildable(m_iCurBuild);
 
 				if (pBuildable)
@@ -4872,8 +4856,6 @@ bool CFFPlayer::Infect( CFFPlayer *pInfector )
 		WRITE_FLOAT(999.0f);
 		MessageEnd();
 
-		Omnibot::Notify_Infected(this, pInfector);
-
 		return true;
 	}
 
@@ -4919,8 +4901,6 @@ bool CFFPlayer::Cure( CFFPlayer *pCurer )
 		// credit the curer with a score
 		if( pCurer )
 			pCurer->AddFortPoints( 100, "#FF_FORTPOINTS_CUREINFECTION" );
-
-		Omnibot::Notify_Cured(this, pCurer);
 
 		bCured = true;
 	}
@@ -5171,13 +5151,6 @@ void CFFPlayer::ThrowGrenade(float fTimer, float flSpeed)
 
 		if (fTimer > 0)
 			pGrenade->m_fIsHandheld = false;
-
-#ifdef GAME_DLL
-		if(m_iGrenadeState == FF_GREN_PRIMEONE)
-			Omnibot::Notify_PlayerShoot(this, Omnibot::TF_WP_GRENADE1, pGrenade);
-		else if(m_iGrenadeState == FF_GREN_PRIMETWO)
-			Omnibot::Notify_PlayerShoot(this, Omnibot::TF_WP_GRENADE2, pGrenade);
-#endif
 	}
 }
 
@@ -5677,8 +5650,6 @@ int CFFPlayer::OnTakeDamage_Alive(const CTakeDamageInfo &info)
 
 		gameeventmanager->FireEvent(pEvent, true);
 	}
-
-	Omnibot::Notify_Hurt(this, attacker);
 
 	return 1;
 }
@@ -6412,7 +6383,6 @@ void CFFPlayer::Command_Disguise(const CCommand& args)
 		// TODO: Nice hud msg!
 		//Warning( "[Disguise] Invalid team for this map!\n" );
 
-		Omnibot::Notify_CantDisguiseAsTeam(this, iTeam);
 		return;
 	}
 
@@ -6421,7 +6391,6 @@ void CFFPlayer::Command_Disguise(const CCommand& args)
 		// TODO: Nice hud msg!
 		//Warning( "[Disguise] Invalid class for this map!\n" );
 
-		Omnibot::Notify_CantDisguiseAsClass(this, iClass);
 		return;
 	}
 
@@ -6431,10 +6400,6 @@ void CFFPlayer::Command_Disguise(const CCommand& args)
 	SetDisguise(iTeam, iClass);
 
 	ClientPrint( this, HUD_PRINTTALK, "#FF_SPY_DISGUISING" );
-
-	// TODO: This should probably pass in iTeam & iClass as
-	// these two functions won't have the right shit yet?
-	Omnibot::Notify_Disguising(this, GetNewDisguisedTeam(), GetNewDisguisedClass());
 }
 
 // Server only
@@ -6485,8 +6450,6 @@ void CFFPlayer::ResetDisguise()
 	m_iNewSpyDisguise = 0;
 	m_iSpyDisguise = 0;
 	m_iSpyDisguising = 0;
-
-	Omnibot::Notify_DisguiseLost(this);
 }
 
 //-----------------------------------------------------------------------------
