@@ -21,6 +21,7 @@
 	#define CFFWeaponNailgun C_FFWeaponNailgun
 	#include "c_ff_player.h"
 #else
+	#include "omnibot_interface.h"
 	#include "ff_player.h"
 #endif
 

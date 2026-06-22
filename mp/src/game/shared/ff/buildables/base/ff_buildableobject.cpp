@@ -58,6 +58,8 @@
 	#include "ff_luacontext.h"
 	#include "ff_scriptman.h"
 	#include "ff_entity_system.h"
+
+	#include "omnibot_interface.h"
 #endif
 
 #ifdef _DEBUG

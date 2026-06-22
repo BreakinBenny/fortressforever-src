@@ -28,6 +28,7 @@ private:
 	static void InitPlayer(lua_State* L);
 	static void InitMath(lua_State* L);
 	static void InitMisc(lua_State* L);
+	static void InitOmnibot(lua_State* L);
 	static void InitTeam(lua_State* L);
 	static void InitUtil(lua_State* L);
 	static void InitWeapons(lua_State* L);

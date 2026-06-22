@@ -34,6 +34,7 @@
 
 #include "client.h"
 #include "gib.h"
+#include "omnibot_interface.h"
 #include "te_effect_dispatch.h"
 
 // added these so I could cast to check for grenades that are not derived from projectile base

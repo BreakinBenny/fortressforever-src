@@ -43,6 +43,7 @@
 	#include "ff_scriptman.h"
 	#include "ff_luacontext.h"
 
+	#include "omnibot_interface.h"
 #endif
 
 #include "gamevars_shared.h"

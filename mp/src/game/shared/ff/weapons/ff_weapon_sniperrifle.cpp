@@ -18,6 +18,7 @@ static int g_iBeam, g_iHalo;
 #ifdef CLIENT_DLL
 	ConVar laser_beam_angle("ffdev_laserbeamangle", "0.01", FCVAR_FF_FFDEV_CLIENT);
 #else
+	#include "omnibot_interface.h"
 #endif
 
 //ConVar sniperrifle_chargetime( "ffdev_sniperrifle_chargetime", "5.0", FCVAR_FF_FFDEV_REPLICATED, "Max charge time on Sniper Rifle" );

@@ -13,6 +13,7 @@
 #include "tier1/strtools.h"
 #include "buttons.h"
 #include "eventqueue.h"
+#include "omnibot_interface.h"
 
 // --> Mirv: Temp test for triggers
 #include "ff_scriptman.h"

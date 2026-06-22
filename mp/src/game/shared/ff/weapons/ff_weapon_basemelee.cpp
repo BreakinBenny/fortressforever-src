@@ -17,6 +17,7 @@
 #ifdef CLIENT_DLL
 	#include "c_ff_player.h"
 #else
+	#include "omnibot_interface.h"
 	#include "ilagcompensationmanager.h"
 #endif
 #include "ff_shareddefs.h"

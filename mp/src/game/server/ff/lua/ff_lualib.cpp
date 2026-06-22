@@ -21,6 +21,7 @@ void CFFLuaLib::Init(lua_State* L)
 	InitWeapons(L);
 	InitMisc(L);
 	InitGlobals(L);
+	InitOmnibot(L);
 	InitUtil(L);
 	InitData(L);
 }
