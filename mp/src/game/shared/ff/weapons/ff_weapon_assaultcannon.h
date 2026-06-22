@@ -25,7 +25,6 @@
 	#include "ff_utils.h"
 	#include "soundenvelope.h"
 #else
-	#include "omnibot_interface.h"
 	#include "ff_player.h"
 #endif
 

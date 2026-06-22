@@ -13,7 +13,6 @@
 
 	extern void FormatViewModelAttachment( Vector &vOrigin, bool bInverse );
 #else
-	#include "omnibot_interface.h"
 	#include "ff_player.h"
 	#include "ff_entity_system.h"
 	#include "te_effect_dispatch.h"

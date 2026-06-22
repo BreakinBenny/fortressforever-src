@@ -1294,16 +1294,6 @@ void CFFInfoScript::SetBotGoalInfo(int _type)
 {
 	m_BotGoalType = _type;
 	m_BotTeamFlags = 0;
-	if(m_allowTouchFlags & kAllowBlueTeam && !(m_disallowTouchFlags & kAllowBlueTeam))
-		m_BotTeamFlags |= (1<<Omnibot::TF_TEAM_BLUE);
-	if(m_allowTouchFlags & kAllowRedTeam && !(m_disallowTouchFlags & kAllowRedTeam))
-		m_BotTeamFlags |= (1<<Omnibot::TF_TEAM_RED);
-	if(m_allowTouchFlags & kAllowYellowTeam && !(m_disallowTouchFlags & kAllowYellowTeam))
-		m_BotTeamFlags |= (1<<Omnibot::TF_TEAM_YELLOW);
-	if(m_allowTouchFlags & kAllowGreenTeam && !(m_disallowTouchFlags & kAllowGreenTeam))
-		m_BotTeamFlags |= (1<<Omnibot::TF_TEAM_GREEN);
-	// FF TODO: Sorry DrEvil, I'm too tired right now to add the class touch flags as well. - Jon
-	Omnibot::Notify_GoalInfo(this, m_BotGoalType, m_BotTeamFlags);
 }
 
 void CFFInfoScript::SpawnBot(const char *_name, int _team, int _class)

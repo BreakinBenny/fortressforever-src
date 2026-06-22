@@ -137,7 +137,6 @@ extern ConVar tf_mm_servermode;
 #include "ff_scheduleman.h"
 #include "ff_timerman.h"
 #include "util.h"
-#include "omnibot_interface.h"
 
 extern IToolFrameworkServer *g_pToolFrameworkServer;
 extern IParticleSystemQuery *g_pParticleSystemQuery;

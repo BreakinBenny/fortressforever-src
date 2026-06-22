@@ -15,7 +15,6 @@
 	#include "c_ff_player.h"
 #elif GAME_DLL
 	#include "ff_player.h"
-	#include "omnibot_interface.h"
 #endif
 
 //-----------------------------------------------------------------------------

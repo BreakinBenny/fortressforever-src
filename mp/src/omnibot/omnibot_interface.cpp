@@ -45,10 +45,8 @@ extern ConVar mp_prematch;
 #include <vector>
 #include "valve_minmax_on.h"
 
-ConVar	omnibot_enable( "omnibot_enable", "1", FCVAR_ARCHIVE | FCVAR_PROTECTED);
+ConVar	omnibot_enable( "omnibot_enable", "0", FCVAR_ARCHIVE | FCVAR_PROTECTED);
 ConVar	omnibot_path( "omnibot_path", "omni-bot", FCVAR_ARCHIVE | FCVAR_PROTECTED);
-ConVar	omnibot_nav( "omnibot_nav", "1", FCVAR_ARCHIVE | FCVAR_PROTECTED);
-ConVar	omnibot_debug( "omnibot_debug", "0", FCVAR_ARCHIVE | FCVAR_PROTECTED);
 
 #define OMNIBOT_MODNAME "Fortress Forever"
 
@@ -2801,38 +2799,8 @@ namespace Omnibot
 	}
 	bool omnibot_interface::InitBotInterface()
 	{
-		if(!omnibot_enable.GetBool())
-		{
-			Msg( "Omni-bot Currently Disabled. Re-enable with cvar omnibot_enable\n" );
+		DevMsg( "Omni-bot is disabled. It is currently being stripped out...\n" );
 			return false;
-		}
-
-		/*if( !gameLocal.isServer )
-		return false;*/
-
-		Msg("-------------- Omni-bot Init ----------------\n");
-
-		// Look for the bot dll.
-		const int BUF_SIZE = 1024;
-		char botFilePath[BUF_SIZE] = {0};
-		char botPath[BUF_SIZE] = {0};
-
-		filesystem->GetLocalPath(
-			UTIL_VarArgs("%s/%s", omnibot_path.GetString(), "omnibot_ff.dll"), botFilePath, BUF_SIZE);		
-		Q_ExtractFilePath(botFilePath, botPath, BUF_SIZE);
-		botPath[strlen(botPath)-1] = 0;
-		Q_FixSlashes(botPath);
-
-		g_InterfaceFunctions = new FFInterface;
-		eomnibot_error err = Omnibot_LoadLibrary(FF_VERSION_LATEST, "omnibot_ff", Omnibot_FixPath(botPath));
-		if(err == BOT_ERROR_NONE)
-		{
-			g_Started = false;
-			gEntList.RemoveListenerEntity(&gBotEntityListener);
-			gEntList.AddListenerEntity(&gBotEntityListener);
-		}
-		Msg( "---------------------------------------------\n" );
-		return err == BOT_ERROR_NONE;
 	}
 
 	void omnibot_interface::ShutdownBotInterface()

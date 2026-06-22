@@ -58,7 +58,6 @@
 #elif GAME_DLL
 	#include "ff_buildableflickerer.h"
 	#include "ff_item_backpack.h"
-	#include "omnibot_interface.h"
 
 	#include "te_effect_dispatch.h"
 #endif
