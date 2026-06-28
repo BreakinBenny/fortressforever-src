@@ -38,17 +38,11 @@ extern ConVar mp_prematch;
 #include "BotExports.h"
 
 #include "omnibot_interface.h"
-#include "omnibot_eventhandler.h"
 #include "Omni-Bot_Events.h"
 
 #include "valve_minmax_off.h"
 #include <vector>
 #include "valve_minmax_on.h"
-
-ConVar	omnibot_enable( "omnibot_enable", "1", FCVAR_ARCHIVE | FCVAR_PROTECTED);
-ConVar	omnibot_path( "omnibot_path", "omni-bot", FCVAR_ARCHIVE | FCVAR_PROTECTED);
-ConVar	omnibot_nav( "omnibot_nav", "1", FCVAR_ARCHIVE | FCVAR_PROTECTED);
-ConVar	omnibot_debug( "omnibot_debug", "0", FCVAR_ARCHIVE | FCVAR_PROTECTED);
 
 #define OMNIBOT_MODNAME "Fortress Forever"
 
@@ -2603,80 +2597,6 @@ namespace Omnibot
 			Vector vForward, vRight, vUp;
 
 			int iNumFeatures = 0;
-
-			CBaseEntity *pEnt = gEntList.FirstEnt();
-			while ( pEnt )
-			{
-				_feature[iNumFeatures].m_Type = 0;
-
-				if(iNumFeatures >= _max)
-					return iNumFeatures;
-
-				Vector vPos = pEnt->GetAbsOrigin();
-				AngleVectors(pEnt->GetAbsAngles(), &vForward, &vRight, &vUp);
-				for(int j = 0; j < 3; ++j)
-				{
-					_feature[iNumFeatures].m_Position[j] = vPos[j];
-					_feature[iNumFeatures].m_TargetPosition[j] = vPos[j];
-					_feature[iNumFeatures].m_Facing[j] = vForward[j];
-
-					_feature[iNumFeatures].m_Bounds.m_Mins[j] = 0.f;
-					_feature[iNumFeatures].m_Bounds.m_Maxs[j] = 0.f;
-
-					_feature[iNumFeatures].m_TargetBounds.m_Mins[j] = 0.f;
-					_feature[iNumFeatures].m_TargetBounds.m_Maxs[j] = 0.f;
-				}
-
-				//////////////////////////////////////////////////////////////////////////
-
-				if(FClassnameIs(pEnt,"info_player_coop") ||
-					FClassnameIs(pEnt,"info_player_deathmatch") ||
-					FClassnameIs(pEnt,"info_player_start") ||
-					FClassnameIs(pEnt,"info_ff_teamspawn"))
-				{
-					_feature[iNumFeatures].m_Type = ENT_CLASS_GENERIC_PLAYERSTART;
-				}
-				else if(FClassnameIs(pEnt,"trigger_teleport"))
-				{
-					CBaseEntity *pTarget = pEnt->GetNextTarget();
-					if(pTarget)
-					{
-						Vector vTargetPos = pTarget->GetAbsOrigin();
-						for(int j = 0; j < 3; ++j)
-						{
-							_feature[iNumFeatures].m_TargetPosition[j] = vTargetPos[j];
-						}
-						_feature[iNumFeatures].m_Type = ENT_CLASS_GENERIC_TELEPORTER;
-					}
-				}
-				else if(FClassnameIs(pEnt,"info_ladder"))
-				{
-					CFuncLadder *pLadder = dynamic_cast<CFuncLadder*>(pEnt);
-					if(pLadder)
-					{
-						for(int j = 0; j < 3; ++j)
-						{
-							_feature[iNumFeatures].m_Bounds.m_Mins[j] = pLadder->mins[j];
-							_feature[iNumFeatures].m_Bounds.m_Maxs[j] = pLadder->maxs[j];
-						}
-						_feature[iNumFeatures].m_Bounds.CenterBottom(_feature[iNumFeatures].m_Position);
-						_feature[iNumFeatures].m_Bounds.CenterBottom(_feature[iNumFeatures].m_TargetPosition);
-						_feature[iNumFeatures].m_Type = ENT_CLASS_GENERIC_LADDER;
-					}
-				}
-				else if(FClassnameIs(pEnt,"info_ff_script"))
-				{
-					CFFInfoScript *pInfo = dynamic_cast<CFFInfoScript*>(pEnt);
-					if(pInfo->GetBotGoalType() == Omnibot::kTrainerSpawn)
-						_feature[iNumFeatures].m_Type = ENT_CLASS_GENERIC_PLAYERSTART;
-				}
-
-				if(_feature[iNumFeatures].m_Type != 0)
-				{
-					++iNumFeatures;
-				}
-				pEnt = gEntList.NextEnt(pEnt);
-			}
 			return iNumFeatures;
 		}
 
@@ -2707,36 +2627,11 @@ namespace Omnibot
 			static char botPath[512] = {0};
 
 			char buffer[512] = {0};
-			filesystem->GetLocalPath(
-				UTIL_VarArgs("%s/%s", omnibot_path.GetString(), "omnibot_ff.dll"), buffer, 512);
 
 			Q_ExtractFilePath(buffer, botPath, 512);
 			return botPath;
 		}
 	};
-
-	//-----------------------------------------------------------------
-
-	void omnibot_interface::OnDLLInit()
-	{
-		assert(!g_pEventHandler);
-		if(!g_pEventHandler)
-		{
-			g_pEventHandler = new omnibot_eventhandler;
-			g_pEventHandler->ExtractEvents();
-			g_pEventHandler->RegisterEvents();
-		}		
-	}
-
-	void omnibot_interface::OnDLLShutdown()
-	{
-		if(g_pEventHandler)
-		{
-			g_pEventHandler->UnRegisterEvents();
-			delete g_pEventHandler;
-			g_pEventHandler = 0;
-		}		
-	}
 
 	//-----------------------------------------------------------------
 
@@ -2801,38 +2696,8 @@ namespace Omnibot
 	}
 	bool omnibot_interface::InitBotInterface()
 	{
-		if(!omnibot_enable.GetBool())
-		{
-			Msg( "Omni-bot Currently Disabled. Re-enable with cvar omnibot_enable\n" );
-			return false;
-		}
-
-		/*if( !gameLocal.isServer )
-		return false;*/
-
-		Msg("-------------- Omni-bot Init ----------------\n");
-
-		// Look for the bot dll.
-		const int BUF_SIZE = 1024;
-		char botFilePath[BUF_SIZE] = {0};
-		char botPath[BUF_SIZE] = {0};
-
-		filesystem->GetLocalPath(
-			UTIL_VarArgs("%s/%s", omnibot_path.GetString(), "omnibot_ff.dll"), botFilePath, BUF_SIZE);		
-		Q_ExtractFilePath(botFilePath, botPath, BUF_SIZE);
-		botPath[strlen(botPath)-1] = 0;
-		Q_FixSlashes(botPath);
-
-		g_InterfaceFunctions = new FFInterface;
-		eomnibot_error err = Omnibot_LoadLibrary(FF_VERSION_LATEST, "omnibot_ff", Omnibot_FixPath(botPath));
-		if(err == BOT_ERROR_NONE)
-		{
-			g_Started = false;
-			gEntList.RemoveListenerEntity(&gBotEntityListener);
-			gEntList.AddListenerEntity(&gBotEntityListener);
-		}
-		Msg( "---------------------------------------------\n" );
-		return err == BOT_ERROR_NONE;
+		DevMsg( "Omni-bot is Disabled and being phased out.\n" );
+		return false;
 	}
 
 	void omnibot_interface::ShutdownBotInterface()

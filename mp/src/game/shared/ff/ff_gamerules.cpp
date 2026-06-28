@@ -292,7 +292,7 @@ ConVar mp_friendlyfire_armorstrip( "mp_friendlyfire_armorstrip",
 		// announce what happened
 		UTIL_SayTextAll( UTIL_VarArgs( "Prematch has been set to end in %d seconds\n", (int)flTargetTime ) );
 	}
-	static ConCommand ff_setprematch( "ff_setprematch", CC_FF_SetPrematch, "Sets premtach so that the given time remains before it ends." );
+	static ConCommand ff_setprematch( "ff_setprematch", CC_FF_SetPrematch, "Sets prematch so that the given time remains before it ends." );
 
 	// --> Mirv: Extra gamerules stuff
 	CFFGameRules::CFFGameRules()

@@ -54,7 +54,6 @@
 #elif GAME_DLL
 	#include "ff_buildableflickerer.h"
 
-	#include "omnibot_interface.h"
 	#include "te_effect_dispatch.h" 
 	#include "smoke_trail.h"
 #endif

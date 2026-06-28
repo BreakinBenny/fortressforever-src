@@ -54,8 +54,6 @@
 	#include "ff_luacontext.h"
 	#include "ff_scriptman.h"
 
-	#include "omnibot_interface.h"
-
 #ifdef NEXT_BOT
 	#include "NextBotManager.h"
 #endif
