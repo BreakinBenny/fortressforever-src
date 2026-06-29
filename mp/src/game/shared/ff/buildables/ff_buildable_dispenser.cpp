@@ -475,9 +475,7 @@ void CFFDispenser::OnObjectTouch( CBaseEntity *pOther )
 					UTIL_Remove( pBackpack );
 
 					// Update ammo percentage
-					UpdateAmmoPercentage();	
-
-					SendStatsToBot();
+					UpdateAmmoPercentage();
 
 					EmitSound( "Dispenser.omnomnom" );
 				}
@@ -511,9 +509,7 @@ void CFFDispenser::OnObjectThink( void )
 	m_iArmor = clamp( m_iArmor + 50, 0, m_iMaxArmor );
 
 	// Update ammo percentage
-	UpdateAmmoPercentage();	
-
-	SendStatsToBot();
+	UpdateAmmoPercentage();
 
 	// Set the next time to call this function
 	SetNextThink( gpGlobals->curtime + m_flThinkTime );

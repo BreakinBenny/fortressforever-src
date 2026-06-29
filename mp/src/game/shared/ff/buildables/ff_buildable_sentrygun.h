@@ -200,8 +200,6 @@ protected:
 	void SpinDown( void );
 	bool UpdateFacing( void );
 
-	void SendStatsToBot( void );
-
 public:
 	virtual void Event_Killed( const CTakeDamageInfo &info );
 

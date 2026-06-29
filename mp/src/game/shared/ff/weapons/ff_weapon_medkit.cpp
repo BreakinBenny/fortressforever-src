@@ -16,8 +16,6 @@
 
 #ifdef CLIENT_DLL
 	#define CFFWeaponMedkit C_FFWeaponMedkit
-#else
-	#include "omnibot_interface.h"
 #endif
 
 #include "ff_shareddefs.h"
@@ -118,14 +116,12 @@ void CFFWeaponMedkit::Hit(trace_t &traceHit, Activity nHitActivity)
 			// if they are same team, then cure the player
 
 #ifdef GAME_DLL
-			const int iBeforeHealth = pPlayer->GetHealth();
+			//const int iBeforeHealth = pPlayer->GetHealth();
 
 			pTarget->Cure(pPlayer);
 			pTarget->Heal(pPlayer, 5);		// |-- Mirv: Heal them by 5hp
 
-			const int iAfterHealth = pPlayer->GetHealth();
-			Omnibot::Notify_GotMedicHealth(pTarget,pPlayer,iBeforeHealth,iAfterHealth);
-			Omnibot::Notify_GaveMedicHealth(pPlayer,pTarget,iBeforeHealth,iAfterHealth);
+			//const int iAfterHealth = pPlayer->GetHealth();
 #endif
 
 			// Heal sound. Add a delay before next sound can be played too

@@ -919,8 +919,6 @@ void CFFSentryGun::OnActiveThink( void )
 		m_iAmmoPercent = 100.0f * (float) m_iShells / m_iMaxShells;
 		if( m_iMaxRockets && !m_iRockets ) 
 			m_iAmmoPercent += 128;
-
-		SendStatsToBot();
 	}
 }
 
@@ -1917,7 +1915,6 @@ bool CFFSentryGun::Upgrade()
 	{
 		bDidUpgrade = true;
 		SetLevel(m_iLevel+1);
-		SendStatsToBot();
 	}
 
 	return bDidUpgrade;
@@ -1932,8 +1929,6 @@ void CFFSentryGun::Repair( int iCells )
 	// Bug #0000238: Repairing sg doesn't remove damage decals
 	if( iCells > 0 )
 		RemoveAllDecals();
-
-	SendStatsToBot();
 }
 
 void CFFSentryGun::AddAmmo( int iShells, int iRockets )
@@ -1942,8 +1937,6 @@ void CFFSentryGun::AddAmmo( int iShells, int iRockets )
 
 	SetShells( GetShells() + iShells );
 	SetRockets( GetRockets() + iRockets );
-
-	SendStatsToBot();
 }
 
 void CFFSentryGun::RecalculateAmmoPercent()

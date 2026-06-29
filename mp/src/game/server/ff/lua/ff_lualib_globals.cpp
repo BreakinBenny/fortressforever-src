@@ -44,8 +44,6 @@ extern "C"
 #include "ff_luacontext.h"
 #include "ff_scriptman.h"
 
-#include "omnibot_interface.h"
-
 #include "LuaBridge/LuaBridge.h"
 
 // memdbgon must be the last include file in a .cpp file!!!

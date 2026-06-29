@@ -197,7 +197,6 @@ protected:
 	void DoExplosion( void );
 	virtual void DoExplosionDamage() { AssertMsg(0, "No DoExplosionDamage()"); }
 
-	virtual void SendStatsToBot() {};
 protected:
 
 	// Flickerer - flickers to indicate us taking damage

@@ -35,7 +35,6 @@
 #include "gameinterface.h"
 #include "ilagcompensationmanager.h"
 
-#include "omnibot_interface.h"
 
 // --> Mirv: Temp test for triggers
 #include "ff_scriptman.h"
@@ -1209,7 +1208,7 @@ CFuncFFScript::CFuncFFScript()
 
 	// bot info
 	m_BotTeamFlags = 0;
-	m_BotGoalType = Omnibot::kNone;
+	m_BotGoalType = 0;
 }
 
 

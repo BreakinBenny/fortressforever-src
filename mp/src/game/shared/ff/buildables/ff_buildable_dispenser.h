@@ -148,8 +148,6 @@ public:
 	int				m_iLastState;
 
 protected:
-	void SendStatsToBot( void );
-
 	// Custom dispenser text string thing
 	char		m_szCustomText[ FF_BUILD_DISP_STRING_LEN ];
 	CFFPlayer	*m_pLastTouch;

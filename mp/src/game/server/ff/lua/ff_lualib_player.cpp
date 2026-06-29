@@ -185,13 +185,6 @@ void CFFLuaLib::InitPlayer(lua_State* L)
 
 			.addFunction("GetAmmoCount", &CFFPlayer::LuaGetAmmoCount)
 
-			.addFunction("SendBotMessage",
-				overload<const char*>(&CFFPlayer::SendBotMessage),
-				overload<const char*, const char*>(&CFFPlayer::SendBotMessage),
-				overload<const char*, const char*, const char*>(&CFFPlayer::SendBotMessage),
-				overload<const char*, const char*, const char*, const char*>(&CFFPlayer::SendBotMessage)
-			)
-
 			.addFunction("GetSentryGun", &CFFPlayer::GetSentryGun)
 			.addFunction("GetDispenser", &CFFPlayer::GetDispenser)
 			.addFunction("GetDetpack", &CFFPlayer::GetDetpack)

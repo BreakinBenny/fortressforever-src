@@ -24,8 +24,6 @@
 #ifdef CLIENT_DLL
 	#define CFFWeaponSpanner C_FFWeaponSpanner
 	#include "ff_utils.h"
-#else
-	#include "omnibot_interface.h"
 #endif
 
 //=============================================================================
@@ -141,7 +139,7 @@ void CFFWeaponSpanner::Hit(trace_t &traceHit, Activity nHitActivity)
 				WeaponSoundLocal( SPECIAL3 );
 
 #ifdef GAME_DLL
-				const int iBeforeArmor = pHitPlayer->GetArmor();
+				//const int iBeforeArmor = pHitPlayer->GetArmor();
 
 				pHitPlayer->AddArmor( iArmorGiven );
 				pPlayer->RemoveAmmo( iArmorGiven / 5, AMMO_CELLS );
@@ -149,9 +147,7 @@ void CFFWeaponSpanner::Hit(trace_t &traceHit, Activity nHitActivity)
 				// Leaving the 'last damage from enemy' part out until discussion has finished about it.
 				pPlayer->AddFortPoints( ( iArmorGiven*0.5 ), "#FF_FORTPOINTS_GIVEARMOR");
 
-				const int iAfterArmor = pHitPlayer->GetArmor();
-				Omnibot::Notify_GotSpannerArmor(pHitPlayer,pPlayer,iBeforeArmor,iAfterArmor);
-				Omnibot::Notify_GaveSpannerArmor(pPlayer,pHitPlayer,iBeforeArmor,iAfterArmor);
+				//const int iAfterArmor = pHitPlayer->GetArmor();
 #endif
 			}
 

@@ -30,7 +30,6 @@
 	extern void FormatViewModelAttachment( Vector &vOrigin, bool bInverse );
 	//extern void DrawHalo(IMaterial* pMaterial, const Vector &source, float scale, float const *color, float flHDRColorScale);
 #else
-	#include "omnibot_interface.h"
 	#include "ff_player.h"
 	#include "te_effect_dispatch.h"
 #endif
@@ -351,8 +350,7 @@ void CFFWeaponRailgun::Fire( void )
 	float flDamage = RAIL_DAMAGE_MIN + ( (RAIL_DAMAGE_MAX - RAIL_DAMAGE_MIN) * flPercent );
 
 	const int iDamageRadius = 100;
-	CFFProjectileRail *pRail = CFFProjectileRail::CreateRail( this, vecSrc, pPlayer->EyeAngles(), pPlayer, flDamage, iDamageRadius, flSpeed, flClampedChargeTime );	
-	Omnibot::Notify_PlayerShoot(pPlayer, Omnibot::TF_WP_RAILGUN, pRail);
+	/*CFFProjectileRail* pRail = */ CFFProjectileRail::CreateRail(this, vecSrc, pPlayer->EyeAngles(), pPlayer, flDamage, iDamageRadius, flSpeed, flClampedChargeTime);
 #endif
 
 	// MUST call sound before removing a round from the clip of a CMachineGun

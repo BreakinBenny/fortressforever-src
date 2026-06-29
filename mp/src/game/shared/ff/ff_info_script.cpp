@@ -26,7 +26,6 @@
 	#include "ff_scriptman.h"
 	#include "ff_luacontext.h"
 	#include "ff_player.h"
-	#include "omnibot_interface.h"
 	#include "ai_basenpc.h"
 
 	// Lua includes
@@ -157,7 +156,7 @@ CFFInfoScript::CFFInfoScript( void )
 
 	// bot info
 	m_BotTeamFlags = 0;
-	m_BotGoalType = Omnibot::kNone;
+	m_BotGoalType = 0;
 #endif // CLIENT_DLL
 }
 
@@ -1298,7 +1297,7 @@ void CFFInfoScript::SetBotGoalInfo(int _type)
 
 void CFFInfoScript::SpawnBot(const char *_name, int _team, int _class)
 {
-	Omnibot::SpawnBotAsync(_name, _team, _class, this);
+	//Omnibot::SpawnBotAsync(_name, _team, _class, this);
 }
 
 //-----------------------------------------------------------------------------
