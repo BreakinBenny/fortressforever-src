@@ -20,12 +20,12 @@
 #include "tier1/callqueue.h"
 
 // BEG: Added by Mulch 11/07/2005
-#ifdef CLIENT_DLL
+#ifdef FF_CLIENT_DLL
 	//#define CFFBuildableObject C_FFBuildableObject
 #endif
-
+#ifdef FF
 #include "ff_buildableobject.h"
-// END: Added by Mulch 11/07/2005
+#endif // END: Added by Mulch 11/07/2005
 
 #ifdef PORTAL
 	#include "portal_util_shared.h"
@@ -1096,7 +1096,7 @@ void CBaseEntity::PhysicsImpact( CBaseEntity *other, trace_t &trace )
 		return;
 	}
 
-	// BEG: Added by Mulch 11/07/2005
+#ifdef FF // BEG: Added by Mulch 11/07/2005
 	if (trace.m_pEnt)
 	{
 		if ((trace.m_pEnt->Classify() == CLASS_DISPENSER) ||
@@ -1108,7 +1108,7 @@ void CBaseEntity::PhysicsImpact( CBaseEntity *other, trace_t &trace )
 				return;
 		}
 	}
-	// END: Added by Mulch 11/07/2005
+#endif	// END: Added by Mulch 11/07/2005
 
 	// If either of the entities is flagged to be deleted, 
 	//  don't call the touch functions
@@ -1599,12 +1599,12 @@ void CBaseEntity::PhysicsCheckWaterTransition( void )
 
 			if ( !IsEFlagSet( EFL_NO_WATER_VELOCITY_CHANGE ) )
 			{
-				// BEG: Removed by Mulch - it was deflecting
+#ifndef FF		// BEG: Removed by Mulch - it was deflecting
 				// stuff entering water
-				/*Vector vecAbsVelocity = GetAbsVelocity();
+				Vector vecAbsVelocity = GetAbsVelocity();
 				vecAbsVelocity[2] *= 0.5;
-				SetAbsVelocity( vecAbsVelocity );*/
-				// END: Mulch
+				SetAbsVelocity( vecAbsVelocity );
+#endif			// END: Mulch
 			}
 		}
 	}
@@ -1698,13 +1698,18 @@ void CBaseEntity::PhysicsToss( void )
 	{	
 		// entity is trapped in another solid
 		// UNDONE: does this entity needs to be removed?
-		// Jiggles: Added this conditional to "fix" the "pipes don't always explode when they hit a player" bug
+#ifdef FF // Jiggles: Added this conditional to "fix" the "pipes don't always explode when they hit a player" bug
 		if (Classify() != CLASS_GLGRENADE)
 		{
 			SetAbsVelocity(vec3_origin);
 			SetLocalAngularVelocity(vec3_angle);
 			return;
 		}
+#else
+		SetAbsVelocity(vec3_origin);
+		SetLocalAngularVelocity(vec3_angle);
+		return;
+#endif
 	}
 	
 #if !defined( CLIENT_DLL )

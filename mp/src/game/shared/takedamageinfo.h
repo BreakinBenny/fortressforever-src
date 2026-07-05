@@ -101,7 +101,7 @@ public:
 	void			AdjustPlayerDamageInflictedForSkillLevel();
 	void			AdjustPlayerDamageTakenForSkillLevel();
 
-#ifdef GAME_DLL
+#ifdef FF_DLL
 	int				GetAmmoTypeLua(void);
 #endif
 

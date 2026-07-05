@@ -35,7 +35,6 @@
 
 #if defined(TF_CLIENT_DLL) || defined(TF_DLL)
 	#include "tf_gamerules.h"
-	#include "tf_lobby.h"
 	#ifdef GAME_DLL
 		#include "player_vs_environment/tf_population_manager.h"
 		#include "../server/tf/tf_gc_server.h"
@@ -194,7 +193,6 @@ ConVar mp_maxrounds( "mp_maxrounds", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "max 
 ConVar mp_winlimit( "mp_winlimit", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Max score one team can reach before server changes maps", true, 0, false, 0 );
 ConVar mp_disable_respawn_times( "mp_disable_respawn_times", "0", FCVAR_NOTIFY | FCVAR_REPLICATED );
 ConVar mp_bonusroundtime( "mp_bonusroundtime", "15", FCVAR_REPLICATED, "Time after round win until round restarts", true, 5, true, 15 );
-ConVar mp_bonusroundtime_final( "mp_bonusroundtime_final", "15", FCVAR_REPLICATED, "Time after final round ends until round restarts", true, 5, true, 300 );
 ConVar mp_stalemate_meleeonly( "mp_stalemate_meleeonly", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Restrict everyone to melee weapons only while in Sudden Death." );
 ConVar mp_forceautoteam( "mp_forceautoteam", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Automatically assign players to teams when joining." );
 
@@ -773,7 +771,7 @@ void CTeamplayRoundBasedRules::SetInWaitingForPlayers( bool bWaitingForPlayers  
 	if( m_bInWaitingForPlayers == bWaitingForPlayers  )
 		return;
 
-	if ( IsInArenaMode() == true && m_flWaitingForPlayersTimeEnds == -1 && IsInTournamentMode() == false )
+	if ( IsInArenaMode() && ( m_flWaitingForPlayersTimeEnds < 0 ) && !IsInTournamentMode() )
 	{
 		m_bInWaitingForPlayers = false;
 		return;
@@ -781,13 +779,13 @@ void CTeamplayRoundBasedRules::SetInWaitingForPlayers( bool bWaitingForPlayers  
 
 	m_bInWaitingForPlayers = bWaitingForPlayers;
 
-	if( m_bInWaitingForPlayers )
+	if ( m_bInWaitingForPlayers )
 	{
 		m_flWaitingForPlayersTimeEnds = gpGlobals->curtime + mp_waitingforplayers_time.GetFloat();
 	}
 	else
 	{
-		m_flWaitingForPlayersTimeEnds = -1;
+		m_flWaitingForPlayersTimeEnds = -1.0f;
 
 		if ( m_hWaitingForPlayersTimer )
 		{
@@ -850,9 +848,9 @@ void CTeamplayRoundBasedRules::CheckWaitingForPlayers( void )
 	if ( IsLoadingBugBaitReport() || gpGlobals->eLoadType == MapLoad_Background || !AllowWaitingForPlayers() )
 		return;
 
-	if( mp_waitingforplayers_restart.GetBool() )
+	if ( mp_waitingforplayers_restart.GetBool() )
 	{
-		if( m_bInWaitingForPlayers )
+		if ( m_bInWaitingForPlayers )
 		{
 			m_flWaitingForPlayersTimeEnds = gpGlobals->curtime + mp_waitingforplayers_time.GetFloat();
 
@@ -999,7 +997,7 @@ void CTeamplayRoundBasedRules::CheckRestartRound( void )
 	{
 		int iDelayMax = 60;
 
-#if defined(TF_CLIENT_DLL) || defined(TF_DLL)
+#ifdef TF_DLL
 		if ( TFGameRules() && ( TFGameRules()->IsMannVsMachineMode() || TFGameRules()->IsCompetitiveMode() ) )
 		{
 			iDelayMax = 180;
@@ -1265,6 +1263,7 @@ void CTeamplayRoundBasedRules::State_Transition( gamerules_roundstate_t newState
 
 	State_Leave();
 	State_Enter( newState );
+
 }	
 
 //-----------------------------------------------------------------------------
@@ -1384,10 +1383,10 @@ void CTeamplayRoundBasedRules::State_Think_PREGAME( void )
 	// Commentary stays in this mode too
 	if ( IsInCommentaryMode() )
 		return;
-	
-	if( CountActivePlayers() > 0 || (IsInArenaMode() == true && m_flWaitingForPlayersTimeEnds == 0.0f) )
+
+	if ( CountActivePlayers() > 0 || ( IsInArenaMode() && ( m_flWaitingForPlayersTimeEnds == 0.f ) )
 	{
-		State_Transition( GR_STATE_STARTGAME );			
+		State_Transition( GR_STATE_STARTGAME );
 	}
 }
 
@@ -1440,7 +1439,7 @@ void CTeamplayRoundBasedRules::State_Enter_PREROUND( void )
 		gameeventmanager->FireEvent( event );
 	}
 
-	if ( IsInArenaMode() == true )
+	if ( IsInArenaMode() )
 	{
 		if ( CountActivePlayers() > 0 )
 		{
@@ -1467,7 +1466,7 @@ void CTeamplayRoundBasedRules::State_Enter_PREROUND( void )
 
 		m_flStateTransitionTime = gpGlobals->curtime + tf_arena_preround_time.GetInt();
 	}
-#if defined(TF_CLIENT_DLL) || defined(TF_DLL)
+#ifdef TF_DLL
 	// Only allow at the very beginning of the game, or between waves in mvm
 	else if ( TFGameRules() && TFGameRules()->UsePlayerReadyStatusMode() && m_bAllowBetweenRounds )
 	{
@@ -1479,7 +1478,7 @@ void CTeamplayRoundBasedRules::State_Enter_PREROUND( void )
 			TFObjectiveResource()->SetMannVsMachineBetweenWaves( true );
 		}
 	}
-#endif // #if defined(TF_CLIENT_DLL) || defined(TF_DLL)
+#endif // TF_DLL
 	else
 	{
 		m_flStateTransitionTime = gpGlobals->curtime + 5 * mp_enableroundwaittime.GetFloat();
@@ -1624,85 +1623,6 @@ void CTeamplayRoundBasedRules::CheckReadyRestart( void )
 	}
 }
 
-#if defined(TF_CLIENT_DLL) || defined(TF_DLL)
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-bool CTeamplayRoundBasedRules::AreLobbyPlayersOnTeamReady( int iTeam )
-{
-	if ( !TFGameRules() )
-		return false;
-
-	if ( TFGameRules()->IsMannVsMachineMode() && iTeam == TF_TEAM_PVE_INVADERS )
-		return true;
-
-	bool bAtLeastOnePersonReady = false;
-	
-	CUtlVector<LobbyPlayerInfo_t> vecLobbyPlayers;
-	GetPotentialPlayersLobbyPlayerInfo( vecLobbyPlayers );
-
-	for ( int i = 0; i < vecLobbyPlayers.Count(); i++ )
-	{
-		const LobbyPlayerInfo_t &p = vecLobbyPlayers[i];
-		
-		// Make sure all lobby players are connected
-		if ( !AreLobbyPlayersConnected() )
-		{
-			return false;
-		}
-		// All are connected, make sure their team is ready
-		else if ( p.m_iTeam == iTeam )
-		{
-			if ( !m_bPlayerReady[ p.m_nEntNum ] )
-				return false;
-
-			// He's totally ready
-			bAtLeastOnePersonReady = true;
-		}
-		else
-		{
-			// In MvM, only the red team should pass through here
-			if ( TFGameRules()->IsMannVsMachineMode() )
-			{
-				// And you may ask yourself, "How did I get here?"
-				Assert( p.m_iTeam == iTeam );
-			}
-		}
-	}
-
-	// We didn't find anybody who we should wait for, so
-	// if at least one person is ready, then we're ready
-	return bAtLeastOnePersonReady;
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: Is everyone in the lobby connected to the server?
-//-----------------------------------------------------------------------------
-bool CTeamplayRoundBasedRules::AreLobbyPlayersConnected( void )
-{
-	CUtlVector<LobbyPlayerInfo_t> vecLobbyPlayers;
-	GetPotentialPlayersLobbyPlayerInfo( vecLobbyPlayers );
-
-	// If you're calling this, you should have lobby members
-	Assert( vecLobbyPlayers.Count() );
-
-	for ( int i = 0; i < vecLobbyPlayers.Count(); i++ )
-	{
-		const LobbyPlayerInfo_t &pLobbyPlayer = vecLobbyPlayers[i];
-		if ( !pLobbyPlayer.m_bConnected || 
-			 pLobbyPlayer.m_nEntNum <= 0 || 
-			 pLobbyPlayer.m_nEntNum >= MAX_PLAYERS ||
-			 ( TFGameRules() && TFGameRules()->IsMannVsMachineMode() && pLobbyPlayer.m_iTeam == TEAM_UNASSIGNED ) )
-		{
-			if ( pLobbyPlayer.m_bInLobby )
-				return false;
-		}
-	}
-
-	return true;
-}
-#endif // #if defined(TF_CLIENT_DLL) || defined(TF_DLL)
-
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -1718,15 +1638,6 @@ void CTeamplayRoundBasedRules::State_Think_RND_RUNNING( void )
 			g_pReplay->SV_EndRecordingSession();
 		}
 #endif
-
-#ifdef TF_DLL
-		// Mass time-out?  Clean everything up.
-		if ( TFGameRules() && TFGameRules()->IsCompetitiveMode() )
-		{
-			TFGameRules()->EndCompetitiveMatch();
-			return;
-		}
-#endif // TF_DLL
 
 		State_Transition( GR_STATE_PREGAME );
 		return;
@@ -1829,14 +1740,6 @@ void CTeamplayRoundBasedRules::State_Think_TEAM_WIN( void )
 {
 	if ( gpGlobals->curtime > m_flStateTransitionTime )
 	{
-#ifdef TF_DLL
-		IGameEvent *event = gameeventmanager->CreateEvent( "scorestats_accumulated_update" );
-		if ( event )
-		{
-			gameeventmanager->FireEvent( event );
-		}
-#endif // TF_DLL
-
 		bool bDone = ( CheckTimeLimit() || CheckWinLimit() || CheckMaxRounds() || CheckNextLevelCvar() );
 
 		// check the win limit, max rounds, time limit and nextlevel cvar before starting the next round
@@ -2276,8 +2179,6 @@ void CTeamplayRoundBasedRules::SetWinningTeam( int team, int iWinReason, bool bF
 	m_iWinningTeam = team;
 	m_iWinReason = iWinReason;
 
-	PlayWinSong( team );
-
 	// only reward the team if they have won the map and we're going to do a full reset or the time has run out and we're changing maps
 	bool bRewardTeam = bForceMapReset || ( IsGameUnderTimeLimit() && ( GetTimeLeft() <= 0 ) );
 
@@ -2297,6 +2198,9 @@ void CTeamplayRoundBasedRules::SetWinningTeam( int team, int iWinReason, bool bF
 	bool bWasSuddenDeath = ( InStalemate() && m_iWinningTeam >= FIRST_GAME_TEAM );
 
 	State_Transition( GR_STATE_TEAM_WIN );
+
+	// this needs to be AFTER we add score above (for TF)
+	PlayWinSong( team );
 
 	m_flLastTeamWin = gpGlobals->curtime;
 
@@ -2581,7 +2485,7 @@ void CTeamplayRoundBasedRules::RespawnPlayers( bool bForceRespawn, bool bTeam /*
 
 			if ( m_iRoundState != GR_STATE_PREROUND )
 			{
-					// If the player hasn't been dead the minimum respawn time, he
+				// If the player hasn't been dead the minimum respawn time, he
 				// waits until the next wave.
 				if ( bTeam && !HasPassedMinRespawnTime( pPlayer ) )
 					continue;
@@ -2986,8 +2890,9 @@ void CTeamplayRoundBasedRules::CheckRespawnWaves( void )
 	}
 }
 
+#ifdef GAME_DLL
 //-----------------------------------------------------------------------------
-// Purpose: Return true if the teams are balanced after this function
+// Purpose: 
 //-----------------------------------------------------------------------------
 void CTeamplayRoundBasedRules::BalanceTeams( bool bRequireSwitcheesToBeDead )
 {
@@ -3157,6 +3062,7 @@ void CTeamplayRoundBasedRules::BalanceTeams( bool bRequireSwitcheesToBeDead )
 		}
 	}
 }
+#endif // GAME_DLL
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -3187,6 +3093,14 @@ void CTeamplayRoundBasedRules::ResetScores( void )
 
 			pPlayer->ResetScores();
 		}
+
+#ifdef TF_DLL
+		IGameEvent *event = gameeventmanager->CreateEvent( "scorestats_accumulated_reset" );
+		if ( event )
+		{
+			gameeventmanager->FireEvent( event );
+		}
+#endif // TF_DLL
 	}
 
 	if ( m_bResetRoundsPlayed )
@@ -3200,14 +3114,6 @@ void CTeamplayRoundBasedRules::ResetScores( void )
 	m_bResetPlayerScores = true;
 	m_bResetRoundsPlayed = true;
 	//m_flStopWatchTime = -1.0f;
-
-#ifdef TF_DLL
-	IGameEvent *event = gameeventmanager->CreateEvent( "scorestats_accumulated_reset" );
-	if ( event )
-	{
-		gameeventmanager->FireEvent( event );
-	}
-#endif // TF_DLL
 }
 
 //-----------------------------------------------------------------------------
@@ -3248,11 +3154,6 @@ void CTeamplayRoundBasedRules::PlayWinSong( int team )
 	}
 	else
 	{
-#if defined (TF_DLL) || defined (TF_CLIENT_DLL)
-		if ( TFGameRules() && TFGameRules()->IsPlayingSpecialDeliveryMode() )
-			return;
-#endif // TF_DLL
-
 		BroadcastSound( TEAM_UNASSIGNED, UTIL_VarArgs("Game.TeamWin%d", team ) );
 
 		for ( int i = FIRST_GAME_TEAM; i < GetNumberOfTeams(); i++ )

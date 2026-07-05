@@ -44,7 +44,7 @@
 #ifdef HL2_DLL
 #include "weapon_physcannon.h"
 #endif
-
+#ifdef FF
 #include "ff_player.h"
 
 #include "ff_buildableobject.h"
@@ -53,7 +53,7 @@
 #include "ff_buildable_dispenser.h"
 #include "ff_scriptman.h"
 #include "ff_luacontext.h"
-
+#endif
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 

@@ -24,7 +24,7 @@
 #ifdef TF_DLL
 #include "tf_gamerules.h"
 #endif // TF_DLL
-
+#ifdef FF
 #include "ff_scriptman.h"
 //#include "ff_luaobject_wrapper.h"
 #include "ff_luacontext.h"
@@ -34,7 +34,7 @@
 
 #undef MINMAX_H
 #include "minmax.h"
-
+#endif
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

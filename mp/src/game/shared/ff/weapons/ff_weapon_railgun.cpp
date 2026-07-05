@@ -350,7 +350,7 @@ void CFFWeaponRailgun::Fire( void )
 	float flDamage = RAIL_DAMAGE_MIN + ( (RAIL_DAMAGE_MAX - RAIL_DAMAGE_MIN) * flPercent );
 
 	const int iDamageRadius = 100;
-	/*CFFProjectileRail* pRail = */ CFFProjectileRail::CreateRail(this, vecSrc, pPlayer->EyeAngles(), pPlayer, flDamage, iDamageRadius, flSpeed, flClampedChargeTime);
+	/*CFFProjectileRail *pRail = */ CFFProjectileRail::CreateRail( this, vecSrc, pPlayer->EyeAngles(), pPlayer, flDamage, iDamageRadius, flSpeed, flClampedChargeTime );
 #endif
 
 	// MUST call sound before removing a round from the clip of a CMachineGun

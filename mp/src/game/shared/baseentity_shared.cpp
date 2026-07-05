@@ -19,13 +19,15 @@
 #include "debugoverlay_shared.h"
 #include "coordsize.h"
 #include "vphysics/performance.h"
+#ifdef FF
 #include "filesystem.h"
 #include "networkvar.h"
-
+#endif
 #ifdef CLIENT_DLL
 	#include "c_te_effect_dispatch.h"
-	// not ideal but I need this to be able to do ToFFPlayer for the team blood stuff
+	#ifdef FF	// not ideal but I need this to be able to do ToFFPlayer for the team blood stuff
 	#include "c_ff_player.h"
+	#endif
 #else
 	#include "te_effect_dispatch.h"
 	#include "soundent.h"
@@ -34,9 +36,9 @@
 	#include "waterbullet.h"
 	#include "func_break.h"
 
-	// not ideal but I need this to be able to do ToFFPlayer for the team blood stuff
+	#ifdef FF	// not ideal but I need this to be able to do ToFFPlayer for the team blood stuff
 	#include "ff_player.h"
-
+	#endif
 #ifdef HL2MP
 	#include "te_hl2mp_shotgun_shot.h"
 #endif
@@ -320,7 +322,7 @@ void CBaseEntity::ParseMapData( CEntityMapData *mapData )
 		while ( mapData->GetNextKey(keyName, value) );
 	}
 
-#ifdef GAME_DLL
+#ifdef FF_DLL
 	// setup the event action for the output
 	// this is necessary for routing the ouputs to lua
 	for (datamap_t* dmap = GetDataDescMap(); dmap != NULL; dmap = dmap->baseMap)

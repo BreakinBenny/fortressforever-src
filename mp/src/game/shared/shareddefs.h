@@ -251,13 +251,13 @@ enum CastVote
 // Start your team numbers after this
 #define LAST_SHARED_TEAM		TEAM_SPECTATOR
 
-// BEG: Added by Mulchman
+#ifdef FF // BEG: Added by Mulchman
 #define TEAM_BLUE				2   // blue team
 #define TEAM_RED				3   // red team
 #define TEAM_YELLOW				4   // yellow team
 #define TEAM_GREEN				5   // green team
 #define TEAM_COUNT				6   // # of teams there are
-// END: Added by Mulchman 
+#endif // END: Added by Mulchman 
 
 // The first team that's game specific (i.e. not unassigned / spectator)
 // TEAM_BLUE
@@ -273,7 +273,7 @@ enum CastVote
 #define WEAPON_IS_CARRIED_BY_PLAYER		1	// This client is carrying this weapon.
 #define WEAPON_IS_ACTIVE				2	// This client is carrying this weapon and it's the currently held weapon
 
-// --> Mirv: Class defines
+#ifdef FF // --> Mirv: Class defines
 #define CLASS_SCOUT			1
 #define CLASS_SNIPER		2
 #define CLASS_SOLDIER		3
@@ -284,7 +284,7 @@ enum CastVote
 #define CLASS_SPY			8
 #define CLASS_ENGINEER		9
 #define CLASS_CIVILIAN		10
-// <-- Mirv: Class defines
+#endif // <-- Mirv: Class defines
 
 // -----------------------------------------
 // Skill Level
@@ -347,10 +347,10 @@ enum
 
 #define TRACER_DONT_USE_ATTACHMENT	-1
 
-// --> Mirv: CEffect flags
+#ifdef FF // --> Mirv: CEffect flags
 #define	CEFFECT_EFFECTNOTNEEDED		0x01
 #define	CEFFECT_SOUNDNOTNEEDED		0x02
-// <-- Mirv
+#endif // <-- Mirv
 
 // Entity Dissolve types
 enum
@@ -456,9 +456,9 @@ enum PLAYER_ANIM
 #define DMG_ALWAYSGIB		(1 << 13)	// with this bit OR'd in, any damage type can be made to gib victims upon death.
 #define DMG_DROWN			(1 << 14)	// Drowning
 
-// time-based damage
+#ifdef FF // time-based damage
 #define DMG_TIMEBASED		(DMG_PARALYZE | DMG_NERVEGAS | DMG_POISON | DMG_RADIATION | DMG_DROWNRECOVER | DMG_ACID | DMG_SLOWBURN)	// mask for time-based damage
-
+#endif
 #define DMG_PARALYZE		(1 << 15)	// slows affected creature down
 #define DMG_NERVEGAS		(1 << 16)	// nerve toxins, very bad
 #define DMG_POISON			(1 << 17)	// blood poisoning - heals over time like drowning damage
@@ -485,7 +485,7 @@ enum PLAYER_ANIM
 // TODO: keep this up to date so all the mod-specific flags don't overlap anything.
 #define DMG_LASTGENERICFLAG	DMG_BUCKSHOT
 
-// these are the damage types that are allowed to gib corpses
+#ifdef FF // these are the damage types that are allowed to gib corpses
 #define DMG_GIB_CORPSE		( DMG_CRUSH | DMG_FALL | DMG_BLAST | DMG_SONIC | DMG_CLUB )
 
 // these are the damage types that have client hud art
@@ -493,7 +493,7 @@ enum PLAYER_ANIM
 
 // these are the damage types that don't have to supply a physics force & position
 #define DMG_NO_PHYSICS_FORCE	(DMG_FALL | DMG_BURN | DMG_PLASMA | DMG_DROWN | DMG_TIMEBASED | DMG_CRUSH | DMG_PHYSGUN | DMG_PREVENT_PHYSICS_FORCE)
-
+#endif
 // settings for m_takedamage
 #define	DAMAGE_NO				0
 #define DAMAGE_EVENTS_ONLY		1		// Call damage functions, but don't modify health
@@ -655,8 +655,7 @@ enum
 	EFL_DIRTY_ABSANGVELOCITY =	(1<<13),
 	EFL_DIRTY_SURROUNDING_COLLISION_BOUNDS	= (1<<14),
 	EFL_DIRTY_SPATIAL_PARTITION = (1<<15),
-	//	UNUSED	(NOW TAKEN)		= (1<<16),
-	EFL_NO_WEAPON_PICKUP =		(1 << 16),		// Characters can't pick up weapons
+	//	UNUSED					= (1<<16),
 
 	EFL_IN_SKYBOX =				(1<<17),	// This is set if the entity detects that it's in the skybox.
 											// This forces it to pass the "in PVS" for transmission.

@@ -87,12 +87,12 @@ class INextBot;
 class IHasAttributes;
 
 typedef CUtlVector< CBaseEntity* > EntityList_t;
-
+#ifdef FF
 namespace luabridge
 {
 	class LuaRef;
 };
-
+#endif
 #if defined( HL2_DLL )
 
 // For CLASSIFY
@@ -202,7 +202,7 @@ enum Class_T
 	CLASS_PLAYER,
 	CLASS_PLAYER_ALLY,
 
-	// BEG: Added by Mulchman
+#ifdef FF // BEG: Added by Mulchman
 	CLASS_DISPENSER,
 	CLASS_SENTRYGUN,
 	CLASS_DETPACK,
@@ -239,7 +239,7 @@ enum Class_T
 	CLASS_TRIGGERSCRIPT,
 	CLASS_TRIGGER_CLIP,
 	CLASS_TEAMSPAWN,
-
+#endif
 	NUM_AI_CLASSES
 };
 
@@ -391,12 +391,12 @@ class CBaseEntity : public IServerEntity
 public:
 	DECLARE_CLASS_NOBASE( CBaseEntity );	
 
-	// active triggers
+#ifdef FF // active triggers
 	CUtlVector< int > m_hActiveScripts;		// only triggerscripts
 	CUtlVector< int > m_hActiveTriggers;	// all triggers
 
 	luabridge::LuaRef GetTouchingTriggers( void );
-
+#endif
 	//----------------------------------------
 	// Class vars and functions
 	//----------------------------------------
@@ -409,9 +409,9 @@ public:
 	static bool				m_bInDebugSelect;
 	static int				m_nDebugPlayer;
 
-	// --> FF
+#ifdef FF // --> FF
 	CUtlVector<CBaseEntity*> m_ObjectivePlayerRefs;
-	// <-- FF
+#endif	// <-- FF
 
 protected:
 
@@ -482,8 +482,9 @@ public:
 	bool					IsCurrentlyTouching( void ) const;
 	const Vector&			GetAbsOrigin( void ) const;
 	const QAngle&			GetAbsAngles( void ) const;
+#ifdef FF
 	Vector					GetAbsFacing() const;
-
+#endif
 	SolidType_t				GetSolid() const;
 	int			 			GetSolidFlags( void ) const;
 
@@ -551,11 +552,11 @@ public:
 	virtual void			SetOwnerEntity( CBaseEntity* pOwner );
 	void					SetEffectEntity( CBaseEntity *pEffectEnt );
 	CBaseEntity				*GetEffectEntity() const;
-
+#ifdef FF
 	// specifies if this entity can collide with its owner entity
 	virtual bool			CanClipOwnerEntity() const { return false; }
 	virtual bool			CanClipPlayer() const { return true; }
-
+#endif
 	// Only CBaseEntity implements these. CheckTransmit calls the virtual ShouldTransmit to see if the
 	// entity wants to be sent. If so, it calls SetTransmit, which will mark any dependents for transmission too.
 	virtual int				ShouldTransmit( const CCheckTransmitInfo *pInfo );
@@ -842,11 +843,11 @@ public:
 	void				SetRenderMode( RenderMode_t nRenderMode );
 	RenderMode_t		GetRenderMode() const;
 
-	// for lua
+#ifdef FF // for lua
 	void				SetRenderFx(int _fx) { m_nRenderFX = _fx; }
 	int					GetRenderFx() { return m_nRenderFX; }
 	void				ClearRenderFx() { m_nRenderFX = kRenderFxNone; }
-
+#endif
 private:
 	// NOTE: Keep this near vtable so it's in cache with vtable.
 	CServerNetworkProperty m_Network;
@@ -934,8 +935,9 @@ protected:
 
 private:
 	CBaseEntity( CBaseEntity& );
+#ifdef FF
 	CSpriteTrail* m_pSpriteTrail;
-
+#endif
 	// list handling
 	friend class CGlobalEntityList;
 	friend class CThinkSyncTester;
@@ -1170,14 +1172,14 @@ public:
 	int		GetHealth() const		{ return m_iHealth; }
 	void	SetHealth( int amt )	{ m_iHealth = amt; }
 
-	// --> Added by Mulch for testing
+#ifdef FF // --> Added by Mulch for testing
 	// Armor accessors
 	int		GetMaxArmor() const { return m_iMaxArmor; }
 	void	SetMaxArmor(int amt) { m_iMaxArmor = amt; }
 
 	int		GetArmor() const { return m_iArmor; }
 	void	SetArmor(int amt) { m_iArmor = amt; }
-	// <-- Added by Mulch for testing
+#endif	// <-- Added by Mulch for testing
 
 	float HealthFraction() const;
 
@@ -1871,7 +1873,7 @@ public:
 	static CBasePlayer				*GetPredictionPlayer( void );
 	static void						SetPredictionPlayer( CBasePlayer *player );
 
-	// -- luabridge3 stuff to avoid const-correctness issues, added for the sake of existing scripts
+#ifdef FF // -- luabridge3 stuff to avoid const-correctness issues, added for the sake of existing scripts
 	
 	inline Vector LUA_GetAbsVelocity(void)	{ return GetAbsVelocity();	};
 	inline Vector LUA_GetAbsOrigin(void)	{ return GetAbsOrigin();	};
@@ -1880,7 +1882,7 @@ public:
 	inline QAngle LUA_GetAbsAngles(void)	{ return GetAbsAngles();	};
 	inline Vector LUA_GetAbsFacing(void)	{ return GetAbsFacing();	};
 	
-	// -- luabridge3 stuff to avoid const-correctness issues, added for the sake of existing scripts
+#endif	// -- luabridge3 stuff to avoid const-correctness issues, added for the sake of existing scripts
 
 	// For debugging shared code
 	static bool						IsServer( void )

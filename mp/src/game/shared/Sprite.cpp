@@ -326,13 +326,11 @@ void CSprite::SpriteInit( const char *pSpriteName, const Vector &origin )
 
 int CSprite::UpdateTransmitState( void )
 {
-	// --> FF
-#ifdef GAME_DLL
+#ifdef FF_DLL // --> FF
 	// always transmit if you're an objective
 	if (m_ObjectivePlayerRefs.Count() > 0)
 		return SetTransmitState(FL_EDICT_ALWAYS);
-#endif // GAME_DLL
-	// <-- FF
+#endif // <-- FF_DLL
 
 	if ( GetMoveParent() )
 	{
@@ -685,10 +683,10 @@ void CSprite::GetRenderBounds( Vector &vecMins, Vector &vecMaxs )
 
 #if 0
 	// Visualize the bounds
-	
-	
+	if ( debugoverlay )
+	{
 		debugoverlay->AddBoxOverlay( GetRenderOrigin(), vecMins, vecMaxs, GetRenderAngles(), 255, 255, 255, 0, 0.01f );
-	
+	}
 #endif
 }
 

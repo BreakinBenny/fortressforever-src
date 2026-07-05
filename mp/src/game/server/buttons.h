@@ -24,7 +24,7 @@ public:
 	void RotSpawn( void );
 	bool KeyValue( const char *szKeyName, const char *szValue );
 	int DrawDebugTextOverlays();
-
+#ifdef FF
 	// moved from protected to public
 	// Input handlers
 	void InputLock(inputdata_t& inputdata);
@@ -32,7 +32,7 @@ public:
 	void InputPress(inputdata_t& inputdata);
 	void InputPressIn(inputdata_t& inputdata);
 	void InputPressOut(inputdata_t& inputdata);
-
+#endif
 protected:
 
 	void ButtonActivate( );

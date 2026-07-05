@@ -93,7 +93,7 @@ public:
 	// When the server acknowledges that the local client is talking, then entindex will be gEngfuncs.GetLocalPlayer().
 	// entindex is -2 to represent the local client's voice being acked by the server.
 	void	UpdateSpeakerStatus(int entindex, bool bTalking);
-
+#ifdef FF
 	int		GetSpeakerStatus(int entindex);
 
 	enum speakerIcons
@@ -105,7 +105,7 @@ public:
 		VOICE_BANNEDTEXT = 5,
 		VOICE_ALLOWEDTEXT = 6,
 	};
-
+#endif
 	// Call from the HUD_CreateEntities function so it can add sprites above player heads.
 	void	DrawHeadLabels();
 	void	SetHeadLabelOffset( float offset );

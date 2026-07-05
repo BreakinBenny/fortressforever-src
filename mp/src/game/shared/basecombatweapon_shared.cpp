@@ -2403,13 +2403,18 @@ bool CBaseCombatWeapon::SetIdealActivity( Activity ideal )
 		SetActivity( ACT_TRANSITION );
 		SetSequence( nextSequence );	
 		SendViewModelAnim( nextSequence );
+#ifdef FF
 		SetWeaponIdleTime(gpGlobals->curtime + SequenceDuration(nextSequence));
+#endif
 	}
 	else
 	{
 		//Set our activity to the ideal
 		SetActivity( m_IdealActivity );
-		//SetSequence( m_nIdealSequence );	
+#ifndef FF
+		SetSequence( m_nIdealSequence );
+		SendViewModelAnim( m_nIdealSequence );	
+#else
 		// The weapon model sequence need clamping to either idle or firing for now
 		// Need to call ResetSequenceInfo for the muzzleflashes
 		// Melee weapons won't have a fire animation (for now)
@@ -2428,12 +2433,13 @@ bool CBaseCombatWeapon::SetIdealActivity( Activity ideal )
 		// that is really set)
 		SendViewModelAnim( m_nIdealSequence );
 		SetWeaponIdleTime(gpGlobals->curtime + SequenceDuration(m_nIdealSequence));
+#endif
 	}
 
 	//Set the next time the weapon will idle
-	// This has been moved into the conditional results above
-	//SetWeaponIdleTime( gpGlobals->curtime + SequenceDuration() );
-	// <-- Mirv
+#ifndef FF // This has been moved into the conditional results above
+	SetWeaponIdleTime( gpGlobals->curtime + SequenceDuration() );
+#endif	// <-- Mirv
 	return true;
 }
 
@@ -2626,9 +2632,12 @@ BEGIN_PREDICTION_DATA( CBaseCombatWeapon )
 	DEFINE_PRED_FIELD( m_nViewModelIndex, FIELD_INTEGER, FTYPEDESC_INSENDTABLE ),
 
 	// Not networked
-
+#ifndef FF
+	DEFINE_FIELD( m_bInReload, FIELD_BOOLEAN ),
+#else
 	DEFINE_PRED_FIELD( m_flTimeWeaponIdle, FIELD_FLOAT, FTYPEDESC_INSENDTABLE ),
 	DEFINE_PRED_FIELD( m_bInReload, FIELD_BOOLEAN, FTYPEDESC_INSENDTABLE ),
+#endif
 	DEFINE_FIELD( m_bFireOnEmpty, FIELD_BOOLEAN ),
 	DEFINE_FIELD( m_bFiringWholeClip, FIELD_BOOLEAN ),
 	DEFINE_FIELD( m_flNextEmptySoundTime, FIELD_FLOAT ),
@@ -2838,7 +2847,9 @@ BEGIN_NETWORK_TABLE_NOBASE( CBaseCombatWeapon, DT_LocalActiveWeaponData )
 	SendPropTime( SENDINFO( m_flNextSecondaryAttack ) ),
 	SendPropInt( SENDINFO( m_nNextThinkTick ) ),
 	SendPropTime( SENDINFO( m_flTimeWeaponIdle ) ),
+	#ifdef FF
 	SendPropBool( SENDINFO( m_bInReload ) ),
+	#endif
 
 #if defined( TF_DLL )
 	SendPropExclude( "DT_AnimTimeMustBeFirst" , "m_flAnimTime" ),
@@ -2849,7 +2860,9 @@ BEGIN_NETWORK_TABLE_NOBASE( CBaseCombatWeapon, DT_LocalActiveWeaponData )
 	RecvPropTime( RECVINFO( m_flNextSecondaryAttack ) ),
 	RecvPropInt( RECVINFO( m_nNextThinkTick ) ),
 	RecvPropTime( RECVINFO( m_flTimeWeaponIdle ) ),
+	#ifdef FF
 	RecvPropBool( RECVINFO( m_bInReload ) ),
+	#endif
 #endif
 END_NETWORK_TABLE()
 
@@ -2858,8 +2871,10 @@ END_NETWORK_TABLE()
 //-----------------------------------------------------------------------------
 BEGIN_NETWORK_TABLE_NOBASE( CBaseCombatWeapon, DT_LocalWeaponData )
 #if !defined( CLIENT_DLL )
-	//SendPropIntWithMinusOneFlag( SENDINFO(m_iClip1 ), 8 ),
-	//SendPropIntWithMinusOneFlag( SENDINFO(m_iClip2 ), 8 ),
+	#ifndef FF
+	SendPropIntWithMinusOneFlag( SENDINFO(m_iClip1 ), 8 ),
+	SendPropIntWithMinusOneFlag( SENDINFO(m_iClip2 ), 8 ),
+	#endif
 	SendPropInt( SENDINFO(m_iPrimaryAmmoType ), 8 ),
 	SendPropInt( SENDINFO(m_iSecondaryAmmoType ), 8 ),
 
@@ -2872,8 +2887,10 @@ BEGIN_NETWORK_TABLE_NOBASE( CBaseCombatWeapon, DT_LocalWeaponData )
 #endif
 
 #else
-	//RecvPropIntWithMinusOneFlag( RECVINFO(m_iClip1 )),
-	//RecvPropIntWithMinusOneFlag( RECVINFO(m_iClip2 )),
+	#ifndef FF
+	RecvPropIntWithMinusOneFlag( RECVINFO(m_iClip1 )),
+	RecvPropIntWithMinusOneFlag( RECVINFO(m_iClip2 )),
+	#endif
 	RecvPropInt( RECVINFO(m_iPrimaryAmmoType )),
 	RecvPropInt( RECVINFO(m_iSecondaryAmmoType )),
 
@@ -2883,7 +2900,7 @@ BEGIN_NETWORK_TABLE_NOBASE( CBaseCombatWeapon, DT_LocalWeaponData )
 
 #endif
 END_NETWORK_TABLE()
-
+#ifdef FF
 //-----------------------------------------------------------------------------
 // Purpose: Propagation data for weapons. Only sent when a player's holding it.
 //-----------------------------------------------------------------------------
@@ -2896,13 +2913,15 @@ RecvPropIntWithMinusOneFlag(RECVINFO(m_iClip1)),
 RecvPropIntWithMinusOneFlag(RECVINFO(m_iClip2)),
 #endif
 END_NETWORK_TABLE()
-
+#endif
 BEGIN_NETWORK_TABLE(CBaseCombatWeapon, DT_BaseCombatWeapon)
 #if !defined( CLIENT_DLL )
 	SendPropDataTable("LocalWeaponData", 0, &REFERENCE_SEND_TABLE(DT_LocalWeaponData), SendProxy_SendLocalWeaponDataTable ),
 	SendPropDataTable("LocalActiveWeaponData", 0, &REFERENCE_SEND_TABLE(DT_LocalActiveWeaponData), SendProxy_SendActiveLocalWeaponDataTable ),
+	#ifdef FF
 	// Data that only gets sent to the player as well as observers of the player
 	SendPropDataTable("ObserverWeaponData", 0, &REFERENCE_SEND_TABLE(DT_ObserverWeaponData), SendProxy_OnlyToObservers),
+	#endif
 	SendPropModelIndex( SENDINFO(m_iViewModelIndex) ),
 	SendPropModelIndex( SENDINFO(m_iWorldModelIndex) ),
 	SendPropInt( SENDINFO(m_iState ), 8, SPROP_UNSIGNED ),
@@ -2910,7 +2929,9 @@ BEGIN_NETWORK_TABLE(CBaseCombatWeapon, DT_BaseCombatWeapon)
 #else
 	RecvPropDataTable("LocalWeaponData", 0, 0, &REFERENCE_RECV_TABLE(DT_LocalWeaponData)),
 	RecvPropDataTable("LocalActiveWeaponData", 0, 0, &REFERENCE_RECV_TABLE(DT_LocalActiveWeaponData)),
+	#ifdef FF
 	RecvPropDataTable("ObserverWeaponData", 0, 0, &REFERENCE_RECV_TABLE(DT_ObserverWeaponData)),
+	#endif
 	RecvPropInt( RECVINFO(m_iViewModelIndex)),
 	RecvPropInt( RECVINFO(m_iWorldModelIndex)),
 	RecvPropInt( RECVINFO(m_iState), 0, &CBaseCombatWeapon::RecvProxy_WeaponState ),
@@ -2918,7 +2939,7 @@ BEGIN_NETWORK_TABLE(CBaseCombatWeapon, DT_BaseCombatWeapon)
 #endif
 END_NETWORK_TABLE()
 
-#ifdef GAME_DLL
+#ifdef FF_DLL
 //-----------------------------------------------------------------------------
 // Purpose: Remove this weapon, now!
 //-----------------------------------------------------------------------------
@@ -2934,7 +2955,8 @@ void CBaseCombatWeapon::ForceRemove(void)
 	RemoveEffects(EF_NODRAW);
 	VPhysicsDestroyObject();
 	SetGroundEntity(NULL);
-	AddEFlags(EFL_NO_WEAPON_PICKUP);
+	if (!this->HasSpawnFlags( SF_WEAPON_NO_PLAYER_PICKUP ))
+		AddSpawnFlags( SF_WEAPON_NO_PLAYER_PICKUP );
 	SetThink(NULL);
 	SetTouch(NULL);
 	SetOwnerEntity(NULL);

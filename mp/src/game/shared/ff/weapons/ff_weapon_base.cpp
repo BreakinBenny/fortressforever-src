@@ -362,14 +362,10 @@ void CFFWeaponBase::Drop( const Vector& vecVelocity )
 	RemoveEffects( EF_NODRAW );
 	FallInit();
 	SetGroundEntity( NULL );
-	AddEFlags( EFL_NO_WEAPON_PICKUP );
+	if( !hl2_episodic.GetBool() )
+		AddSpawnFlags( SF_WEAPON_NO_PLAYER_PICKUP );
 	SetThink( &CFFWeaponBase::DropThink );
 	SetTouch( NULL );
-
-	if( hl2_episodic.GetBool() )
-	{
-		RemoveSpawnFlags( SF_WEAPON_NO_PLAYER_PICKUP );
-	}
 
 	IPhysicsObject *pObj = VPhysicsGetObject();
 	if ( pObj != NULL )

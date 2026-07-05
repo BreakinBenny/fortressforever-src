@@ -1962,12 +1962,12 @@ void CMultiPlayerAnimState::DebugShowEyeYaw( void )
 	AngleVectors( angles, &vecForward, &vecRight, &vecUp );
 
 	// Draw a red triangle on the ground for the eye yaw.
-	
-	
+	if ( debugoverlay )
+	{
 		debugoverlay->AddTriangleOverlay( ( vecPos + vecRight * flBaseSize / 2.0f ), 
 			( vecPos - vecRight * flBaseSize / 2.0f ), 
 			( vecPos + vecForward * flHeight, 255, 0, 0, 255, false, 0.01f );
-	
+	}
 
 #endif
 }
@@ -2048,8 +2048,8 @@ void CMultiPlayerAnimState::DebugShowAnimState( int iStartLine )
 
 	Anim_StateLog( "--------------------------------------------\n\n" );
 
-	
-	
+	if ( debugoverlay )
+	{
 		// Draw a red triangle on the ground for the eye yaw.
 		float flBaseSize = 10;
 		float flHeight = 80;
@@ -2064,7 +2064,7 @@ void CMultiPlayerAnimState::DebugShowAnimState( int iStartLine )
 		angles[YAW] = m_angRender[YAW];
 		AngleVectors( angles, &vForward, &vRight, &vUp );
 		debugoverlay->AddTriangleOverlay( vBasePos+vRight*flBaseSize/2, vBasePos-vRight*flBaseSize/2, vBasePos+vForward*flHeight, 0, 0, 255, 255, false, 0.01 );	
-	
+	}
 }
 
 // Debug!

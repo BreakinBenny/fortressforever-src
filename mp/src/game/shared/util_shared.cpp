@@ -34,10 +34,11 @@
 bool NPC_CheckBrushExclude( CBaseEntity *pEntity, CBaseEntity *pBrush );
 #endif
 
+#ifdef FF
 #include "ff_triggerclip.h"
 #include "ff_gamerules.h"
-
-#ifdef CLIENT_DLL
+#endif
+#ifdef FF_CLIENT_DLL
 #include "c_ff_team.h"
 #include "c_ff_player.h"
 #include "c_te_effect_dispatch.h"
@@ -56,6 +57,7 @@ bool NPC_CheckBrushExclude( CBaseEntity *pEntity, CBaseEntity *pBrush );
 ConVar r_visualizetraces( "r_visualizetraces", "0", FCVAR_CHEAT );
 ConVar developer("developer", "0", 0, "Set developer message level" ); // developer mode
 
+#ifdef FF
 //Adding ConVars to toggle grenades/pipes colliding with the enemy
 //ConVar ffdev_grenade_collidewithenemy("ffdev_grenade_collidewithenemy", "1", FCVAR_FF_FFDEV_REPLICATED, "If set to 0, grenades pass through enemies" );
 #define GRENADE_COLLIDEWITHENEMY true
@@ -63,7 +65,7 @@ ConVar developer("developer", "0", 0, "Set developer message level" ); // develo
 #define SOFTCLIP_ALWAYSCLIPPERCENT 1.25f
 //ConVar ffdev_softclip_asdisguisedteam("ffdev_softclip_asdisguisedteam", "0", FCVAR_FF_FFDEV_REPLICATED, "If set to 1, spies soft clip as though they were on their disguised team");
 #define SOFTCLIP_ASDISGUISEDTEAM false
-
+#endif
 
 float UTIL_VecToYaw( const Vector &vec )
 {
@@ -301,7 +303,7 @@ CTraceFilterSimple::CTraceFilterSimple( const IHandleEntity *passedict, int coll
 //-----------------------------------------------------------------------------
 bool CTraceFilterSimple::ShouldHitEntity( IHandleEntity *pHandleEntity, int contentsMask )
 {
-
+#ifdef FF
 	CBaseEntity* pHandle = EntityFromEntityHandle(pHandleEntity);
 
 	const CBaseEntity* pPassEnt = NULL;
@@ -617,7 +619,30 @@ bool CTraceFilterSimple::ShouldHitEntity( IHandleEntity *pHandleEntity, int cont
 	if ( m_pExtraShouldHitCheckFunction &&
 		(! ( m_pExtraShouldHitCheckFunction( pHandleEntity, contentsMask ) ) ) )
 		return false;
+#else
+	if ( !StandardFilterRules( pHandleEntity, contentsMask ) )
+		return false;
 
+	if ( m_pPassEnt )
+	{
+		if ( !PassServerEntityFilter( pHandleEntity, m_pPassEnt ) )
+		{
+			return false;
+		}
+	}
+
+	// Don't test if the game code tells us we should ignore this collision...
+	CBaseEntity *pEntity = EntityFromEntityHandle( pHandleEntity );
+	if ( !pEntity )
+		return false;
+	if ( !pEntity->ShouldCollide( m_collisionGroup, contentsMask ) )
+		return false;
+	if ( pEntity && !g_pGameRules->ShouldCollide( m_collisionGroup, pEntity->GetCollisionGroup() ) )
+		return false;
+	if ( m_pExtraShouldHitCheckFunction &&
+		(! ( m_pExtraShouldHitCheckFunction( pHandleEntity, contentsMask ) ) ) )
+		return false;
+#endif
 	return true;
 }
 
@@ -1265,7 +1290,7 @@ void UTIL_BloodImpact( const Vector &pos, const Vector &dir, int color, int amou
 
 	DispatchEffect( "bloodimpact", data );
 }
-
+#ifdef FF
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -1284,7 +1309,7 @@ void UTIL_BloodSpray(const Vector& pos, const Vector& dir, int color, int amount
 
 	DispatchEffect("bloodspray", data);
 }
-
+#endif
 bool UTIL_IsSpaceEmpty( CBaseEntity *pMainEnt, const Vector &vMin, const Vector &vMax )
 {
 	Vector vHalfDims = ( vMax - vMin ) * 0.5f;

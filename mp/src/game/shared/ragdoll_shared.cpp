@@ -768,11 +768,11 @@ bool ShouldRemoveThisRagdoll( CBaseAnimating *pRagdoll )
 	{
 		if ( g_debug_ragdoll_removal.GetBool() )
 		{
-			
-			
+			if ( debugoverlay )
+			{
 				debugoverlay->AddBoxOverlay( origin, vMins, vMaxs, QAngle( 0, 0, 0 ), 0, 255, 0, 16, 5 );
 				debugoverlay->AddLineOverlay( origin, origin + Vector( 0, 0, 64 ), 0, 255, 0, true, 5 );
-			
+			}
 		}
 
 		return true;
@@ -781,11 +781,11 @@ bool ShouldRemoveThisRagdoll( CBaseAnimating *pRagdoll )
 	{
 		if ( g_debug_ragdoll_removal.GetBool() )
 		{
-			
-			
+			if ( debugoverlay )
+			{
 				debugoverlay->AddBoxOverlay( origin, vMins, vMaxs, QAngle( 0, 0, 0 ), 0, 0, 255, 16, 5 );
 				debugoverlay->AddLineOverlay( origin, origin + Vector( 0, 0, 64 ), 0, 0, 255, true, 5 );
-			
+			}
 		}
 
 		return true;
@@ -1195,12 +1195,11 @@ void C_BaseAnimating::IgniteRagdoll( C_BaseAnimating *pSource )
 	if ( pChild )
 	{
 		C_EntityFlame *pFireChild = dynamic_cast<C_EntityFlame *>( pChild );
-
-		// --> Mirv: Use anim overlay instead
-		//C_ClientRagdoll *pRagdoll = dynamic_cast< C_ClientRagdoll * > ( this );
+#ifdef FF	// --> Mirv: Use anim overlay instead
 		C_BaseAnimatingOverlay* pRagdoll = dynamic_cast<C_BaseAnimatingOverlay*> (this);
-		// <-- Mirv
-
+#else	// <-- Mirv
+		C_ClientRagdoll *pRagdoll = dynamic_cast< C_ClientRagdoll * > ( this );
+#endif
 		if ( pFireChild )
 		{
 			pRagdoll->SetEffectEntity ( FireEffect( pRagdoll, pFireChild, NULL, NULL, NULL ) );

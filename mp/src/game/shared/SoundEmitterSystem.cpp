@@ -479,12 +479,12 @@ public:
 			params.volume = ep.m_flVolume;
 		}
 
-		// needed for ac rev sound to play at the same time as ac loop shot sound - Jon
+#ifdef FF	// needed for ac rev sound to play at the same time as ac loop shot sound - Jon
 		if (ep.m_nFlags & SND_CHANGE_CHAN)
 		{
 			params.channel = ep.m_nChannel;
 		}
-
+#endif
 #if !defined( CLIENT_DLL )
 		bool bSwallowed = CEnvMicrophone::OnSoundPlayed( 
 			entindex, 
@@ -539,8 +539,11 @@ public:
 			ep.m_pSoundName, params.soundname, entindex );
 
 
-		// Don't caption modulations to the sound
+#ifndef FF	// Don't caption modulations to the sound
+		if ( !( ep.m_nFlags & ( SND_CHANGE_PITCH | SND_CHANGE_VOL ) ) )
+#else
 		if ( !( ep.m_nFlags & ( SND_CHANGE_PITCH | SND_CHANGE_VOL | SND_CHANGE_CHAN ) ) )
+#endif
 		{
 			EmitCloseCaption( filter, entindex, params, ep );
 		}
@@ -881,7 +884,7 @@ public:
 		}
 	}
 
-	// Jon: so we can stop sounds in a specific channel that's different from what the script defines
+#ifdef FF	// Jon: so we can stop sounds in a specific channel that's different from what the script defines
 	void StopSoundInChannelByHandle(int entindex, const char* soundname, HSOUNDSCRIPTHANDLE& handle, const int channel)
 	{
 		if (handle == SOUNDEMITTER_INVALID_HANDLE)
@@ -928,7 +931,7 @@ public:
 
 		StopSoundInChannelByHandle(entindex, soundname, (HSOUNDSCRIPTHANDLE&)soundindex, channel);
 	}
-
+#endif
 
 	void StopSound( int entindex, const char *soundname )
 	{
@@ -1183,11 +1186,10 @@ void CBaseEntity::EmitSoundShared( const char *soundname, float soundtime /*= 0.
 
 	CPASAttenuationFilter filter( this, soundname );
 
-#ifdef GAME_DLL
-	// FF: AfterShock: Don't send to self. This fixes clientside prediction on sounds and means we can just do 1 shared EmitSound(bla)
+#ifdef FF_DLL // FF: AfterShock: Don't send to self. This fixes clientside prediction on sounds and means we can just do 1 shared EmitSound(bla)
 	if (gpGlobals->maxClients > 1)
 	{
-		CBasePlayer* pPlayer = ToBasePlayer(this);
+		CBasePlayer *pPlayer = ToBasePlayer(this);
 		if (pPlayer)
 			filter.RemoveRecipient(pPlayer);
 	}

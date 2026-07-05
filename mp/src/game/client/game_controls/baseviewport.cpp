@@ -247,11 +247,11 @@ void CBaseViewport::CreateDefaultPanels( void )
 	// AddNewPanel( CreatePanelByName( PANEL_NAV_PROGRESS ), "PANEL_NAV_PROGRESS" );
 #endif // !TF_CLIENT_DLL
 
-	// --> Mirv: FF panels
+#ifdef FF // --> Mirv: FF panels
 	AddNewPanel( CreatePanelByName( PANEL_TEAM ), "PANEL_TEAM" );
 	AddNewPanel( CreatePanelByName( PANEL_CLASS ), "PANEL_CLASS" );
 	AddNewPanel( CreatePanelByName( PANEL_MAP ), "PANEL_MAP" );
-	// <--
+#endif	// <--
 	
 #endif // !_XBOX
 }
@@ -308,7 +308,7 @@ IViewPortPanel* CBaseViewport::CreatePanelByName(const char *szPanelName)
 	}
 #endif	// TF_CLIENT_DLL
 
-	// --> Mirv: Pick up new panels
+#ifdef FF // --> Mirv: Pick up new panels
 	else if (Q_strcmp(PANEL_TEAM, szPanelName) == 0)
 	{
 		newpanel = new CTeamMenu(this);
@@ -321,7 +321,7 @@ IViewPortPanel* CBaseViewport::CreatePanelByName(const char *szPanelName)
 	{
 		newpanel = new CMapScreen(this);
 	}
-	// <--
+#endif	// <--
 
 #endif
 

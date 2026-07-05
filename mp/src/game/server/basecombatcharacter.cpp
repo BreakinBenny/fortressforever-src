@@ -53,11 +53,11 @@
 	#include "prop_portal_shared.h"
 	#include "portal_shareddefs.h"
 #endif
-
+#ifdef FF_DLL
 #include "ff_player.h"
 #include "ff_scriptman.h"
 #include "ff_luacontext.h"
-
+#endif
 #undef MINMAX_H
 #include "minmax.h"
 

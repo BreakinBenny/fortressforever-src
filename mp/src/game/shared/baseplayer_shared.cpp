@@ -1408,6 +1408,7 @@ void CBasePlayer::PlayerUse ( void )
 		else if ( (m_afButtonReleased & IN_USE) && (pUseEntity->ObjectCaps() & FCAP_ONOFF_USE) )	// BUGBUG This is an "off" use
 		{
 			pUseEntity->AcceptInput( "Use", this, this, emptyVariant, USE_OFF );
+#ifdef FF
 			bUsed = true;
 		}
 
@@ -1420,14 +1421,15 @@ void CBasePlayer::PlayerUse ( void )
 				pEvent->SetInt("entity", pUseEntity->entindex());
 				gameeventmanager->FireEvent(pEvent, true);
 			}
+#endif
 		}
 	}
 	else if ( m_afButtonPressed & IN_USE )
 	{
-		// haha, very funny
+#ifdef FF // haha, very funny
 		if ( !IsAlive() && m_iHealth <= 0 )
 			return;
-
+#endif
 		PlayUseDenySound();
 	}
 #endif
@@ -1484,7 +1486,7 @@ void CBasePlayer::SmoothViewOnStairs( Vector& eyeOrigin )
 	CBaseEntity *pGroundEntity = GetGroundEntity();
 	float flCurrentPlayerZ = GetLocalOrigin().z;
 	float flCurrentPlayerViewOffsetZ = GetViewOffset().z;
-
+#ifdef FF
 	// --> Mirv:
 	// We're now only smoothing stairs if we've recently stepped up or down
 	// far enough (currently >= 8.0 units). This way the stair smoothing isn't
@@ -1505,7 +1507,7 @@ void CBasePlayer::SmoothViewOnStairs( Vector& eyeOrigin )
 		}
 	}
 	// <-- Mirv
-
+#endif
 	// Smooth out stair step ups
 	// NOTE: Don't want to do this when the ground entity is moving the player
 	if ( ( pGroundEntity != NULL && pGroundEntity->GetMoveType() == MOVETYPE_NONE ) && ( flCurrentPlayerZ != m_flOldPlayerZ ) && smoothstairs.GetBool() &&

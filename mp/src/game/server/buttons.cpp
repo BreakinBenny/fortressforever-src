@@ -13,7 +13,7 @@
 #include "tier1/strtools.h"
 #include "buttons.h"
 #include "eventqueue.h"
-
+#ifdef FF
 // --> Mirv: Temp test for triggers
 #include "ff_scriptman.h"
 //#include "ff_luaobject_wrapper.h"
@@ -22,7 +22,7 @@
 
 #undef MINMAX_H
 #include "minmax.h"
-
+#endif
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -309,6 +309,7 @@ void CBaseButton::InputPressOut( inputdata_t &inputdata )
 //-----------------------------------------------------------------------------
 int CBaseButton::OnTakeDamage( const CTakeDamageInfo &info )
 {
+#ifdef FF
 	CTakeDamageInfo mutableInfo = info;
 
 	// check to see if the trepids allow this button to do what it wants to
@@ -319,7 +320,7 @@ int CBaseButton::OnTakeDamage( const CTakeDamageInfo &info )
 	// lua can cancel the effects of the damage by setting it to 0
 	if (mutableInfo.GetDamage() <= 0.0)
 		return 0;
-
+#endif
 	m_OnDamaged.FireOutput(m_hActivator, this);
 
 	// dvsents2: remove obselete health keyvalue from func_button
@@ -557,7 +558,7 @@ void CBaseButton::ButtonUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 		//
 		if ( HasSpawnFlags(SF_BUTTON_TOGGLE))
 		{
-			// double check that it's allowed to toggle
+#ifdef FF	// double check that it's allowed to toggle
 			//CFFLuaObjectWrapper hAllowed;
 			CFFLuaSC hAllowed(1, pActivator);
 			if (_scriptman.RunPredicates_LUA(this, &hAllowed, "allowed"))
@@ -568,6 +569,7 @@ void CBaseButton::ButtonUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 					return;
 				}
 			}
+#endif
 			if ( m_sNoise != NULL_STRING )
 			{
 				CPASAttenuationFilter filter( this );
@@ -580,15 +582,16 @@ void CBaseButton::ButtonUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 
 				EmitSound( filter, entindex(), ep );
 			}
-
+#ifdef FF
 			_scriptman.RunPredicates_LUA(this, &hAllowed, "onuse");
-
+#endif
 			m_OnPressed.FireOutput(m_hActivator, this);
 			ButtonReturn();
 		}
 	}
 	else
 	{
+#ifdef FF
 		// check with entsys to make sure it is allowed to activate
 		//CFFLuaObjectWrapper hAllowed;
 		CFFLuaSC hAllowed(1, pActivator);
@@ -602,7 +605,7 @@ void CBaseButton::ButtonUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 		}
 
 		_scriptman.RunPredicates_LUA(this, &hAllowed, "onuse");
-
+#endif
 		m_OnPressed.FireOutput(m_hActivator, this);
 		ButtonActivate( );
 	}
@@ -647,7 +650,7 @@ void CBaseButton::ButtonTouch( CBaseEntity *pOther )
 	// Ignore touches by anything but players
 	if ( !pOther->IsPlayer() )
 		return;
-
+#ifdef FF
 	//CFFLuaObjectWrapper hButtonTouch;
 	CFFLuaSC hAllowed(1, pOther);
 	if (_scriptman.RunPredicates_LUA(this, &hAllowed, "allowed"))
@@ -658,7 +661,7 @@ void CBaseButton::ButtonTouch( CBaseEntity *pOther )
 			return;
 		}
 	}
-
+#endif
 	m_hActivator = pOther;
 
 	BUTTON_CODE code = ButtonResponseToTouch();
@@ -672,9 +675,9 @@ void CBaseButton::ButtonTouch( CBaseEntity *pOther )
 		PlayLockSounds(this, &m_ls, TRUE, TRUE);
 		return;
 	}
-
+#ifdef FF
 	_scriptman.RunPredicates_LUA(this, &hAllowed, "ontouch");
-
+#endif
 	// Temporarily disable the touch function, until movement is finished.
 	SetTouch( NULL );
 

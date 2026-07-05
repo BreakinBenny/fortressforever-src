@@ -409,10 +409,6 @@ protected:
 	bool		 CheckMaxRounds( bool bAllowEnd = true );
 
 	void		 CheckReadyRestart( void );
-#if defined(TF_CLIENT_DLL) || defined(TF_DLL)
-	bool		 AreLobbyPlayersOnTeamReady( int iTeam );
-	bool		 AreLobbyPlayersConnected( void );
-#endif
 
 	virtual bool CanChangelevelBecauseOfTimeLimit( void ) { return true; }
 	virtual bool CanGoToStalemate( void ) { return true; }

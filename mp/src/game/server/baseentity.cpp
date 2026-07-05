@@ -62,7 +62,7 @@
 #include "env_debughistory.h"
 #include "tier1/utlstring.h"
 #include "utlhashtable.h"
-
+#ifdef FF
 #include "SpriteTrail.h"
 #include "triggers.h"
 
@@ -78,7 +78,7 @@ extern "C"
 }
 
 #include "LuaBridge/LuaBridge.h"
-
+#endif
 #if defined( TF_DLL )
 #include "tf_gamerules.h"
 #endif
@@ -2644,8 +2644,9 @@ void CBaseEntity::PhysicsRelinkChildren( float dt )
 
 void CBaseEntity::PhysicsTouchTriggers( const Vector *pPrevAbsOrigin )
 {
+#ifdef FF
 	CollisionProp()->SetSurroundingBoundsType(USE_OBB_COLLISION_BOUNDS);	// |-- Mirv: Use correct bbox for physics
-
+#endif
 	edict_t *pEdict = edict();
 	if ( pEdict && !IsWorld() )
 	{
@@ -2675,7 +2676,7 @@ void CBaseEntity::PhysicsTouchTriggers( const Vector *pPrevAbsOrigin )
 			engine->TriggerMoved( pEdict, sm_bAccurateTriggerBboxChecks );
 		}
 	}
-
+#ifdef FF
 	//Vector(-16, -16, -18 ),         // m_vDuckHullMin
 	//Vector( 16,  16,  18 ),         // m_vDuckHullMax
 	//Vector( 0, 0, 12 ),            // m_vDuckView         
@@ -2690,7 +2691,7 @@ void CBaseEntity::PhysicsTouchTriggers( const Vector *pPrevAbsOrigin )
 		CollisionProp()->SetSurroundingBoundsType(USE_SPECIFIED_BOUNDS, &absMin, &absMax);
 	}
 	// <-- Mirv
-
+#endif
 }
 
 void CBaseEntity::VPhysicsShadowCollision( int index, gamevcollisionevent_t *pEvent )
@@ -3572,11 +3573,11 @@ int	CBaseEntity::SetTransmitState( int nFlag)
 
 int CBaseEntity::UpdateTransmitState()
 {
-	// --> FF
+#ifdef FF // --> FF
 	// always transmit if you're an objective
 	if (m_ObjectivePlayerRefs.Count() > 0)
 		return SetTransmitState(FL_EDICT_ALWAYS);
-	// <-- FF
+#endif	// <-- FF
 	// 
 	// If you get this assert, you should be calling DispatchUpdateTransmitState
 	// instead of UpdateTransmitState.
@@ -4044,6 +4045,7 @@ bool CBaseEntity::AcceptInput( const char *szInputName, CBaseEntity *pActivator,
 					return true;
 				}
 			}
+#ifdef FF
 			else if (dmap->dataDesc[i].flags & FTYPEDESC_OUTPUT)
 			{
 				// pass the event to script
@@ -4052,7 +4054,7 @@ bool CBaseEntity::AcceptInput( const char *szInputName, CBaseEntity *pActivator,
 				sc.Push(pCaller);
 				sc.CallFunction(this, szInputName);*/
 			}
-
+#endif
 		}
 	}
 
@@ -7076,7 +7078,7 @@ QAngle CBaseEntity::GetStepAngles( void ) const
 {
 	return GetLocalAngles();
 }
-
+#ifdef FF
 Vector CBaseEntity::GetAbsFacing() const
 {
 	QAngle angles = GetAbsAngles();
@@ -7084,7 +7086,7 @@ Vector CBaseEntity::GetAbsFacing() const
 	AngleVectors(angles, &fwd);
 	return fwd;
 }
-
+#endif
 //-----------------------------------------------------------------------------
 // Purpose: For each client who appears to be a valid recipient, checks the client has disabled CC and if so, removes them from 
 //  the recipient list.
@@ -7593,7 +7595,7 @@ void CC_Ent_Orient( const CCommand& args )
 		pEnt->SetAbsAngles( vecEntAngles );
 	}
 }
-
+#ifdef FF
 //------------------------------------------------------------------------------
 // Purpose: Start a trail which the object leaves behind as it moves, e.g. for flag trails
 //------------------------------------------------------------------------------
@@ -7647,9 +7649,9 @@ void CBaseEntity::StopTrail()
 	m_pSpriteTrail->StopFollowingEntity();
 	m_pSpriteTrail->FadeAndDie(1.5f); // Can't take longer unfortuntely
 }
-
+#endif
 static ConCommand ent_orient("ent_orient", CC_Ent_Orient, "Orient the specified entity to match the player's angles. By default, only orients target entity's YAW. Use the 'allangles' option to orient on all axis.\n\tFormat: ent_orient <entity name> <optional: allangles>", FCVAR_CHEAT);
-
+#ifdef FF
 luabridge::LuaRef CBaseEntity::GetTouchingTriggers( void )
 {
 	luabridge::LuaRef retObj = luabridge::newTable( _scriptman.GetLuaState() );
@@ -7665,3 +7667,4 @@ luabridge::LuaRef CBaseEntity::GetTouchingTriggers( void )
 
 	return retObj;
 }
+#endif
