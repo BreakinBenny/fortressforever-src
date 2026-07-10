@@ -31,7 +31,9 @@ class IResponseSystem;
 class IEntitySaveUtils;
 class CRecipientFilter;
 class CStudioHdr;
+#ifdef FF
 class CSpriteTrail;
+#endif
 
 // Matching the high level concept is significantly better than other criteria
 // FIXME:  Could do this in the script file by making it required and bumping up weighting there instead...
@@ -194,15 +196,13 @@ enum Class_T
 	NUM_AI_CLASSES
 };
 
-#else
-
+#elif defined( FF_DLL )	// BEG: Added by Mulchman
 enum Class_T
 {
 	CLASS_NONE = 0,
 	CLASS_PLAYER,
 	CLASS_PLAYER_ALLY,
 
-#ifdef FF // BEG: Added by Mulchman
 	CLASS_DISPENSER,
 	CLASS_SENTRYGUN,
 	CLASS_DETPACK,
@@ -239,7 +239,17 @@ enum Class_T
 	CLASS_TRIGGERSCRIPT,
 	CLASS_TRIGGER_CLIP,
 	CLASS_TEAMSPAWN,
-#endif
+	NUM_AI_CLASSES
+};
+
+#else
+
+enum Class_T
+{
+	CLASS_NONE = 0,
+	CLASS_PLAYER,
+	CLASS_PLAYER_ALLY,
+
 	NUM_AI_CLASSES
 };
 
@@ -434,8 +444,8 @@ public:
 	DECLARE_SERVERCLASS();
 	// data description
 	DECLARE_DATADESC();
-
-	void PrintDeleteInfo();
+	
+	
 	
 	// memory handling
     void *operator new( size_t stAllocateBlock );
@@ -771,9 +781,9 @@ public:
 	virtual int	Save( ISave &save );
 	virtual int	Restore( IRestore &restore );
 	virtual bool ShouldSavePhysics();
-
+#ifdef FF
 	virtual int TakeEmp() { return 0; }	// |-- Mirv: For EMPs
-
+#endif
 	// handler to reset stuff before you are restored
 	// NOTE: Always chain to base class when implementing this!
 	virtual void OnSave( IEntitySaveUtils *pSaveUtils );
@@ -960,7 +970,11 @@ public:
 
 // Classify - returns the type of group (i.e, "houndeye", or "human military" so that NPCs with different classnames
 // still realize that they are teammates. (overridden for NPCs that form groups)
+#ifndef FF
+	virtual Class_T Classify ( void );
+#else
 	virtual Class_T Classify ( void ) { return CLASS_NONE; }
+#endif
 	virtual void	DeathNotice ( CBaseEntity *pVictim ) {}// NPC maker children use this to tell the NPC maker that they have died.
 	virtual bool	ShouldAttractAutoAim( CBaseEntity *pAimingEnt ) { return ((GetFlags() & FL_AIMTARGET) != 0); }
 	virtual float	GetAutoAimRadius();
@@ -1007,7 +1021,9 @@ public:
 	CAI_BaseNPC				*MyNPCPointer( void ); 
 	virtual CBaseCombatCharacter *MyCombatCharacterPointer( void ) { return NULL; }
 	virtual INextBot		*MyNextBotPointer( void ) { return NULL; }
-	virtual CBasePlayer*	MyCharacterPointer(void) { return NULL; }
+#ifdef FF
+	virtual CBasePlayer		*MyCharacterPointer(void) { return NULL; }
+#endif
 	virtual float			GetDelay( void ) { return 0; }
 	virtual bool			IsMoving( void );
 	bool					IsWorld() { return entindex() == 0; }
@@ -1018,9 +1034,11 @@ public:
 	void			AddPoints( int score, bool bAllowNegativeScore );
 	void			AddPointsToTeam( int score, bool bAllowNegativeScore );
 	void			RemoveAllDecals( void );
+#ifdef FF
 	void	        StartTrail(int teamId);
 	void	        StartTrail(int teamId, float startWidth, float endWidth, float lifetime);
 	void	        StopTrail(void);
+#endif
 
 	virtual bool	OnControls( CBaseEntity *pControls ) { return false; }
 	virtual bool	HasTarget( string_t targetname );
@@ -1031,8 +1049,11 @@ public:
 	virtual bool	IsBaseTrain( void ) const { return false; }
 	bool			IsBSPModel() const;
 	bool			IsCombatCharacter() { return MyCombatCharacterPointer() == NULL ? false : true; }
-	//bool			IsInWorld( void ) const;
+#ifndef FF
+	bool			IsInWorld( void ) const;
+#else
 	virtual bool	IsInWorld( void ) const;
+#endif
 	virtual bool	IsCombatItem( void ) const { return false; }
 
 	virtual bool	IsBaseCombatWeapon( void ) const { return false; }
@@ -1243,13 +1264,16 @@ public:
 	CNetworkVarForDerived( int, m_iHealth );
 
 	CNetworkVarForDerived( char, m_lifeState );
-	//CNetworkVarForDerived( char , m_takedamage );
+#ifndef FF
+	CNetworkVarForDerived( char , m_takedamage );
+#else
 	CNetworkVar(unsigned char, m_takedamage);
 
 	// --> Added by Mulch for testing
 	CNetworkVarForDerived(int, m_iArmor);
 	CNetworkVarForDerived(int, m_iMaxArmor);
 	// <-- Added by Mulch for testing
+#endif
 
 	// Damage filtering
 	string_t	m_iszDamageFilterName;	// The name of the entity to use as our damage filter.
@@ -1425,9 +1449,9 @@ public:
 	void					ToggleFlag( int flagToToggle );
 	int						GetFlags( void ) const;
 	void					ClearFlags( void );
-
+#ifdef FF
 	bool					IsOnFire(void) const { return (GetFlags() & FL_ONFIRE) ? true : false; }
-
+#endif
 	// Sets the local position from a transform
 	void					SetLocalTransform( const matrix3x4_t &localTransform );
 
@@ -1438,7 +1462,9 @@ public:
 	void					EmitSound( const char *soundname, HSOUNDSCRIPTHANDLE& handle, float soundtime = 0.0f, float *duration = NULL );  // Override for doing the general case of CPASAttenuationFilter filter( this ), and EmitSound( filter, entindex(), etc. );
 	void					StopSound( const char *soundname );
 	void					StopSound( const char *soundname, HSOUNDSCRIPTHANDLE& handle );
+#ifdef FF
 	void					StopSoundInChannel(const char* soundname, HSOUNDSCRIPTHANDLE& handle, const int channel); // Jon: for AC stuff
+#endif
 	void					GenderExpandString( char const *in, char *out, int maxlen );
 
 	virtual void ModifyEmitSoundParams( EmitSound_t &params );
@@ -1451,7 +1477,9 @@ public:
 	static void EmitSound( IRecipientFilter& filter, int iEntIndex, const char *soundname, const Vector *pOrigin = NULL, float soundtime = 0.0f, float *duration = NULL );
 	static void EmitSound( IRecipientFilter& filter, int iEntIndex, const char *soundname, HSOUNDSCRIPTHANDLE& handle, const Vector *pOrigin = NULL, float soundtime = 0.0f, float *duration = NULL );
 	static void StopSound( int iEntIndex, const char *soundname );
+#ifdef FF
 	static void StopSoundInChannel(int iEntIndex, const char* soundname, const int channel); // Jon: for AC stuff
+#endif
 	static soundlevel_t LookupSoundLevel( const char *soundname );
 	static soundlevel_t LookupSoundLevel( const char *soundname, HSOUNDSCRIPTHANDLE& handle );
 
@@ -1648,7 +1676,11 @@ public:
 	// Add a discontinuity to a step
 	bool					AddStepDiscontinuity( float flTime, const Vector &vecOrigin, const QAngle &vecAngles );
 	int						GetFirstThinkTick();	// get first tick thinking on any context
+#ifndef FF
+private:
+#else
 protected:	// |-- Mirv: Changed from private
+#endif
 	// origin and angles to use in step calculations
 	virtual	Vector			GetStepOrigin( void ) const;
 	virtual	QAngle			GetStepAngles( void ) const;

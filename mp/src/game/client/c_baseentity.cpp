@@ -1253,7 +1253,6 @@ void C_BaseEntity::Release()
 
 	UpdateOnRemove();
 
-	PrintDeleteInfo();
 	delete this;
 }
 
@@ -3206,11 +3205,11 @@ void C_BaseEntity::Simulate()
 void C_BaseEntity::InterpolateServerEntities()
 {
 	VPROF_BUDGET( "C_BaseEntity::InterpolateServerEntities", VPROF_BUDGETGROUP_INTERPOLATION );
-
-	// fuck off!!!!
-	// s_bInterpolate = cl_interpolate.GetBool();
+#ifndef FF // Enforce interpolation in FF!!!!
+	s_bInterpolate = cl_interpolate.GetBool();
+#else
 	s_bInterpolate = true;
-
+#endif
 	// Don't interpolate during timedemo playback
 	if ( engine->IsPlayingTimeDemo() || engine->IsPaused() )
 	{										 
@@ -4933,8 +4932,9 @@ C_BaseEntity *C_BaseEntity::CreatePredictedEntityByName( const char *classname, 
 				return ent;
 			}
 		}
-		// Mirv: For predicted rockets...
-		//return NULL;
+#ifndef FF	// Mirv: For predicted rockets...
+		return NULL;
+#endif
 	}
 
 	// Try to create it
@@ -5968,8 +5968,11 @@ float C_BaseEntity::GetInterpolationAmount( int flags )
 	const bool bPlayingNonLocallyRecordedDemo = bPlayingDemo && !engine->IsPlayingDemoALocallyRecordedDemo();
 	if ( bPlayingMultiplayer || bPlayingNonLocallyRecordedDemo )
 	{
-		//return AdjustInterpolationAmount( this, TICKS_TO_TIME( TIME_TO_TICKS( GetClientInterpAmount() ) + serverTickMultiple ) );
+#ifndef FF
+		return AdjustInterpolationAmount( this, TICKS_TO_TIME( TIME_TO_TICKS( GetClientInterpAmount() ) + serverTickMultiple ) );
+#else
 		return AdjustInterpolationAmount(this, TICKS_TO_TIME(TIME_TO_TICKS(flInterp) + serverTickMultiple));	// |-- Mirv: Use dynamic interp
+#endif
 	}
 
 	int expandedServerTickMultiple = serverTickMultiple;
@@ -5991,9 +5994,11 @@ float C_BaseEntity::GetInterpolationAmount( int flags )
 	{
 		return TICK_INTERVAL * expandedServerTickMultiple;
 	}
-
-	//return AdjustInterpolationAmount( this, TICKS_TO_TIME( TIME_TO_TICKS( GetClientInterpAmount() ) + serverTickMultiple ) );
+#ifndef FF
+	return AdjustInterpolationAmount( this, TICKS_TO_TIME( TIME_TO_TICKS( GetClientInterpAmount() ) + serverTickMultiple ) );
+#else
 	return AdjustInterpolationAmount(this, TICK_INTERVAL * (TIME_TO_TICKS(flInterp) + serverTickMultiple));	// |-- Mirv: Use dynamic interp
+#endif
 }
 
 

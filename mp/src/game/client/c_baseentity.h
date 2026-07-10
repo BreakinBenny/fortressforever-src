@@ -69,7 +69,7 @@ typedef unsigned int			AimEntsListHandle_t;
 extern void RecvProxy_IntToColor32( const CRecvProxyData *pData, void *pStruct, void *pOut );
 extern void RecvProxy_LocalVelocity( const CRecvProxyData *pData, void *pStruct, void *pOut );
 
-// BEG: Added by Mulchman
+#ifdef FF // BEG: Added by Mulchman
 enum Class_T
 {
 	CLASS_NONE = 0,
@@ -113,16 +113,20 @@ enum Class_T
 
 	NUM_AI_CLASSES
 };
-// END: Added by Mulchman
+#endif // END: Added by Mulchman
 
 enum CollideType_t
 {
 	ENTITY_SHOULD_NOT_COLLIDE = 0,
 	ENTITY_SHOULD_COLLIDE,
+#ifndef FF
+	ENTITY_SHOULD_RESPOND
+#else
 	ENTITY_SHOULD_RESPOND,
 
 	// HACKHACK: Fix to allow laser beam to shine off ragdolls
 	ENTITY_SHOULD_COLLIDE_RESPOND
+#endif
 };
 
 class VarMapEntry_t
@@ -234,13 +238,11 @@ public:
 	DECLARE_CLIENTCLASS();
 	DECLARE_PREDICTABLE();
 
-	void PrintDeleteInfo();
-
 									C_BaseEntity();
 	virtual							~C_BaseEntity();
-
+#ifdef FF
 	virtual Class_T					Classify(void) { return CLASS_NONE; }
-
+#endif
 	static C_BaseEntity				*CreatePredictedEntityByName( const char *classname, const char *module, int line, bool persist = false );
 	
 	// FireBullets uses shared code for prediction.
@@ -377,11 +379,11 @@ public:
 
 	C_BaseEntity					*GetEffectEntity( void ) const;
 	void							SetEffectEntity( C_BaseEntity *pEffectEnt );
-
+#ifdef FF
 	// specifies if this entity can collide with its owner entity
 	virtual bool					CanClipOwnerEntity() const { return false; }
 	virtual bool					CanClipPlayer() const { return true; }
-
+#endif
 	// This function returns a value that scales all damage done by this entity.
 	// Use CDamageModifier to hook in damage modifiers on a guy.
 	virtual float					GetAttackDamageScale( void );
@@ -648,7 +650,9 @@ public:
 	void	EmitSound( const char *soundname, HSOUNDSCRIPTHANDLE& handle, float soundtime = 0.0f, float *duration = NULL );  // Override for doing the general case of CPASAttenuationFilter( this ), and EmitSound( filter, entindex(), etc. );
 	void	StopSound( const char *soundname );
 	void	StopSound( const char *soundname, HSOUNDSCRIPTHANDLE& handle );
-	void	StopSoundInChannel(const char* soundname, HSOUNDSCRIPTHANDLE& handle, const int channel); // Jon: for AC stuff
+#ifdef FF
+	void	StopSoundInChannel(const char *soundname, HSOUNDSCRIPTHANDLE& handle, const int channel); // Jon: for AC stuff
+#endif
 	void	GenderExpandString( char const *in, char *out, int maxlen );
 
 	static float GetSoundDuration( const char *soundname, char const *actormodel );
@@ -659,7 +663,9 @@ public:
 	static void EmitSound( IRecipientFilter& filter, int iEntIndex, const char *soundname, const Vector *pOrigin = NULL, float soundtime = 0.0f, float *duration = NULL );
 	static void EmitSound( IRecipientFilter& filter, int iEntIndex, const char *soundname, HSOUNDSCRIPTHANDLE& handle, const Vector *pOrigin = NULL, float soundtime = 0.0f, float *duration = NULL );
 	static void StopSound( int iEntIndex, const char *soundname );
-	static void StopSoundInChannel(int iEntIndex, const char* soundname, const int channel); // Jon: for AC stuff
+#ifdef FF
+	static void StopSoundInChannel(int iEntIndex, const char *soundname, const int channel); // Jon: for AC stuff
+#endif
 	static soundlevel_t LookupSoundLevel( const char *soundname );
 	static soundlevel_t LookupSoundLevel( const char *soundname, HSOUNDSCRIPTHANDLE& handle );
 
@@ -1398,18 +1404,20 @@ public:
 #ifdef TF_CLIENT_DLL
 	int								m_nModelIndexOverrides[MAX_VISION_MODES];
 #endif
-
-	//char							m_takedamage;
+#ifndef FF
+	char							m_takedamage;
+#else
 	unsigned char					m_takedamage;
+#endif
 	char							m_lifeState;
 
 	int								m_iHealth;
 
-	// BEG: Added by Mulchman
+#ifdef FF // BEG: Added by Mulchman
 	int								m_iMaxHealth;
 	int								m_iArmor;
 	int								m_iMaxArmor;
-	// END: Added by Mulchman
+#endif	// END: Added by Mulchman
 
 	// was pev->speed
 	float							m_flSpeed;

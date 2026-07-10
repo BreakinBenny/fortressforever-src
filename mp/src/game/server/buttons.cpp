@@ -333,9 +333,11 @@ int CBaseButton::OnTakeDamage( const CTakeDamageInfo &info )
 
 	if ( code == BUTTON_NOTHING )
 		return 0;
-
+#ifndef FF
+	m_hActivator = info.GetAttacker();
+#else
 	m_hActivator = /*info.GetAttacker();*/ mutableInfo.GetAttacker();
-
+#endif
 	// dvsents2: why would activator be NULL here?
 	if ( m_hActivator == NULL )
 		return 0;

@@ -9,9 +9,9 @@
 #ifdef _WIN32
 #pragma once
 #endif
-
+#ifdef FF
 #include "locksounds.h"
-
+#endif
 class CBaseButton : public CBaseToggle
 {
 public:
@@ -49,7 +49,14 @@ protected:
 
 	virtual void Lock();
 	virtual void Unlock();
-
+#ifndef FF
+	// Input handlers
+	void InputLock( inputdata_t &inputdata );
+	void InputUnlock( inputdata_t &inputdata );
+	void InputPress( inputdata_t &inputdata );
+	void InputPressIn( inputdata_t &inputdata );
+	void InputPressOut( inputdata_t &inputdata );
+#endif
 	virtual int OnTakeDamage( const CTakeDamageInfo &info );
 	
 	enum BUTTON_CODE { BUTTON_NOTHING, BUTTON_ACTIVATE, BUTTON_RETURN, BUTTON_PRESS };

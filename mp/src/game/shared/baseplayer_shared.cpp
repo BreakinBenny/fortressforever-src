@@ -514,8 +514,8 @@ void CBasePlayer::UpdateStepSound( surfacedata_t *psurface, const Vector &vecOri
 	float velrun;
 	float velwalk;
 	int	fLadder;
-
-	/*if ( m_flStepSoundTime > 0 )
+#ifndef FF
+	if ( m_flStepSoundTime > 0 )
 	{
 		m_flStepSoundTime -= 1000.0f * gpGlobals->frametime;
 		if ( m_flStepSoundTime < 0 )
@@ -525,13 +525,13 @@ void CBasePlayer::UpdateStepSound( surfacedata_t *psurface, const Vector &vecOri
 	}
 
 	if ( m_flStepSoundTime > 0 )
-		return;*/
-
+		return;
+#else
 	// --> Mirv: Replaced to fix footsteps
 	if (m_flStepSoundTime > gpGlobals->curtime)
 		return;
 	// <-- Mirv
-
+#endif
 	if ( GetFlags() & (FL_FROZEN|FL_ATCONTROLS))
 		return;
 
@@ -661,14 +661,14 @@ void CBasePlayer::UpdateStepSound( surfacedata_t *psurface, const Vector &vecOri
 		fvol *= 0.65;
 	}
 
-	// --> Mirv: Redone sound stuff
+#ifdef FF	// --> Mirv: Redone sound stuff
 
 	// If we are walking or ducking, silence
 	if (GetFlags() & (FL_DUCKING) || m_nButtons & IN_SPEED)
 		return;
 	else
 		fvol = 1.0f;
-
+#endif
 	PlayStepSound( feet, psurface, fvol, false );
 }
 
@@ -709,9 +709,12 @@ void CBasePlayer::PlayStepSound( Vector &vecOrigin, surfacedata_t *psurface, flo
 	}
 	else
 	{
+#ifndef FF
+		const char *pSoundName = MoveHelper()->GetSurfaceProps()->GetString( stepSoundName );
+#else
 		IPhysicsSurfaceProps *physprops = MoveHelper()->GetSurfaceProps();
 		const char *pSoundName = physprops->GetString( stepSoundName );
-
+#endif
 		// Give child classes an opportunity to override.
 		pSoundName = GetOverrideStepSound( pSoundName );
 
@@ -791,8 +794,13 @@ void CBasePlayer::GetStepSoundVelocities( float *velwalk, float *velrun )
 	}
 	else
 	{
+#ifndef FF
+		*velwalk = 90;
+		*velrun = 220;
+#else
 		*velwalk = 120;
 		*velrun = 210;
+#endif
 	}
 }
 
@@ -804,7 +812,18 @@ void CBasePlayer::SetStepSoundTime( stepsoundtimes_t iStepSoundTime, bool bWalki
 	switch ( iStepSoundTime )
 	{
 	case STEPSOUNDTIME_NORMAL:
+#ifndef FF
 	case STEPSOUNDTIME_WATER_FOOT:
+		m_flStepSoundTime = bWalking ? 400 : 300;
+		break;
+
+	case STEPSOUNDTIME_ON_LADDER:
+		m_flStepSoundTime = 350;
+		break;
+
+	case STEPSOUNDTIME_WATER_KNEE:
+		m_flStepSoundTime = 600;
+#else
 		m_flStepSoundTime = bWalking ? /*400 : 300;*/ gpGlobals->curtime + 0.400f : gpGlobals->curtime + 0.300f;	// |-- Mirv: Added gpGlobals->curtime
 		break;
 
@@ -814,6 +833,7 @@ void CBasePlayer::SetStepSoundTime( stepsoundtimes_t iStepSoundTime, bool bWalki
 
 	case STEPSOUNDTIME_WATER_KNEE:
 		m_flStepSoundTime = /*600;*/ gpGlobals->curtime + 0.600f;	// |-- Mirv: Added gpGlobals->curtime
+#endif
 		break;
 
 	default:
@@ -824,9 +844,13 @@ void CBasePlayer::SetStepSoundTime( stepsoundtimes_t iStepSoundTime, bool bWalki
 	// UNDONE: need defined numbers for run, walk, crouch, crouch run velocities!!!!	
 	if ( ( GetFlags() & FL_DUCKING) || ( GetMoveType() == MOVETYPE_LADDER ) )
 	{
+#ifndef FF
+		m_flStepSoundTime += 100;
+#else
 		m_flStepSoundTime += 0.001f * 100; // slower step time if ducking
 	} else {
 		m_flStepSoundTime += 0.001f;
+#endif
 	}
 }
 
@@ -1381,9 +1405,9 @@ void CBasePlayer::PlayerUse ( void )
 	{
 
 		//!!!UNDONE: traceline here to prevent +USEing buttons through walls			
-
+#ifdef FF
 		bool bUsed = false;
-
+#endif
 		int caps = pUseEntity->ObjectCaps();
 		variant_t emptyVariant;
 		if ( ( (m_nButtons & IN_USE) && (caps & FCAP_CONTINUOUS_USE) ) || ( (m_afButtonPressed & IN_USE) && (caps & (FCAP_IMPULSE_USE|FCAP_ONOFF_USE)) ) )
@@ -1396,12 +1420,16 @@ void CBasePlayer::PlayerUse ( void )
 			if ( pUseEntity->ObjectCaps() & FCAP_ONOFF_USE )
 			{
 				pUseEntity->AcceptInput( "Use", this, this, emptyVariant, USE_ON );
+#ifdef FF
 				bUsed = true;
+#endif
 			}
 			else
 			{
 				pUseEntity->AcceptInput( "Use", this, this, emptyVariant, USE_TOGGLE );
+#ifdef FF
 				bUsed = true;
+#endif
 			}
 		}
 		// UNDONE: Send different USE codes for ON/OFF.  Cache last ONOFF_USE object to send 'off' if you turn away

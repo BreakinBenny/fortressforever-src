@@ -52,10 +52,10 @@ short		g_sModelIndexBloodSpray;	// holds the sprite index for splattered blood
 
 ConVar weapon_showproficiency( "weapon_showproficiency", "0" );
 extern ConVar ai_debug_shoot_positions;
-
-extern void PrecacheFileGrenadeInfoDatabase(IFileSystem* filesystem, const unsigned char* pICEKey);
-extern void PrecacheFilePlayerClassInfoDatabase(IFileSystem* filesystem, const unsigned char* pICEKey);
-
+#ifdef FF
+extern void PrecacheFileGrenadeInfoDatabase(IFileSystem *filesystem, const unsigned char *pICEKey);
+extern void PrecacheFilePlayerClassInfoDatabase(IFileSystem *filesystem, const unsigned char *pICEKey);
+#endif
 //-----------------------------------------------------------------------------
 // Purpose: Precache global weapon sounds
 //-----------------------------------------------------------------------------
@@ -73,11 +73,10 @@ void W_Precache(void)
 #endif // HL1_DLL
 
 #ifndef TF_DLL
-
-	// --> Mirv: Add some more here
+#ifdef FF	// --> Mirv: Add some more here
 	PrecacheFileGrenadeInfoDatabase(filesystem, g_pGameRules->GetEncryptionKey());
 	PrecacheFilePlayerClassInfoDatabase(filesystem, g_pGameRules->GetEncryptionKey());
-	// <--
+#endif	// <--
 
 	g_sModelIndexFireball = CBaseEntity::PrecacheModel ("sprites/zerogxplode.vmt");// fireball
 
@@ -103,14 +102,12 @@ void W_Precache(void)
 //-----------------------------------------------------------------------------
 int CBaseCombatWeapon::UpdateTransmitState( void)
 {
-	// --> FF
-#ifdef GAME_DLL
+#ifdef FF_DLL	// --> FF
 	// always transmit if you're an objective
 	if (m_ObjectivePlayerRefs.Count() > 0)
 		return SetTransmitState(FL_EDICT_ALWAYS);
-#endif // GAME_DLL
-	// <-- FF
-	// 
+#endif // <-- FF_DLL
+
 	// If the weapon is being carried by a CBaseCombatCharacter, let the combat character do the logic
 	// about whether or not to transmit it.
 	if ( GetOwner() )
@@ -131,21 +128,21 @@ void CBaseCombatWeapon::Operator_FrameUpdate( CBaseCombatCharacter *pOperator )
 
 	if ( IsSequenceFinished() )
 	{
-		// --> Mirv: Removed for world model fix
+#ifndef FF	// --> Mirv: Removed for world model fix
 
 		// Don't allow this to happen. It won't affect the viewmodel loops because
 		// they are done separately. If something comes up later with w_ model loops,
 		// reset to the current sequence and not the new SelectWeightedSequence
-		//if ( SequenceLoops() )
-		//{
-		//	// animation does loop, which means we're playing subtle idle. Might need to fidget.
-		//	int iSequence = SelectWeightedSequence( GetActivity() );
-		//	if ( iSequence != ACTIVITY_NOT_AVAILABLE )
-		//	{
-		//		ResetSequence( iSequence );	// Set to new anim (if it's there)
-		//	}
-		//}
-		// <-- Mirv
+		if ( SequenceLoops() )
+		{
+			// animation does loop, which means we're playing subtle idle. Might need to fidget.
+			int iSequence = SelectWeightedSequence( GetActivity() );
+			if ( iSequence != ACTIVITY_NOT_AVAILABLE )
+			{
+				ResetSequence( iSequence );	// Set to new anim (if it's there)
+			}
+		}
+#endif	// <-- Mirv
 #if 0
 		else
 		{
