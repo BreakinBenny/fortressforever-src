@@ -91,8 +91,9 @@ private:
 	void	ComputeScreenPosition( Vector *pScreenPos );
 	void	ConvertSkybox();
 	void	UpdateBoundingBox( void );
+#ifdef FF
 	bool	IsEnabledByClient();
-
+#endif
 	TrailPoint_t	m_vecSteps[MAX_SPRITE_TRAIL_POINTS];
 	int	m_nFirstStep;
 	int m_nStepCount;

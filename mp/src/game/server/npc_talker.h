@@ -28,7 +28,9 @@
 #endif
 
 // the include <set> monkey's with the MAX() define, unbreak it
+#ifdef FF
 #undef MINMAX_H
+#endif
 #include "minmax.h"
 
 #include "ai_playerally.h"

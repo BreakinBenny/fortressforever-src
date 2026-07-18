@@ -71,8 +71,9 @@ CNavMesh::CNavMesh( void )
 //	ListenForGameEvent( "round_start_pre_entity" );
 	ListenForGameEvent( "break_prop" );
 	ListenForGameEvent( "break_breakable" );
-	//ListenForGameEvent( "teamplay_round_start" );
-		
+#ifndef FF
+	ListenForGameEvent( "teamplay_round_start" );
+#endif		
 	Reset();
 }
 

@@ -46,8 +46,8 @@ public:
 
 			CHandle();
 			CHandle( int iEntry, int iSerialNumber );
-			CHandle( const CBaseHandle &handle );
-			CHandle( T *pVal );
+	/*implicit*/ CHandle( T *pVal );
+	/*implicit*/ CHandle( const CBaseHandle &handle );
 
 	
 	
@@ -63,8 +63,8 @@ public:
 	T*		Get() const;
 	void	Set( const T* pVal );
 
-			operator T*();
-			operator T*() const;
+	/*implicit*/ operator T*();
+	/*implicit*/ operator T*() const;
 
 	bool	operator !() const;
 	bool	operator==( T *val ) const;
@@ -90,13 +90,11 @@ CHandle<T>::CHandle( int iEntry, int iSerialNumber )
 	Init( iEntry, iSerialNumber );
 }
 
-
 template<class T>
 CHandle<T>::CHandle( const CBaseHandle &handle )
 	: CBaseHandle( handle )
 {
 }
-
 
 template<class T>
 CHandle<T>::CHandle( T *pObj )

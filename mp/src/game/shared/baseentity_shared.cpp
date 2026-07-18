@@ -800,13 +800,11 @@ int CBaseEntity::RegisterThinkContext( const char *szContext )
 //-----------------------------------------------------------------------------
 BASEPTR	CBaseEntity::ThinkSet( BASEPTR func, float thinkTime, const char *szContext )
 {
-#if !defined( CLIENT_DLL )
-#ifdef _DEBUG
+#if !defined( CLIENT_DLL ) && defined( _DEBUG )
 #ifdef GNUC
 	COMPILE_TIME_ASSERT( sizeof(func) == 8 );
 #else
 	COMPILE_TIME_ASSERT( sizeof(func) == 4 );
-#endif
 #endif
 #endif
 
@@ -1705,11 +1703,14 @@ void CBaseEntity::FireBullets( const FireBulletsInfo_t &info )
 	Vector vecEnd;
 	
 	// Skip multiple entities when tracing
-	//CBulletsTraceFilter traceFilter( COLLISION_GROUP_NONE );
-	//Testing if this is what makes sentryguns not damage players with projectile clipping -Green Mushy
+#ifndef FF
+	CBulletsTraceFilter traceFilter( COLLISION_GROUP_NONE );
+	traceFilter.SetPassEntity( this ); // Standard pass entity for THIS so that it can be easily removed from the list after passing through a portal
+	traceFilter.AddEntityToIgnore( info.m_pAdditionalIgnoreEnt );
+#else	//Testing if this is what makes sentryguns not damage players with projectile clipping -Green Mushy
 	CTraceFilterSkipTwoEntities traceFilter(this, info.m_pAdditionalIgnoreEnt, COLLISION_GROUP_NONE /*COLLISION_GROUP_PROJECTILE*/);	// |-- Mirv: Count bullets as projectiles so they don't hit weapon bags
 	traceFilter.SetPassEntity( this ); // Standard pass entity for THIS so that it can be easily removed from the list after passing through a portal
-	//traceFilter.AddEntityToIgnore( info.m_pAdditionalIgnoreEnt );
+#endif
 
 #if defined( HL2_EPISODIC ) && defined( GAME_DLL )
 	// FIXME: We need to emulate this same behavior on the client as well -- jdw
@@ -1875,8 +1876,11 @@ void CBaseEntity::FireBullets( const FireBulletsInfo_t &info )
 
 		// Now hit all triggers along the ray that respond to shots...
 		// Clip the ray to the first collided solid returned from traceline
-		//CTakeDamageInfo triggerInfo( pAttacker, pAttacker, info.m_flDamage, nDamageType );
+#ifndef FF
+		CTakeDamageInfo triggerInfo( pAttacker, pAttacker, info.m_flDamage, nDamageType );
+#else
 		CTakeDamageInfo triggerInfo(this, pAttacker, /*info.m_flDamage*/flDmg, nDamageType); // |-- Mirv: Split damage into shots
+#endif
 		CalculateBulletDamageForce( &triggerInfo, info.m_iAmmoType, vecDir, tr.endpos );
 		triggerInfo.ScaleDamageForce( info.m_flDamageForceScale );
 		triggerInfo.SetAmmoType( info.m_iAmmoType );
@@ -1910,9 +1914,11 @@ void CBaseEntity::FireBullets( const FireBulletsInfo_t &info )
 			{
 				bHitWater = HandleShotImpactingWater( info, vecEnd, &traceFilter, &vecTracerDest );
 			}
-
+#ifndef FF
+			float flActualDamage = info.m_flDamage;
+#else
 			float flActualDamage = /*info.m_flDamage*/ flDmg;	// |-- Mirv: Split damage into shots
-
+#endif
 			// If we hit a player, and we have player damage specified, use that instead
 			// Adrian: Make sure to use the currect value if we hit a vehicle the player is currently driving.
 			if ( iPlayerDamage )

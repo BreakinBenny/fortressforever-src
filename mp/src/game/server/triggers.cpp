@@ -35,7 +35,7 @@
 #include "gameinterface.h"
 #include "ilagcompensationmanager.h"
 
-
+#ifdef FF
 // --> Mirv: Temp test for triggers
 #include "ff_scriptman.h"
 #include "ff_luacontext.h"
@@ -43,7 +43,7 @@
 
 #undef MINMAX_H
 #include "minmax.h"	
-
+#endif
 #ifdef HL2_DLL
 #include "hl2_player.h"
 #endif
@@ -365,23 +365,27 @@ void CBaseTrigger::InitTrigger( )
 //-----------------------------------------------------------------------------
 bool CBaseTrigger::PassesTriggerFilters(CBaseEntity *pOther)
 {
-	// Check for removed state here
+#ifdef FF	// Check for removed state here
 	if (Classify() == CLASS_TRIGGERSCRIPT)
 	{
 		CFuncFFScript* pScript = dynamic_cast<CFuncFFScript*>(this);
 		if (pScript && pScript->IsRemoved())
 			return false;
 	}
-
+#endif
 	// First test spawn flag filters
 	if ( HasSpawnFlags(SF_TRIGGER_ALLOW_ALL) ||
 		(HasSpawnFlags(SF_TRIGGER_ALLOW_CLIENTS) && (pOther->GetFlags() & FL_CLIENT)) ||
 		(HasSpawnFlags(SF_TRIGGER_ALLOW_NPCS) && (pOther->GetFlags() & FL_NPC)) ||
 		(HasSpawnFlags(SF_TRIGGER_ALLOW_PUSHABLES) && FClassnameIs(pOther, "func_pushable")) ||
+#ifndef FF
+		(HasSpawnFlags(SF_TRIGGER_ALLOW_PHYSICS) && pOther->GetMoveType() == MOVETYPE_VPHYSICS) 
+#else
 		(HasSpawnFlags(SF_TRIGGER_ALLOW_PHYSICS) && pOther->GetMoveType() == MOVETYPE_VPHYSICS) ||
 		(HasSpawnFlags(SF_TRIGGER_ALLOW_FF_GRENADES) && (pOther->GetFlags() & FL_GRENADE)) ||
 		(HasSpawnFlags(SF_TRIGGER_ALLOW_FF_BUILDABLES) && ((pOther->Classify() == CLASS_SENTRYGUN) || (pOther->Classify() == CLASS_DISPENSER)))
 		//(HasSpawnFlags(SF_TRIGGER_ALLOW_FF_INFOSCRIPTS) && ((pOther->Classify() == CLASS_INFOSCRIPT)))
+#endif
 #if defined( HL2_EPISODIC ) || defined( TF_DLL )		
 		||
 		(	HasSpawnFlags(SF_TRIG_TOUCH_DEBRIS) && 
@@ -392,7 +396,7 @@ bool CBaseTrigger::PassesTriggerFilters(CBaseEntity *pOther)
 #endif
 		)
 	{
-		// This is needed as CBaseTrigger::StartTouch can fail
+#ifdef FF // This is needed as CBaseTrigger::StartTouch can fail
 		// but the superclass (like a push or teleporter) will
 		// still call it's individual Touch function - when it
 		// shouldn't. A better solution would be when StartTouch
@@ -492,7 +496,7 @@ bool CBaseTrigger::PassesTriggerFilters(CBaseEntity *pOther)
 			}
 		}
 		*/
-
+#endif
 		if ( pOther->GetFlags() & FL_NPC )
 		{
 			CAI_BaseNPC *pNPC = pOther->MyNPCPointer();
@@ -592,7 +596,7 @@ void CBaseTrigger::StartTouch(CBaseEntity *pOther)
 
 		m_OnStartTouch.FireOutput(pOther, this);
 
-		// Fire the lua output
+#ifdef FF	// Fire the lua output
 		CFFLuaSC hTouch(1, pOther);
 		_scriptman.RunPredicates_LUA(this, &hTouch, "ontouch");
 
@@ -636,7 +640,7 @@ void CBaseTrigger::StartTouch(CBaseEntity *pOther)
 			if (pScript)
 				pScript->SetActive();
 		}
-
+#endif
 		if ( bAdded && ( m_hTouchingEntities.Count() == 1 ) )
 		{
 			// First entity to touch us that passes our filters
@@ -658,7 +662,14 @@ void CBaseTrigger::EndTouch(CBaseEntity *pOther)
 		EHANDLE hOther;
 		hOther = pOther;
 		m_hTouchingEntities.FindAndRemove( hOther );
-
+#ifndef FF
+		
+		//FIXME: Without this, triggers fire their EndTouch outputs when they are disabled!
+		//if ( !m_bDisabled )
+		//{
+			m_OnEndTouch.FireOutput(pOther, this);
+		//}
+#else	// Squeek says: "moved [m_OnEndTouch.FireOutput] down so it only gets fired if Lua allows it"
 		// Do this to clear the entry. Don't care if we're not allowed
 		// to touch this trigger still.
 		// Remove this trigger from m_hActiveScripts. Want to do this even
@@ -674,14 +685,7 @@ void CBaseTrigger::EndTouch(CBaseEntity *pOther)
 				if (pOther->m_hActiveScripts[i] == iEntIndex)
 					pOther->m_hActiveScripts.Remove(i);
 		}
-		
-		//FIXME: Without this, triggers fire their EndTouch outputs when they are disabled!
-		//if ( !m_bDisabled )
-		//{
-			// squeek: moved this line down below so it only gets fired if Lua allows it	
-			//m_OnEndTouch.FireOutput(pOther, this);
-		//}
-
+#endif
 		// If there are no more entities touching this trigger, fire the lost all touches
 		// Loop through the touching entities backwards. Clean out old ones, and look for existing
 		bool bFoundOtherTouchee = false;
@@ -712,7 +716,7 @@ void CBaseTrigger::EndTouch(CBaseEntity *pOther)
 			m_OnEndTouchAll.FireOutput(pOther, this);
 			EndTouchAll();
 		}
-
+#ifdef FF
 		if (Classify() == CLASS_TRIGGERSCRIPT)
 		{
 			CFuncFFScript* pScript = dynamic_cast<CFuncFFScript*>(this);
@@ -737,6 +741,7 @@ void CBaseTrigger::EndTouch(CBaseEntity *pOther)
 				m_OnEndTouch.FireOutput(pOther, this);
 			}
 		}
+#endif
 	}
 }
 
@@ -1163,11 +1168,11 @@ void CTriggerMultiple::ActivateMultiTrigger(CBaseEntity *pActivator)
 		return;         // still waiting for reset time
 
 	m_hActivator = pActivator;
-
+#ifdef FF
 	// Run lua trigger event
 	CFFLuaSC hOnTrigger(1, pActivator);
 	_scriptman.RunPredicates_LUA(this, &hOnTrigger, "ontrigger");
-
+#endif
 	m_OnTrigger.FireOutput(m_hActivator, this);
 
 	if (m_flWait > 0)
@@ -1193,7 +1198,7 @@ void CTriggerMultiple::MultiWaitOver( void )
 {
 	SetThink( NULL );
 }
-
+#ifdef FF //For organization, func_ff_script'll need files of its own
 // ##################################################################################
 //	>> func_ff_script
 // ##################################################################################
@@ -1298,7 +1303,7 @@ void CFuncFFScript::SetBotGoalInfo(int _type, int _team)
 	m_BotGoalType = _type;
 	m_BotTeamFlags = 0;
 }
-
+#endif
 // ##################################################################################
 //	>> TriggerOnce
 // ##################################################################################
@@ -2059,14 +2064,14 @@ int BuildChangeList( levellist_t *pLevelList, int maxList )
 {
 	return CChangeLevel::ChangeList( pLevelList, maxList );
 }
-
+#ifdef FF
 struct collidelist_t
 {
 	const CPhysCollide	*pCollide;
 	Vector			origin;
 	QAngle			angles;
 };
-
+#endif
 
 // NOTE: This routine is relatively slow.  If you need to use it for per-frame work, consider that fact.
 // UNDONE: Expand this to the full matrix of solid types on each side and move into enginetrace
@@ -3282,13 +3287,11 @@ void CTriggerCamera::Spawn( void )
 
 int CTriggerCamera::UpdateTransmitState()
 {
-	// --> FF
-#ifdef GAME_DLL
+#ifdef FF // --> FF
 	// always transmit if you're an objective
 	if (m_ObjectivePlayerRefs.Count() > 0)
 		return SetTransmitState(FL_EDICT_ALWAYS);
-#endif // GAME_DLL
-	// <-- FF
+#endif // <-- FF
 
 	// always tranmit if currently used by a monitor
 	if ( m_state == USE_ON )
@@ -3388,7 +3391,7 @@ void CTriggerCamera::Enable( void )
 			{
 				if ( pOtherCamera == this )
 				{
-					// what the hell do you think you are doing?
+					// what do you think you are doing?
 					Warning("Viewcontrol %s was enabled twice in a row!\n", GetDebugName());
 					return;
 				}
@@ -4772,7 +4775,7 @@ bool CBaseVPhysicsTrigger::PassesTriggerFilters( CBaseEntity *pOther )
 {
 	if ( pOther->GetMoveType() != MOVETYPE_VPHYSICS && !pOther->IsPlayer() )
 		return false;
-
+#ifdef FF
 	// Removing this for now...  what is a CBaseVPhysicsTrigger
 	// anyway and when is it used? Also, we never fire a
 	// ontouch/ontrigger with anything but a CBaseTrigger so 
@@ -4786,7 +4789,7 @@ bool CBaseVPhysicsTrigger::PassesTriggerFilters( CBaseEntity *pOther )
 			return false;
 	}
 	*/
-
+#endif
 	// First test spawn flag filters
 	if ( HasSpawnFlags(SF_TRIGGER_ALLOW_ALL) ||
 		(HasSpawnFlags(SF_TRIGGER_ALLOW_CLIENTS) && (pOther->GetFlags() & FL_CLIENT)) ||

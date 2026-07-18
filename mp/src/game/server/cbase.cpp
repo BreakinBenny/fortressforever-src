@@ -285,6 +285,9 @@ void CBaseEntityOutput::FireOutput(variant_t Value, CBaseEntity *pActivator, CBa
 			//
 			// Post the event with the default parameter.
 			//
+#ifndef FF
+			g_EventQueue.AddEvent( STRING(ev->m_iTarget), STRING(ev->m_iTargetInput), Value, ev->m_flDelay + fDelay, pActivator, pCaller, ev->m_iIDStamp );
+#else
 			if ( pCaller &&
 				( pCaller->Classify() == CLASS_TRIGGER ||
 				  pCaller->Classify() == CLASS_TRIGGER_HURT ||
@@ -298,6 +301,7 @@ void CBaseEntityOutput::FireOutput(variant_t Value, CBaseEntity *pActivator, CBa
 			}
 			else
 				g_EventQueue.AddEvent( STRING(ev->m_iTarget), STRING(ev->m_iTargetInput), Value, ev->m_flDelay + fDelay, pActivator, pCaller, ev->m_iIDStamp );
+#endif
 		}
 		else
 		{
@@ -306,7 +310,9 @@ void CBaseEntityOutput::FireOutput(variant_t Value, CBaseEntity *pActivator, CBa
 			//
 			variant_t ValueOverride;
 			ValueOverride.SetString( ev->m_iParameter );
-
+#ifndef FF
+			g_EventQueue.AddEvent( STRING(ev->m_iTarget), STRING(ev->m_iTargetInput), ValueOverride, ev->m_flDelay, pActivator, pCaller, ev->m_iIDStamp );
+#else
 			if ( pCaller &&
 				( pCaller->Classify() == CLASS_TRIGGER ||
 				  pCaller->Classify() == CLASS_TRIGGER_HURT ||
@@ -320,6 +326,7 @@ void CBaseEntityOutput::FireOutput(variant_t Value, CBaseEntity *pActivator, CBa
 			}
 			else
 				g_EventQueue.AddEvent( STRING(ev->m_iTarget), STRING(ev->m_iTargetInput), ValueOverride, ev->m_flDelay, pActivator, pCaller, ev->m_iIDStamp );
+#endif
 		}
 
 		if ( ev->m_flDelay )

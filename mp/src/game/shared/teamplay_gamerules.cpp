@@ -44,8 +44,9 @@ CTeamplayRules::CTeamplayRules()
 
 	// Copy over the team from the server config
 	m_szTeamList[0] = 0;
+#ifdef FF
 	m_szGameDescription[0] = '\0';
-
+#endif
 	RecountTeams();
 }
 
@@ -352,7 +353,22 @@ bool CTeamplayRules::IsTeamplay( void )
 {
 	return true;
 }
+#ifndef FF
+bool CTeamplayRules::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAttacker, const CTakeDamageInfo &info )
+{
+	if ( pAttacker && PlayerRelationship( pPlayer, pAttacker ) == GR_TEAMMATE && !info.IsForceFriendlyFire() )
+	{
+		// my teammate hit me.
+		if ( (friendlyfire.GetInt() == 0) && (pAttacker != pPlayer) )
+		{
+			// friendly fire is off, and this hit came from someone other than myself,  then don't get hurt
+			return false;
+		}
+	}
 
+	return BaseClass::FPlayerCanTakeDamage( pPlayer, pAttacker, info );
+}
+#else
 bool CTeamplayRules::FCanTakeDamage( CBaseEntity *pVictim, CBaseEntity *pAttacker, const CTakeDamageInfo &info )
 {
 	if ( pAttacker && PlayerRelationship( pVictim, pAttacker ) == GR_TEAMMATE && !info.IsForceFriendlyFire() )
@@ -369,7 +385,7 @@ bool CTeamplayRules::FCanTakeDamage( CBaseEntity *pVictim, CBaseEntity *pAttacke
 
 	return BaseClass::FCanTakeDamage( pVictim, pAttacker, info );
 }
-
+#endif
 //=========================================================
 //=========================================================
 int CTeamplayRules::PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pTarget )

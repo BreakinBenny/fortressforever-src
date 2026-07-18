@@ -13,9 +13,9 @@
 #include "movehelper_server.h"
 #include "shake.h"				// For screen fade constants
 #include "engine/IEngineSound.h"
-
+#ifdef FF
 #include "ff_player.h"
-
+#endif
 //=============================================================================
 // HPE_BEGIN
 // [dwenger] Necessary for stats tracking
@@ -364,11 +364,17 @@ bool CMoveHelperServer::PlayerFallingDamage( void )
 	float flFallDamage = g_pGameRules->FlPlayerFallDamage( m_pHostPlayer );	
 	if ( flFallDamage > 0 )
 	{
+#ifndef FF
+		int iDamageTaken = m_pHostPlayer->TakeDamage( CTakeDamageInfo( GetContainingEntity(INDEXENT(0)), GetContainingEntity(INDEXENT(0)), flFallDamage, DMG_FALL ) ); 
+		if ( iDamageTaken > 0 )
+		{
+			StartSound( m_pHostPlayer->GetAbsOrigin(), "Player.FallDamage" );
+		}
+#else
 		m_pHostPlayer->TakeDamage( CTakeDamageInfo( GetContainingEntity(INDEXENT(0)), GetContainingEntity(INDEXENT(0)), flFallDamage, DMG_FALL ) ); 
-		
-		
-			//StartSound( m_pHostPlayer->GetAbsOrigin(), "Player.FallDamage" );
-		
+
+		//StartSound( m_pHostPlayer->GetAbsOrigin(), "Player.FallDamage" );
+#endif	
 
         //=============================================================================
         // HPE_BEGIN:

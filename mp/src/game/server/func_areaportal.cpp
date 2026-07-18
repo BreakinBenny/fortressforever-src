@@ -185,13 +185,11 @@ bool CAreaPortal::UpdateState()
 
 int CAreaPortal::UpdateTransmitState()
 {
-	// --> FF
-#ifdef GAME_DLL
+#ifdef FF // --> FF
 	// always transmit if you're an objective
 	if (m_ObjectivePlayerRefs.Count() > 0)
 		return SetTransmitState(FL_EDICT_ALWAYS);
-#endif // GAME_DLL
-	// <-- FF
+#endif // <-- FF
 
 	// Our brushes are kept around so don't transmit anything since we don't want to draw them.
 	return SetTransmitState( FL_EDICT_DONTSEND );

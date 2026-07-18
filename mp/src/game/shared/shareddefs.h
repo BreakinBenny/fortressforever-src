@@ -120,13 +120,13 @@ public:
 #define MAX_ITEMS				5	// hard coded item types
 
 #define WEAPON_NOCLIP			-1	// clip sizes set to this tell the weapon it doesn't use a clip
-
-//#define	MAX_AMMO_TYPES	32		// ???
-//#define MAX_AMMO_SLOTS  32		// not really slots
-
-#define	MAX_AMMO_TYPES	8		// ???
-#define MAX_AMMO_SLOTS  8		// not really slots
-
+#ifndef FF
+#define	MAX_AMMO_TYPES	32		// ???
+#define MAX_AMMO_SLOTS  32		// not really slots
+#else
+#define	MAX_AMMO_TYPES	8
+#define MAX_AMMO_SLOTS  8
+#endif
 #define HUD_PRINTNOTIFY		1
 #define HUD_PRINTCONSOLE	2
 #define HUD_PRINTTALK		3
@@ -203,12 +203,24 @@ enum CastVote
 #define HIDEHUD_INVEHICLE			( 1<<10 )
 #define HIDEHUD_BONUS_PROGRESS		( 1<<11 )	// Hide bonus progress display (for bonus map challenges)
 
-// --> FF
-#define HIDEHUD_SPECTATING			( 1<<12 )	// Hide while spectating
-#define HIDEHUD_UNASSIGNED			( 1<<13 )	// Hide while the local player has not chosen a class or team
-// <-- FF
+#if defined( TF_DLL ) || defined ( TF_CLIENT_DLL )
+#define HIDEHUD_BUILDING_STATUS		        ( 1<<12 )	// Hide Engineer building status
+#define HIDEHUD_CLOAK_AND_FEIGN             ( 1<<13 )	// Hide item effect meter (cloak, etc)
+#define HIDEHUD_PIPES_AND_CHARGE            ( 1<<14 )	// Hide demo hud
+#define HIDEHUD_METAL                       ( 1<<15 )	// Metal/account hud
+#define HIDEHUD_TARGET_ID                   ( 1<<16 )	// Target ID
+#define HIDEHUD_MATCH_STATUS				( 1<<17 )	// Hide match status
+#define HIDEHUD_BITCOUNT			18
+#else
+	#ifdef FF // --> FF
+	#define HIDEHUD_SPECTATING			( 1<<12 )	// Hide while spectating
+	#define HIDEHUD_UNASSIGNED			( 1<<13 )	// Hide while the local player has not chosen a class or team
+	#define HIDEHUD_BITCOUNT		14
+	#else // <-- FF
+#define HIDEHUD_BITCOUNT			12
+	#endif // <-- FF
+#endif
 
-#define HIDEHUD_BITCOUNT			14
 
 //===================================================================================================================
 // suit usage bits
@@ -406,12 +418,13 @@ enum PLAYER_ANIM
 #define PLAYER_MIN_BOUNCE_SPEED		173
 #define PLAYER_FALL_PUNCH_THRESHOLD 303.0f // won't punch player's screen/make scrape noise unless player falling at least this fast - at least a 76" fall (sqrt( 2 * g * 76))
 #else
-//#define PLAYER_FATAL_FALL_SPEED		1024 // approx 60 feet
-//#define PLAYER_MAX_SAFE_FALL_SPEED	580 // approx 20 feet
-//#define PLAYER_LAND_ON_FLOATING_OBJECT	200 // Can go another 200 units without getting hurt
-//#define PLAYER_MIN_BOUNCE_SPEED		200
-//#define PLAYER_FALL_PUNCH_THRESHOLD (float)350 // won't punch player's screen/make scrape noise unless player falling at least this fast.
-
+#ifndef FF_DLL
+#define PLAYER_FATAL_FALL_SPEED		1024 // approx 60 feet
+#define PLAYER_MAX_SAFE_FALL_SPEED	580 // approx 20 feet
+#define PLAYER_LAND_ON_FLOATING_OBJECT	200 // Can go another 200 units without getting hurt
+#define PLAYER_MIN_BOUNCE_SPEED		200
+#define PLAYER_FALL_PUNCH_THRESHOLD (float)350 // won't punch player's screen/make scrape noise unless player falling at least this fast.
+#else
 // --> Mirv: Changed fall speed limits
 #define PLAYER_FATAL_FALL_SPEED				1024	// This is a kind of arbitary figure
 #define PLAYER_MAX_SAFE_FALL_SPEED			640		// Just a bit more than the 2fort balc drop
@@ -419,7 +432,7 @@ enum PLAYER_ANIM
 #define PLAYER_MIN_BOUNCE_SPEED				200
 #define PLAYER_FALL_PUNCH_THRESHOLD			(float)490 // Won't punch player's screen/make scrape noise unless player falling at least this fast.
 // <-- Mirv: Changed fall speed limits
-
+#endif
 #endif
 #define DAMAGE_FOR_FALL_SPEED		100.0f / ( PLAYER_FATAL_FALL_SPEED - PLAYER_MAX_SAFE_FALL_SPEED ) // damage per unit per second.
 

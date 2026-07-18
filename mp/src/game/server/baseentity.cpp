@@ -79,6 +79,7 @@ extern "C"
 
 #include "LuaBridge/LuaBridge.h"
 #endif
+
 #if defined( TF_DLL )
 #include "tf_gamerules.h"
 #endif
@@ -300,8 +301,9 @@ IMPLEMENT_SERVERCLASS_ST_NOBASE( CBaseEntity, DT_BaseEntity )
 	SendPropEHandle (SENDINFO(m_hEffectEntity)),
 	SendPropEHandle (SENDINFO_NAME(m_hMoveParent, moveparent)),
 	SendPropInt		(SENDINFO(m_iParentAttachment), NUM_PARENTATTACHMENT_BITS, SPROP_UNSIGNED),
+#ifdef FF
 	SendPropInt		(SENDINFO(m_takedamage), 3, SPROP_UNSIGNED),
-
+#endif
 	SendPropInt		(SENDINFO_NAME( m_MoveType, movetype ), MOVETYPE_MAX_BITS, SPROP_UNSIGNED ),
 	SendPropInt		(SENDINFO_NAME( m_MoveCollide, movecollide ), MOVECOLLIDE_MAX_BITS, SPROP_UNSIGNED ),
 #if PREDICTION_ERROR_CHECK_LEVEL > 1 
@@ -1510,16 +1512,16 @@ int CBaseEntity::TakeDamage( const CTakeDamageInfo &inputInfo )
 	{
 		CTakeDamageInfo info = inputInfo;
 		
-		// --> Mirv: No scaling
+#ifndef FF // --> Mirv: No scaling
 		// Scale the damage by the attacker's modifier.
-		/*if ( info.GetAttacker() )
+		if ( info.GetAttacker() )
 		{
 			info.ScaleDamage( info.GetAttacker()->GetAttackDamageScale( this ) );
-		}*/
+		}
 
 		// Scale the damage by my own modifiers
-		//info.ScaleDamage( GetReceivedDamageScale( info.GetAttacker() ) );
-		// <-- Mirv: No scaling
+		info.ScaleDamage( GetReceivedDamageScale( info.GetAttacker() ) );
+#endif	// <-- Mirv: no scaling
 
 		//Msg("%s took %.2f Damage, at %.2f\n", GetClassname(), info.GetDamage(), gpGlobals->curtime );
 
@@ -2982,6 +2984,12 @@ void CC_AI_LOS_Debug( IConVar *var, const char *pOldString, float flOldValue )
 }
 ConVar ai_debug_los("ai_debug_los", "0", FCVAR_CHEAT, "NPC Line-Of-Sight debug mode. If 1, solid entities that block NPC LOC will be highlighted with white bounding boxes. If 2, it'll show non-solid entities that would do it if they were solid.", CC_AI_LOS_Debug );
 
+#ifndef FF
+Class_T CBaseEntity::Classify ( void )
+{ 
+	return CLASS_NONE;
+}
+#endif
 float CBaseEntity::GetAutoAimRadius()
 {
 	if( g_pGameRules->GetAutoAimMode() == AUTOAIM_ON_CONSOLE )
@@ -3936,7 +3944,7 @@ ConVar ent_messages_draw( "ent_messages_draw", "0", FCVAR_CHEAT, "Visualizes all
 //-----------------------------------------------------------------------------
 bool CBaseEntity::AcceptInput( const char *szInputName, CBaseEntity *pActivator, CBaseEntity *pCaller, variant_t Value, int outputID )
 {
-	// pass the event to script
+#ifdef FF // pass the event to script
 	CFFLuaSC hInput;
 	if (pActivator) // just in case
 		hInput.Push(pActivator);
@@ -3946,7 +3954,7 @@ bool CBaseEntity::AcceptInput( const char *szInputName, CBaseEntity *pActivator,
 	Q_strncpy(buf, szInputName, sizeof(buf));
 	Q_strlower(buf);
 	_scriptman.RunPredicates_LUA(this, &hInput, buf);
-
+#endif
 	if ( ent_messages_draw.GetBool() )
 	{
 		if ( pCaller != NULL )
@@ -5843,15 +5851,15 @@ void CBaseEntity::CalcAbsolutePosition( void )
 
 	RemoveEFlags( EFL_DIRTY_ABSTRANSFORM );
 
-	// Plop the entity->parent matrix into m_rgflCoordinateFrame
-	AngleMatrix( m_angRotation, m_vecOrigin, m_rgflCoordinateFrame );
+		// Plop the entity->parent matrix into m_rgflCoordinateFrame
+		AngleMatrix( m_angRotation, m_vecOrigin, m_rgflCoordinateFrame );
 
-	CBaseEntity *pMoveParent = GetMoveParent();
-	if ( !pMoveParent )
-	{
-		// no move parent, so just copy existing values
-		m_vecAbsOrigin = m_vecOrigin;
-		m_angAbsRotation = m_angRotation;
+		CBaseEntity *pMoveParent = GetMoveParent();
+		if ( !pMoveParent )
+		{
+			// no move parent, so just copy existing values
+			m_vecAbsOrigin = m_vecOrigin;
+			m_angAbsRotation = m_angRotation;
 		if ( HasDataObjectType( POSITIONWATCHER ) )
 		{
 			ReportPositionChanged( this );

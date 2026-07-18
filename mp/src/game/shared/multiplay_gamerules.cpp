@@ -14,10 +14,10 @@
 #include "filesystem.h"
 #include "mp_shareddefs.h"
 #include "utlbuffer.h"
-
+#ifdef FF
 #include "ff_projectile_base.h"
 #include "ff_weapon_base.h"
-
+#endif
 #ifdef CLIENT_DLL
 
 #else
@@ -41,6 +41,7 @@
 	#include "usermessages.h"
 	#include "tier0/icommandline.h"
 
+#ifdef FF
 	#include "ff_player.h"
 
 	// BEG: Added by Mulchman for Buildable Objects
@@ -53,7 +54,7 @@
 
 	#include "ff_luacontext.h"
 	#include "ff_scriptman.h"
-
+#endif
 #ifdef NEXT_BOT
 	#include "NextBotManager.h"
 #endif
@@ -361,7 +362,7 @@ bool CMultiplayRules::Init()
 	// override some values for multiplay.
 
 		// suitcharger
-#if !defined( TF_DLL ) && !defined( FF_DLL )
+#ifndef TF_DLL
 //=============================================================================
 // HPE_BEGIN:
 // [menglish] CS doesn't have the suitcharger either
@@ -660,7 +661,11 @@ ConVarRef suitcharger( "sk_suitcharger" );
 
 	//=========================================================
 	//=========================================================
+#ifndef FF
+	bool CMultiplayRules::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAttacker, const CTakeDamageInfo &info )
+#else
 	bool CMultiplayRules::FCanTakeDamage( CBaseEntity *pVictim, CBaseEntity *pAttacker, const CTakeDamageInfo &info )
+#endif
 	{
 		return true;
 	}
@@ -734,7 +739,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 			if ( pKiller->Classify() == CLASS_PLAYER )
 				return (CBasePlayer*)pKiller;
 
-			// BEG: Added by Mulchman
+#ifdef FF	// BEG: Added by Mulchman
 			// Buildable Objects need to be specifically tested for
 			// because pScorer in DeathNotice is NULL when someone
 			// is killed by a Buildable Object (and this in incorrect -
@@ -749,7 +754,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 
 			if (pKiller->Classify() == CLASS_DISPENSER)
 				return (CBasePlayer*)(((CFFDispenser*)pKiller)->m_hOwner.Get());
-			// END: Added by Mulchman
+#endif		// END: Added by Mulchman
 
 			// Killing entity might be specifying a scorer player
 			IScorer *pScorerInterface = dynamic_cast<IScorer*>( pKiller );
@@ -792,7 +797,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 		// Find the killer & the scorer
 		CBaseEntity *pInflictor = info.GetInflictor();
 		CBaseEntity *pKiller = info.GetAttacker();
-
+#ifdef FF
 		// Jiggles: Maybe not the best spot to put this, but...
 		// If the gun killed someone while in malicious sabotage mode
 		// we want to give credit to the Spy who did it
@@ -802,21 +807,38 @@ ConVarRef suitcharger( "sk_suitcharger" );
 			if (pSabotagedBuildable->IsMaliciouslySabotaged())
 				pKiller = pSabotagedBuildable->m_hSaboteur;
 		}
-
+#endif
 		CBasePlayer *pScorer = GetDeathScorer( pKiller, pInflictor, pVictim );
 		
 		pVictim->IncrementDeathCount( 1 );
+#ifndef FF
+		// dvsents2: uncomment when removing all FireTargets
+		// variant_t value;
+		// g_EventQueue.AddEvent( "game_playerdie", "Use", value, 0, pVictim, pVictim );
+		FireTargets( "game_playerdie", pVictim, pVictim, USE_TOGGLE, 0 );
 
+		// Did the player kill himself?
+		if ( pVictim == pScorer )  
+		{			
+			if ( UseSuicidePenalty() )
+			{
+				// Players lose a frag for killing themselves
+				pVictim->IncrementFragCount( -1 );
+			}			
+		}
+		else if ( pScorer )
+#else
 		// Bug #0000529: Total death column doesn't work
 		if (pVictim->GetTeam())
 			pVictim->GetTeam()->AddDeaths(1);
 		FireTargets( "game_playerdie", pVictim, pVictim, USE_TOGGLE, 0 );
 
 		if ( pScorer && pVictim != pScorer )
+#endif
 		{
 			// if a player dies in a deathmatch game and the killer is a client, award the killer some points
 			pScorer->IncrementFragCount( IPointsForKill( pScorer, pVictim ) );
-
+#ifdef FF
 			// AfterShock - scoring system : Just award 100 points for frag (for now)
 			if (PlayerRelationship(pScorer, pVictim) == GR_TEAMMATE)
 			{
@@ -824,13 +846,20 @@ ConVarRef suitcharger( "sk_suitcharger" );
 			}
 			else
 				pScorer->AddFortPoints(100, "#FF_FORTPOINTS_FRAG");
-			
+#endif			
 			// Allow the scorer to immediately paint a decal
 			pScorer->AllowImmediateDecalPainting();
 
 			FireTargets( "game_playerkill", pScorer, pScorer, USE_TOGGLE, 0 );
 		}
-
+#ifndef FF
+		else
+		{  
+			if ( UseSuicidePenalty() )
+			{
+				// Players lose a frag for letting the world kill them			
+				pVictim->IncrementFragCount( -1 );
+#else
 		// if there was a kill assister, give them some fort point as long as they're not a teammate from prior team dmg
 		CFFPlayer* pFFPlayer = ToFFPlayer(pVictim);
 		if (pFFPlayer)
@@ -841,6 +870,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 			{
 				pTopAssister->hPlayer->AddFortPoints(25, "#FF_FORTPOINTS_ASSIST");
 				pTopAssister->hPlayer->IncrementAssistsCount(1);
+#endif
 			}					
 		}
 	}
@@ -854,14 +884,27 @@ ConVarRef suitcharger( "sk_suitcharger" );
 		// Work out what killed the player, and send a message to all clients about it
 		const char *killer_weapon_name = "world";		// by default, the player is killed by the world
 		int killer_ID = 0;
+#ifdef FF
 		int iKilledSGLevel = 0;
 		int iKillerSGLevel = 0;
-
+#endif
 		// Find the killer & the scorer
 		CBaseEntity *pInflictor = info.GetInflictor();
 		CBaseEntity *pKiller = info.GetAttacker();
-		//CBasePlayer *pScorer = GetDeathScorer( pKiller, pInflictor, pVictim );
+#ifndef FF
+		CBasePlayer *pScorer = GetDeathScorer( pKiller, pInflictor, pVictim );
 
+		// Custom damage type?
+		if ( info.GetDamageCustom() )
+		{
+			killer_weapon_name = GetDamageCustomString( info );
+			if ( pScorer )
+			{
+				killer_ID = pScorer->GetUserID();
+			}
+		}
+		else
+#else
 		// Removed, this is now handled further on
 		// Hack for sg rockets (might break other stuff?)
 		//if( pKiller->Classify() == CLASS_SENTRYGUN )
@@ -922,6 +965,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 		//	}
 		//}
 		//else
+#endif
 		{
 			// Is the killer a client?
 			if ( pScorer )
@@ -952,7 +996,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 			{
 				killer_weapon_name = STRING( pInflictor->m_iClassname );
 			}
-
+#ifdef FF
 			// --> Mirv: Special case for projectiles
 			CFFProjectileBase* pProjectile = dynamic_cast<CFFProjectileBase*> (pInflictor);
 
@@ -1009,7 +1053,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 
 			//UTIL_LogPrintf(" killer_ID: %i\n",killer_ID);
 			//UTIL_LogPrintf(" killer_weapon_name: %s\n",killer_weapon_name);
-
+#endif
 			// strip the NPC_* or weapon_* from the inflictor's classname
 			if ( Q_strncmp( killer_weapon_name, "weapon_", 7 ) == 0 )
 			{
@@ -1075,6 +1119,10 @@ ConVarRef suitcharger( "sk_suitcharger" );
 #ifdef HL1MP_DLL
 			event->SetString("weapon", killer_weapon_name );
 #endif			
+#ifndef FF
+			gameeventmanager->FireEvent( event );
+		}
+#else
 			// pass on to lua to do "stuff"
 			bool bAllowedLUA = true;
 			
@@ -1091,6 +1139,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 				gameeventmanager->FireEvent(event);
 			}
 		}
+#endif
 	}
 
 	//=========================================================
@@ -1266,16 +1315,22 @@ ConVarRef suitcharger( "sk_suitcharger" );
 	//=========================================================
 	int CMultiplayRules::DeadPlayerWeapons( CBasePlayer *pPlayer )
 	{
-		// Modified by L0ki: we dont drop weapons in FF
+#ifndef FF
+		return GR_PLR_DROP_GUN_ACTIVE;
+#else	// Modified by L0ki: we dont drop weapons in FF
 		return GR_PLR_DROP_GUN_NO;
+#endif
 	}
 
 	//=========================================================
 	//=========================================================
 	int CMultiplayRules::DeadPlayerAmmo( CBasePlayer *pPlayer )
 	{
-		// Modified by L0ki: we drop all ammo types in FF
+#ifndef FF
+		return GR_PLR_DROP_AMMO_ACTIVE;
+#else	// Modified by L0ki: we drop all ammo types in FF
 		return GR_PLR_DROP_AMMO_ALL;
+#endif
 	}
 
 	CBaseEntity *CMultiplayRules::GetPlayerSpawnSpot( CBasePlayer *pPlayer )
@@ -1327,9 +1382,12 @@ ConVarRef suitcharger( "sk_suitcharger" );
 	//=========================================================
 	bool CMultiplayRules::FAllowNPCs( void )
 	{
-		//return true; // E3 hack
-		//return ( allowNPCs.GetInt() != 0 );
+#ifndef FF
+		return true; // E3 hack
+		return ( allowNPCs.GetInt() != 0 );
+#else
 		return false; // Jiggles: No need for NPCs in FF :)
+#endif
 	}
 
 	//=========================================================
@@ -1361,7 +1419,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 
 			pPlayer->ShowViewPortPanel( PANEL_SCOREBOARD );
 
-			// --> Mirv: Lock into place too
+#ifdef FF	// --> Mirv: Lock into place too
 			CFFPlayer* pFFPlayer = ToFFPlayer(pPlayer);
 			pFFPlayer->LockPlayerInPlace();
 			pFFPlayer->AddFlag(FL_FROZEN);
@@ -1391,6 +1449,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 			//////////////////////////////////////////////////////////////////////////
 			pEvent->SetInt("winner", pWinningTeam ? pWinningTeam->GetTeamNumber() : 0);
 			gameeventmanager->FireEvent(pEvent);
+#endif
 		}
 	}
 

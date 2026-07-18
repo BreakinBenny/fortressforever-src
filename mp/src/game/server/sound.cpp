@@ -1235,9 +1235,10 @@ void SENTENCEG_PlaySentenceIndex( edict_t *entity, int iSentenceIndex, float vol
 {
 	if ( iSentenceIndex >= 0 )
 	{
-		/*CPASAttenuationFilter filter( GetContainingEntity( entity ), soundlevel );
-		CBaseEntity::EmitSentenceByIndex( filter, ENTINDEX(entity), CHAN_VOICE, iSentenceIndex, volume, soundlevel, flags, pitch );*/
-		// Jiggles: We don't want to send this to other players -- just use a SingleRecipientFilter
+#ifndef FF
+		CPASAttenuationFilter filter( GetContainingEntity( entity ), soundlevel );
+		CBaseEntity::EmitSentenceByIndex( filter, ENTINDEX(entity), CHAN_VOICE, iSentenceIndex, volume, soundlevel, flags, pitch );
+#else	// Jiggles: We don't want to send this to other players -- just use a SingleRecipientFilter
 		CBasePlayer* pPlayer = ToBasePlayer(GetContainingEntity(entity));
 		if (pPlayer)
 		{
@@ -1245,7 +1246,7 @@ void SENTENCEG_PlaySentenceIndex( edict_t *entity, int iSentenceIndex, float vol
 			// Using CHAN_VOICE, the vox was getting cut-off by pain/death sounds
 			CBaseEntity::EmitSentenceByIndex(filter, ENTINDEX(entity), CHAN_STREAM/* CHAN_VOICE */, iSentenceIndex, volume, soundlevel, flags, pitch);
 		}
-
+#endif
 	}
 }
 
