@@ -868,8 +868,8 @@ namespace FFLib
 		int iTeam1 = pTeam1->GetTeamNumber();
 		int iTeam2 = pTeam2->GetTeamNumber();
 
-		if( ( iTeam1 >= TEAM_BLUE ) && ( iTeam1 <= TEAM_GREEN ) &&
-			( iTeam2 >= TEAM_BLUE ) && ( iTeam2 <= TEAM_GREEN ) )
+		if( ( iTeam1 >= FF_TEAM_BLUE ) && ( iTeam1 <= FF_TEAM_GREEN ) &&
+			( iTeam2 >= FF_TEAM_BLUE ) && ( iTeam2 <= FF_TEAM_GREEN ) )
 		{
 			if( FFGameRules()->IsTeam1AlliedToTeam2( iTeam1, iTeam2 ) == GR_TEAMMATE )
 				return true;
@@ -1535,16 +1535,16 @@ namespace FFLib
 
 	void SetPlayerLimits(CPlayerLimits& limits)
 	{
-		CFFTeam* pTeam = GetTeam(TEAM_BLUE);
+		CFFTeam* pTeam = GetTeam(FF_TEAM_BLUE);
 		pTeam->SetTeamLimits(limits.blue);
 
-		pTeam = GetTeam(TEAM_RED);
+		pTeam = GetTeam(FF_TEAM_RED);
 		pTeam->SetTeamLimits(limits.red);
 
-		pTeam = GetTeam(TEAM_YELLOW);
+		pTeam = GetTeam(FF_TEAM_YELLOW);
 		pTeam->SetTeamLimits(limits.yellow);
 
-		pTeam = GetTeam(TEAM_GREEN);
+		pTeam = GetTeam(FF_TEAM_GREEN);
 		pTeam->SetTeamLimits(limits.green);
 	}
 

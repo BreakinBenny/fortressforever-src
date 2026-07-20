@@ -255,7 +255,7 @@ void CC_Player_Kill( void )
 	if (pPlayer)
 	{
 		// Don't kill if we're a spec or something
-		if( pPlayer->GetTeamNumber() < TEAM_BLUE )
+		if( pPlayer->GetTeamNumber() < FF_TEAM_BLUE )
 			return;
 
 		// Bug #0000578: Suiciding using /kill doesn't cause a respawn delay
@@ -828,7 +828,7 @@ void CFFPlayer::PostThink()
 {
 	BaseClass::PostThink();
 
-	if( GetTeamNumber() < TEAM_BLUE )
+	if( GetTeamNumber() < FF_TEAM_BLUE )
 	{
 		MoveTowardsMapGuide();
 	}
@@ -1130,7 +1130,7 @@ ReturnSpot:
 			}
 
 			// If we got a spawn spot and we're spec, it's valid
-			if( GetTeamNumber() < TEAM_BLUE )
+			if( GetTeamNumber() < FF_TEAM_BLUE )
 			{
 				goto ReturnSpot;
 			}
@@ -2192,7 +2192,7 @@ bool CFFPlayer::BecomeRagdollOnClient( const Vector &force )
 void CFFPlayer::CreateRagdollEntity(const CTakeDamageInfo *info)
 {
 	// Let's not create ragdolls until we're actually playing
-	if( GetTeamNumber() < TEAM_BLUE )
+	if( GetTeamNumber() < FF_TEAM_BLUE )
 		return;
 
 	// If we already have a ragdoll, don't make another one.
@@ -2327,7 +2327,7 @@ void CFFPlayer::CheatImpulseCommands( int iImpulse )
 		return ;
 	}
 
-	if(sv_cheats->GetBool() && GetTeamNumber() >= TEAM_BLUE && GetTeamNumber() <= TEAM_GREEN)
+	if(sv_cheats->GetBool() && GetTeamNumber() >= FF_TEAM_BLUE && GetTeamNumber() <= FF_TEAM_GREEN)
 	{
 		GiveAmmo(300, AMMO_NAILS);
 		GiveAmmo(300, AMMO_SHELLS);
@@ -2592,7 +2592,7 @@ void CFFPlayer::ChangeTeam(int iTeamNum)
 	m_fRandomPC = false;
 
 	// if we're changing to/from spec, count it as a class change so people can't use that to avoid the suicide respawn delay
-	if (iTeamNum == FF_TEAM_SPEC || GetTeamNumber() == FF_TEAM_SPEC)
+	if (iTeamNum == TEAM_SPECTATOR || GetTeamNumber() == TEAM_SPECTATOR)
 		m_flLastClassSwitch = gpGlobals->curtime;
 
 	BaseClass::ChangeTeam(iTeamNum);
@@ -2818,7 +2818,7 @@ void CFFPlayer::Command_Team(const CCommand& args)
 			ClientPrint(this, HUD_PRINTCENTER, "#FF_ERROR_FLYTHROUGH");
 			return;
 		}
-		iTeam = FF_TEAM_SPEC;
+		iTeam = TEAM_SPECTATOR;
 	}
 	else if( !Q_stricmp( args[ 1 ], "blue" ) )
 		iTeam = FF_TEAM_BLUE;
@@ -2919,7 +2919,7 @@ void CFFPlayer::Command_Team(const CCommand& args)
 	m_iGrenadeState = 0;
 
 	// Only kill the player if they are alive on a team
-	if (IsAlive() && GetTeamNumber() >= TEAM_BLUE)
+	if (IsAlive() && GetTeamNumber() >= FF_TEAM_BLUE)
 	{
 		KillPlayer();
 
@@ -2936,7 +2936,7 @@ void CFFPlayer::Command_Team(const CCommand& args)
 
 	// Bug #0001686: Possible to spectate outside of spectator mode
 	// If our previous team was spectator, then stop observer mode.
-	if( iOldTeam == FF_TEAM_SPEC )
+	if( iOldTeam == TEAM_SPECTATOR )
 	{
 		StopObserverMode();
 	}
@@ -3107,7 +3107,7 @@ void CFFPlayer::KillPlayer( void )
 void CFFPlayer::KillAndRemoveItems( void )
 {
 	// Not on a team, don't be so hasty
-	if (GetTeamNumber() < TEAM_BLUE)
+	if (GetTeamNumber() < FF_TEAM_BLUE)
 	{
 		m_lifeState = LIFE_DISCARDBODY;
 		pl.deadflag = true;
@@ -6256,7 +6256,7 @@ void CFFPlayer::Command_Disguise(const CCommand& args)
 
 			int iEnemyTeams[8] = {0};
 			int iNumTeams = 0;
-			for(int i = TEAM_BLUE; i <= TEAM_GREEN; ++i)
+			for(int i = FF_TEAM_BLUE; i <= FF_TEAM_GREEN; ++i)
 			{
 				if(i==iMyTeam)
 					continue;
@@ -6294,16 +6294,16 @@ void CFFPlayer::Command_Disguise(const CCommand& args)
 					switch( szTeam[ 0 ] ) // Single letter like b, r, y, g
 					{
 						case 'b':
-						case 'B': iTeam = TEAM_BLUE; break;
+						case 'B': iTeam = FF_TEAM_BLUE; break;
 
 						case 'r':
-						case 'R': iTeam = TEAM_RED; break;
+						case 'R': iTeam = FF_TEAM_RED; break;
 
 						case 'y':
-						case 'Y': iTeam = TEAM_YELLOW; break;
+						case 'Y': iTeam = FF_TEAM_YELLOW; break;
 
 						case 'g':
-						case 'G': iTeam = TEAM_GREEN; break;
+						case 'G': iTeam = FF_TEAM_GREEN; break;
 
 						default:
 							Warning( "[Disguise] Disguise command must be in the proper format!\n" );
@@ -6317,13 +6317,13 @@ void CFFPlayer::Command_Disguise(const CCommand& args)
 			{
 				// Some kind of string
 				if( !Q_stricmp( szTeam, "blue" ) )
-					iTeam = TEAM_BLUE;
+					iTeam = FF_TEAM_BLUE;
 				else if( !Q_stricmp( szTeam, "red" ) )
-					iTeam = TEAM_RED;
+					iTeam = FF_TEAM_RED;
 				else if( !Q_stricmp( szTeam, "yellow" ) )
-					iTeam = TEAM_YELLOW;
+					iTeam = FF_TEAM_YELLOW;
 				else if( !Q_stricmp( szTeam, "green" ) )
-					iTeam = TEAM_GREEN;
+					iTeam = FF_TEAM_GREEN;
 			}
 		}
 		
@@ -6472,7 +6472,7 @@ void CFFPlayer::FinishDisguise()
 			//{
 			// AfterShock: If we want to do friendly spies showing up as friendly spies, we'd have to have different models for friendly and enemies?
 				SetModel(pPlayerClassInfo->m_szModel);
-				m_nSkin = GetNewDisguisedTeam() - TEAM_BLUE; // since m_nSkin = 0 is blue
+				m_nSkin = GetNewDisguisedTeam() - FF_TEAM_BLUE; // since m_nSkin = 0 is blue
 			//}
 		}
 	}
@@ -7992,7 +7992,7 @@ RecentAttackerInfo* CFFPlayer::GetTopKillAssister( CBasePlayer* killerToIgnore )
 		}
 
 		// this also shouldnt happen, but sanity check. if the player is a spec, ignore em
-		if ( pFFAssister->GetTeamNumber() < TEAM_BLUE )
+		if ( pFFAssister->GetTeamNumber() < FF_TEAM_BLUE )
 		{
 			continue;
 		}

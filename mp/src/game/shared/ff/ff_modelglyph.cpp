@@ -198,7 +198,7 @@ bool CFFSaveMe::ShouldDraw( void )
 	if( !pOwner || !pOwner->IsPlayer() )
 		return false;
 
-	if( pLocalPlayer->IsObserver() || pOwner->IsObserver() || ( pOwner->GetTeamNumber() < TEAM_BLUE ) || ( pLocalPlayer->GetTeamNumber() < TEAM_BLUE ) )
+	if( pLocalPlayer->IsObserver() || pOwner->IsObserver() || ( pOwner->GetTeamNumber() < FF_TEAM_BLUE ) || ( pLocalPlayer->GetTeamNumber() < FF_TEAM_BLUE ) )
 		return false;
 
 	// Hide from player if not the right team

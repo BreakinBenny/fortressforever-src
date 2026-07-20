@@ -273,10 +273,10 @@ void CClientScoreBoardDialog::Reset()
 void CClientScoreBoardDialog::InitScoreboardSections()
 {
 	// Do this initially
-	m_hSections[ TEAM_BLUE ].m_iTeam = TEAM_BLUE;
-	m_hSections[ TEAM_RED ].m_iTeam = TEAM_RED;
-	m_hSections[ TEAM_YELLOW ].m_iTeam = TEAM_YELLOW;
-	m_hSections[ TEAM_GREEN ].m_iTeam = TEAM_GREEN;
+	m_hSections[ FF_TEAM_BLUE ].m_iTeam = FF_TEAM_BLUE;
+	m_hSections[ FF_TEAM_RED ].m_iTeam = FF_TEAM_RED;
+	m_hSections[ FF_TEAM_YELLOW ].m_iTeam = FF_TEAM_YELLOW;
+	m_hSections[ FF_TEAM_GREEN ].m_iTeam = FF_TEAM_GREEN;
 
 	AddHeader();
 }
@@ -707,7 +707,7 @@ void CClientScoreBoardDialog::UpdateHeaders( void )
 	if( !pGR )
 		return;
 	
-	for( int i = TEAM_BLUE; i <= TEAM_GREEN; i++ )
+	for( int i = FF_TEAM_BLUE; i <= FF_TEAM_GREEN; i++ )
 	{
 		int iTeam = m_hSections[ i ].m_iTeam;
 		int iNumPlayers = m_hSections[ i ].m_iNumPlayers;
@@ -950,7 +950,7 @@ void CClientScoreBoardDialog::FillScoreBoard()
 	bool bNeedToSort = NeedToSortTeams();
 
 	// Set up num players, latency, score, and time scored for each team
-	for( int i = TEAM_BLUE; i <= TEAM_GREEN; i++ )
+	for( int i = FF_TEAM_BLUE; i <= FF_TEAM_GREEN; i++ )
 	{
 		int iTeam = m_hSections[ i ].m_iTeam;
 
@@ -987,15 +987,15 @@ void CClientScoreBoardDialog::FillScoreBoard()
 		CUtlVector< ScoreboardSection_s > hTemp;
 		
 		// Copy to vector...
-		for( int i = TEAM_BLUE; i <= TEAM_GREEN; i++ )
+		for( int i = FF_TEAM_BLUE; i <= FF_TEAM_GREEN; i++ )
 			hTemp.AddToTail( m_hSections[ i ] );
 
 		// Sort!
 		hTemp.Sort( ScoreboardSection_Sort );
 
 		// Copy back over...
-		for( int i = TEAM_BLUE; i <= TEAM_GREEN; i++ )
-			m_hSections[ i ] = hTemp[ i - TEAM_BLUE ];
+		for( int i = FF_TEAM_BLUE; i <= FF_TEAM_GREEN; i++ )
+			m_hSections[ i ] = hTemp[ i - FF_TEAM_BLUE ];
 
 		// Have to remove all sections because if you're
 		// viewing the scoreboard when teams get sorted
@@ -1022,10 +1022,10 @@ bool CClientScoreBoardDialog::NeedToSortTeams( void ) const
 {
 	bool bSort = false;
 
-	int iLastScore = m_hSections[ TEAM_BLUE ].m_iScore;
-	float flLastUpdate = m_hSections[ TEAM_BLUE ].m_flLastScored;
+	int iLastScore = m_hSections[FF_TEAM_BLUE ].m_iScore;
+	float flLastUpdate = m_hSections[ FF_TEAM_BLUE ].m_flLastScored;
 
-	for( int i = TEAM_RED; ( i <= TEAM_GREEN ) && !bSort; i++ )
+	for( int i = FF_TEAM_RED; ( i <= FF_TEAM_GREEN ) && !bSort; i++ )
 	{
 		if( iLastScore < m_hSections[ i ].m_iScore )
 			bSort = true;

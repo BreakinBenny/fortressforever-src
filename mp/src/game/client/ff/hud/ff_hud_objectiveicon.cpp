@@ -202,7 +202,7 @@ void CHudObjectiveIcon::Paint( void )
 		Vector vecOrigin = pPlayer->GetFeetOrigin();
 
 		Color cColor = Color( 255, 255, 255, 255 );
-		if( g_PR && ( pPlayer->GetTeamNumber() >= TEAM_BLUE ) && ( pPlayer->GetTeamNumber() <= TEAM_GREEN ) )
+		if( g_PR && ( pPlayer->GetTeamNumber() >= FF_TEAM_BLUE ) && ( pPlayer->GetTeamNumber() <= FF_TEAM_GREEN ) )
 			cColor = g_PR->GetTeamColor( pPlayer->GetTeamNumber() );
 
 		// Draw a box around the objective if it's on the player's screen

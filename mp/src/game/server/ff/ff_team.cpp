@@ -58,7 +58,7 @@ void CFFTeam::Init( const char *pName, int iNumber )
 	m_iAllies = 0;										// no allies
 
 	// set default team icons
-	if ( m_iTeamNum < TEAM_BLUE || m_iTeamNum > TEAM_GREEN )
+	if ( m_iTeamNum < FF_TEAM_BLUE || m_iTeamNum > FF_TEAM_GREEN )
 		Q_strncpy( m_szTeamIcon.GetForModify(), "dummystring", 128 ); // just in case someone accesses unassigned or spectator's icon
 	else
 		ResetTeamIcon();
@@ -143,15 +143,15 @@ void CFFTeam::UpdateLimits( void )
 
 void CFFTeam::ResetTeamIcon(void)
 {
-	if ( m_iTeamNum < TEAM_BLUE || m_iTeamNum > TEAM_GREEN )
+	if ( m_iTeamNum < FF_TEAM_BLUE || m_iTeamNum > FF_TEAM_GREEN )
 		return;
 
-	Q_strncpy( m_szTeamIcon.GetForModify(), pszInsignias[m_iTeamNum - TEAM_BLUE], 128);
+	Q_strncpy( m_szTeamIcon.GetForModify(), pszInsignias[m_iTeamNum - FF_TEAM_BLUE], 128);
 }
 
 void CFFTeam::SetTeamIcon( const char* szIcon )
 {
-	if ( m_iTeamNum < TEAM_BLUE || m_iTeamNum > TEAM_GREEN )
+	if ( m_iTeamNum < FF_TEAM_BLUE || m_iTeamNum > FF_TEAM_GREEN )
 		return;
 
 	Q_strncpy( m_szTeamIcon.GetForModify(), szIcon, 128 );

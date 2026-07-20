@@ -12,7 +12,7 @@
 #endif
 
 #include "c_team.h"
-#include "shareddefs.h"
+#include "ff_shareddefs.h"
 
 class C_BaseEntity;
 class C_BaseObject;

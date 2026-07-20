@@ -2319,7 +2319,7 @@ void CFFPlayer::PrimeGrenade1( void )
 	}
 
 	// Bug #0000169: Grenade timer is played when player is dead and primes a grenade
-	if ( !IsAlive() || GetTeamNumber() < TEAM_BLUE )
+	if ( !IsAlive() || GetTeamNumber() < FF_TEAM_BLUE )
 		return;
 
 	// Make sure we can't insta-prime on the client either
@@ -2404,7 +2404,7 @@ void CFFPlayer::PrimeGrenade2( void )
 	}
 
 	// Bug #0000169: Grenade timer is played when player is dead and primes a grenade
-	if ( !IsAlive() || GetTeamNumber() < TEAM_BLUE )
+	if ( !IsAlive() || GetTeamNumber() < FF_TEAM_BLUE )
 		return;
 
 	// Make sure we can't insta-prime on the client either

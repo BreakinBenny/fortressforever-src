@@ -100,16 +100,16 @@ int C_SlowfieldEffect::DrawModel( int flags )
 {
 	switch(m_iTeam)
 	{
-	case TEAM_BLUE:
+	case FF_TEAM_BLUE:
 		FindOverrideMaterial(FF_SLOWFIELD_MATERIAL_BLUE, FF_SLOWFIELD_TEXTURE_GROUP);
 		break;
-	case TEAM_RED:
+	case FF_TEAM_RED:
 		FindOverrideMaterial(FF_SLOWFIELD_MATERIAL_RED, FF_SLOWFIELD_TEXTURE_GROUP);
 		break;
-	case TEAM_YELLOW:
+	case FF_TEAM_YELLOW:
 		FindOverrideMaterial(FF_SLOWFIELD_MATERIAL_YELLOW, FF_SLOWFIELD_TEXTURE_GROUP);
 		break;
-	case TEAM_GREEN:
+	case FF_TEAM_GREEN:
 		FindOverrideMaterial(FF_SLOWFIELD_MATERIAL_GREEN, FF_SLOWFIELD_TEXTURE_GROUP);
 		break;
 	default:
