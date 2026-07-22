@@ -592,7 +592,7 @@ void IN_ChangeClass(const CCommand& args)
 	// --> Mirv: Select team first bud
 	C_BasePlayer* player = C_BasePlayer::GetLocalPlayer();
 
-	if (player && player->GetTeamNumber() < TEAM_BLUE)
+	if (player && player->GetTeamNumber() < FF_TEAM_BLUE)
 	{
 		IN_ChangeTeam(args);
 		return;

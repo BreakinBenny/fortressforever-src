@@ -124,18 +124,18 @@ int CheckDisguiseClass( int iClass )
 		// something else. Find that
 		// something else!
 
-		for( int i = TEAM_BLUE; ( i <= TEAM_GREEN ) && ( iDisguiseTeam == TEAM_UNASSIGNED ); i++ )
+		for( int i = FF_TEAM_BLUE; ( i <= FF_TEAM_GREEN ) && ( iDisguiseTeam == TEAM_UNASSIGNED ); i++ )
 			if( ( pGr->GetTeamLimits( i ) != -1 ) && ( i != iTeam ) )
 				iDisguiseTeam = i;
 	}
 	else if( !Q_strcmp( pszTeam, "red " ) )
-		iDisguiseTeam = TEAM_RED;
+		iDisguiseTeam = FF_TEAM_RED;
 	else if( !Q_strcmp( pszTeam, "blue " ) )
-		iDisguiseTeam = TEAM_BLUE;
+		iDisguiseTeam = FF_TEAM_BLUE;
 	else if( !Q_strcmp( pszTeam, "yellow " ) )
-		iDisguiseTeam = TEAM_YELLOW;
+		iDisguiseTeam = FF_TEAM_YELLOW;
 	else if( !Q_strcmp( pszTeam, "green " ) )
-		iDisguiseTeam = TEAM_GREEN;
+		iDisguiseTeam = FF_TEAM_GREEN;
 
 	// Bail if we didn't get a disguise team
 	if( iDisguiseTeam == TEAM_UNASSIGNED )
@@ -350,14 +350,14 @@ int TeamAvailableForDisguise(int iTeam, AvailableAs_t as)
 	return ((bAllied == (as == FRIENDLY)) ? MENU_SHOW : MENU_DIM);
 }
 
-ADD_MENU_BRANCH(disguise_blue_friendly, "#FF_CM_DISGUISEBLUE", 'T', "disguise blue ", &ClassDMenu) { return TeamAvailableForDisguise(TEAM_BLUE, FRIENDLY); }
-ADD_MENU_BRANCH(disguise_red_friendly, "#FF_CM_DISGUISERED", 'U', "disguise red ", &ClassDMenu) { return TeamAvailableForDisguise(TEAM_RED, FRIENDLY); }
-ADD_MENU_BRANCH(disguise_yellow_friendly, "#FF_CM_DISGUISEYELLOW", 'V', "disguise yellow ", &ClassDMenu) { return TeamAvailableForDisguise(TEAM_YELLOW, FRIENDLY); }
-ADD_MENU_BRANCH(disguise_green_friendly, "#FF_CM_DISGUISEGREEN", 'W', "disguise green ", &ClassDMenu) { return TeamAvailableForDisguise(TEAM_GREEN, FRIENDLY); }
-ADD_MENU_BRANCH(disguise_blue_enemy, "#FF_CM_DISGUISEBLUE", 'T', "disguise blue ", &ClassDMenu) { return TeamAvailableForDisguise(TEAM_BLUE, ENEMY); }
-ADD_MENU_BRANCH(disguise_red_enemy, "#FF_CM_DISGUISERED", 'U', "disguise red ", &ClassDMenu) { return TeamAvailableForDisguise(TEAM_RED, ENEMY); }
-ADD_MENU_BRANCH(disguise_yellow_enemy, "#FF_CM_DISGUISEYELLOW", 'V', "disguise yellow ", &ClassDMenu) { return TeamAvailableForDisguise(TEAM_YELLOW, ENEMY); }
-ADD_MENU_BRANCH(disguise_green_enemy, "#FF_CM_DISGUISEGREEN", 'W', "disguise green ", &ClassDMenu) { return TeamAvailableForDisguise(TEAM_GREEN, ENEMY); }
+ADD_MENU_BRANCH(disguise_blue_friendly, "#FF_CM_DISGUISEBLUE", 'T', "disguise blue ", &ClassDMenu) { return TeamAvailableForDisguise(FF_TEAM_BLUE, FRIENDLY); }
+ADD_MENU_BRANCH(disguise_red_friendly, "#FF_CM_DISGUISERED", 'U', "disguise red ", &ClassDMenu) { return TeamAvailableForDisguise(FF_TEAM_RED, FRIENDLY); }
+ADD_MENU_BRANCH(disguise_yellow_friendly, "#FF_CM_DISGUISEYELLOW", 'V', "disguise yellow ", &ClassDMenu) { return TeamAvailableForDisguise(FF_TEAM_YELLOW, FRIENDLY); }
+ADD_MENU_BRANCH(disguise_green_friendly, "#FF_CM_DISGUISEGREEN", 'W', "disguise green ", &ClassDMenu) { return TeamAvailableForDisguise(FF_TEAM_GREEN, FRIENDLY); }
+ADD_MENU_BRANCH(disguise_blue_enemy, "#FF_CM_DISGUISEBLUE", 'T', "disguise blue ", &ClassDMenu) { return TeamAvailableForDisguise(FF_TEAM_BLUE, ENEMY); }
+ADD_MENU_BRANCH(disguise_red_enemy, "#FF_CM_DISGUISERED", 'U', "disguise red ", &ClassDMenu) { return TeamAvailableForDisguise(FF_TEAM_RED, ENEMY); }
+ADD_MENU_BRANCH(disguise_yellow_enemy, "#FF_CM_DISGUISEYELLOW", 'V', "disguise yellow ", &ClassDMenu) { return TeamAvailableForDisguise(FF_TEAM_YELLOW, ENEMY); }
+ADD_MENU_BRANCH(disguise_green_enemy, "#FF_CM_DISGUISEGREEN", 'W', "disguise green ", &ClassDMenu) { return TeamAvailableForDisguise(FF_TEAM_GREEN, ENEMY); }
 
 ADD_MENU_OPTION(disguisescout, "#FF_CM_DISGUISESCOUT", '!', "scout") { return CheckDisguiseClass( CLASS_SCOUT ); }
 ADD_MENU_OPTION(disguisesniper, "#FF_CM_DISGUISESNIPER", '@', "sniper") {	return CheckDisguiseClass( CLASS_SNIPER ); }

@@ -128,7 +128,7 @@ public:
 	//-----------------------------------------------------------------------------
 	void SetTeamID(int iTeamID)
 	{
-		Assert(iTeamID >= TEAM_BLUE && iTeamID <= TEAM_GREEN);
+		Assert(iTeamID >= FF_TEAM_BLUE && iTeamID <= FF_TEAM_GREEN);
 		m_iTeamID = iTeamID;
 
 		UpdateTeamIcon(iTeamID);
@@ -147,7 +147,7 @@ public:
 		if (pFFTeam)
 			m_pTeamInsignia->SetImage(pFFTeam->GetTeamIcon());
 		else
-			m_pTeamInsignia->SetImage(pszInsignias[iTeamID - TEAM_BLUE]);
+			m_pTeamInsignia->SetImage(pszInsignias[iTeamID - FF_TEAM_BLUE]);
 	}
 
 	//-----------------------------------------------------------------------------
@@ -241,7 +241,7 @@ CTeamMenu::CTeamMenu(IViewPort *pViewPort) : Frame(NULL, PANEL_TEAM )
 	for (int iTeamIndex = 0; iTeamIndex < ARRAYSIZE(pszButtons); iTeamIndex++)
 	{
 		m_pTeamButtons[iTeamIndex] = new TeamButton(this, pszButtons[iTeamIndex], (const char *) NULL, this, pszButtons[iTeamIndex]);
-		m_pTeamButtons[iTeamIndex]->SetTeamID(iTeamIndex + TEAM_BLUE);
+		m_pTeamButtons[iTeamIndex]->SetTeamID(iTeamIndex + FF_TEAM_BLUE);
 	}
 
 	m_pAutoAssignButton = new FFButton(this, "AutoAssignButton", (const char *) NULL, this, "AutoAssign");
@@ -354,7 +354,7 @@ void CTeamMenu::OnKeyCodePressed(KeyCode code)
 	// Bug #0000540: Can't changeclass while changeteam menu is up
 	// Support bring the class menu back up if the team menu is showing
 	if( gameuifuncs->GetButtonCodeForBind("changeclass") == code &&
-		( C_BasePlayer::GetLocalPlayer()->GetTeamNumber() >= TEAM_BLUE ) ) 
+		( C_BasePlayer::GetLocalPlayer()->GetTeamNumber() >= FF_TEAM_BLUE ) )
 	{
 		m_pViewPort->ShowPanel( this, false );
 		engine->ClientCmd( "changeclass" );
@@ -441,9 +441,9 @@ void CTeamMenu::UpdateTeamButtons()
 
 	int nActiveButtons = 0;
 
-	for (int iTeamID = TEAM_BLUE; iTeamID <= TEAM_GREEN; iTeamID++)
+	for (int iTeamID = FF_TEAM_BLUE; iTeamID <= FF_TEAM_GREEN; iTeamID++)
 	{
-		int iTeamIndex = iTeamID - TEAM_BLUE;
+		int iTeamIndex = iTeamID - FF_TEAM_BLUE;
 		TeamButton *pTeamButton = m_pTeamButtons[iTeamIndex];
 
 		// This team doesn't exist at all
@@ -619,6 +619,6 @@ void CTeamMenu::UpdateTeamIcons()
 {
 	for ( int iTeamID = 0; iTeamID < 4; iTeamID++ )
 	{
-		m_pTeamButtons[iTeamID]->UpdateTeamIcon(iTeamID + TEAM_BLUE);
+		m_pTeamButtons[iTeamID]->UpdateTeamIcon(iTeamID + FF_TEAM_BLUE);
 	}
 }

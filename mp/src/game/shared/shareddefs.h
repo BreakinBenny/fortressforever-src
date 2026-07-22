@@ -263,17 +263,19 @@ enum CastVote
 // Start your team numbers after this
 #define LAST_SHARED_TEAM		TEAM_SPECTATOR
 
-#ifdef FF // BEG: Added by Mulchman
-#define TEAM_BLUE				2   // blue team
-#define TEAM_RED				3   // red team
-#define TEAM_YELLOW				4   // yellow team
-#define TEAM_GREEN				5   // green team
-#define TEAM_COUNT				6   // # of teams there are
-#endif // END: Added by Mulchman 
-
 // The first team that's game specific (i.e. not unassigned / spectator)
-// TEAM_BLUE
 #define FIRST_GAME_TEAM			(LAST_SHARED_TEAM+1)
+
+#ifdef FF // BEG: Added by Mulchman
+enum
+{
+	FF_TEAM_BLUE = FIRST_GAME_TEAM,
+	FF_TEAM_RED,
+	FF_TEAM_YELLOW,
+	FF_TEAM_GREEN,
+	TEAM_COUNT	// # of teams there are
+};
+#endif // END: Added by Mulchman
 
 #define MAX_TEAMS				32	// Max number of teams in a game
 #define MAX_TEAM_NAME_LENGTH	32	// Max length of a team's name
@@ -286,16 +288,19 @@ enum CastVote
 #define WEAPON_IS_ACTIVE				2	// This client is carrying this weapon and it's the currently held weapon
 
 #ifdef FF // --> Mirv: Class defines
-#define CLASS_SCOUT			1
-#define CLASS_SNIPER		2
-#define CLASS_SOLDIER		3
-#define CLASS_DEMOMAN		4
-#define CLASS_MEDIC			5
-#define CLASS_HWGUY			6
-#define CLASS_PYRO			7
-#define CLASS_SPY			8
-#define CLASS_ENGINEER		9
-#define CLASS_CIVILIAN		10
+enum FFClass
+{
+	CLASS_SCOUT = 1,
+	CLASS_SNIPER,
+	CLASS_SOLDIER,
+	CLASS_DEMOMAN,
+	CLASS_MEDIC,
+	CLASS_HWGUY,
+	CLASS_PYRO,
+	CLASS_SPY,
+	CLASS_ENGINEER,
+	CLASS_CIVILIAN
+};
 #endif // <-- Mirv: Class defines
 
 // -----------------------------------------

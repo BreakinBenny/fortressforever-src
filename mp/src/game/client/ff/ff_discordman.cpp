@@ -169,7 +169,7 @@ void CFFDiscordManager::UpdateGameData()
 	std::stringstream scoresStream;
 	scoresStream << FFGameRules()->GetGameDescription() << " (";
 
-	for (int i = TEAM_BLUE; i <= TEAM_GREEN; i++)
+	for (int i = FF_TEAM_BLUE; i <= FF_TEAM_GREEN; i++)
 	{
 		C_FFTeam* team = GetGlobalFFTeam(i);
 

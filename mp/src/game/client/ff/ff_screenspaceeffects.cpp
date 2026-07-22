@@ -346,7 +346,7 @@ void CMotionBlur::Render(int x, int y, int w, int h)
 	C_FFPlayer *pPlayer = C_FFPlayer::GetLocalFFPlayerOrObserverTarget();
 
 	// Must be valid, on a team and not no-clipping and alive
-	if (!cl_dynamicblur.GetBool() || !pPlayer || pPlayer->GetTeamNumber() < TEAM_BLUE || !pPlayer->IsAlive() || pPlayer->GetMoveType() == MOVETYPE_NOCLIP)
+	if (!cl_dynamicblur.GetBool() || !pPlayer || pPlayer->GetTeamNumber() < FF_TEAM_BLUE || !pPlayer->IsAlive() || pPlayer->GetMoveType() == MOVETYPE_NOCLIP)
 		return;
 
 	// Don't do anything here if the frametime is broken

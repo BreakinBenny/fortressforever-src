@@ -406,10 +406,10 @@ void SetColorByTeam( int iTeam, Color& cColor )
 
 	switch( iTeam )
 	{
-		case TEAM_BLUE: cColor.SetColor( 64, 128, 255 ); break;
-		case TEAM_RED: cColor.SetColor( 255, 64, 64 ); break;
-		case TEAM_YELLOW: cColor.SetColor( 255, 255, 64 ); break;
-		case TEAM_GREEN: cColor.SetColor( 100, 255, 100 ); break;
+		case FF_TEAM_BLUE: cColor.SetColor( 64, 128, 255 ); break;
+		case FF_TEAM_RED: cColor.SetColor( 255, 64, 64 ); break;
+		case FF_TEAM_YELLOW: cColor.SetColor( 255, 255, 64 ); break;
+		case FF_TEAM_GREEN: cColor.SetColor( 100, 255, 100 ); break;
 		default: cColor.SetColor( 255, 255, 255 ); break;
 	}
 }
@@ -958,7 +958,7 @@ bool FF_IsPlayerSpec( CFFPlayer *pPlayer )
 	if( !pPlayer )
 		return false;
 
-	return !( ( pPlayer->GetTeamNumber() >= TEAM_BLUE ) && ( pPlayer->GetTeamNumber() <= TEAM_GREEN ) );
+	return !( ( pPlayer->GetTeamNumber() >= FF_TEAM_BLUE ) && ( pPlayer->GetTeamNumber() <= FF_TEAM_GREEN ) );
 }
 
 //-----------------------------------------------------------------------------
@@ -1036,12 +1036,12 @@ void UTIL_GetTeamNumbers(char nTeamNumbers[4])
 		if (pPlayer == NULL || !pPlayer->IsConnected())
 			continue;
 		
-		int iTeamIndex = pPlayer->GetTeamNumber() - TEAM_BLUE;
+		int iTeamIndex = pPlayer->GetTeamNumber() - FF_TEAM_BLUE;
 #else
 		if (!pGR->IsConnected(iClient))
 			continue;
 
-		int iTeamIndex = pGR->GetTeam(iClient) - TEAM_BLUE;
+		int iTeamIndex = pGR->GetTeam(iClient) - FF_TEAM_BLUE;
 #endif
 
 		// Finally add this team if it is valid
@@ -1070,9 +1070,9 @@ void UTIL_GetTeamLimits(char nTeamLimits[4])
 #endif
 
 	// Loop through teams getting limits
-	for (int iTeamID = TEAM_BLUE; iTeamID <= TEAM_GREEN; iTeamID++)
+	for (int iTeamID = FF_TEAM_BLUE; iTeamID <= FF_TEAM_GREEN; iTeamID++)
 	{
-		int iTeamIndex = iTeamID - TEAM_BLUE;
+		int iTeamIndex = iTeamID - FF_TEAM_BLUE;
 
 #ifdef GAME_DLL
 		CFFTeam *pTeam = GetGlobalFFTeam(iTeamID);
@@ -1112,9 +1112,9 @@ int UTIL_GetTeamSpaces(char nSpacesRemaining[4])
 
 	// Now loop through the teams and take different branches to find out
 	// what their limits are and calculate places remaining from these
-	for (int iTeamID = TEAM_BLUE; iTeamID <= TEAM_GREEN; iTeamID++)
+	for (int iTeamID = FF_TEAM_BLUE; iTeamID <= FF_TEAM_GREEN; iTeamID++)
 	{
-		int iTeamIndex = iTeamID - TEAM_BLUE;
+		int iTeamIndex = iTeamID - FF_TEAM_BLUE;
 
 		// No limit at all
 		if (nTeamLimits[iTeamIndex] == 0)

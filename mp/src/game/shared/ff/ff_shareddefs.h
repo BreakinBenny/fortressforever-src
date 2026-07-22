@@ -10,6 +10,8 @@
 #pragma once
 #endif
 
+#include "shareddefs.h"
+
 #ifdef CLIENT_DLL
 	#include "materialsystem/imaterialsystem.h"
 	#include "materialsystem/imesh.h"
