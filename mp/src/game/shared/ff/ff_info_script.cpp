@@ -530,24 +530,24 @@ bool CFFInfoScript::CanEntityTouch(CBaseEntity* pEntity)
 		int iTeam = pEntity->GetTeamNumber();
 		switch(iTeam)
 		{
-		case FF_TEAM_BLUE:
+		case TEAM_BLUE:
 			bCanTouch = (m_allowTouchFlags & kAllowBlueTeam) == kAllowBlueTeam
 				&& (m_disallowTouchFlags & kAllowBlueTeam) != kAllowBlueTeam;
 			break;
 
-		case FF_TEAM_RED:
+		case TEAM_RED:
 			bCanTouch = (m_allowTouchFlags & kAllowRedTeam) == kAllowRedTeam
 				&& (m_disallowTouchFlags & kAllowRedTeam) != kAllowRedTeam;
 			break;
 
-		case FF_TEAM_YELLOW:
-			bCanTouch = (m_allowTouchFlags & kAllowYellowTeam) == kAllowYellowTeam
-				&& (m_disallowTouchFlags & kAllowYellowTeam) != kAllowYellowTeam;
-			break;
-
-		case FF_TEAM_GREEN:
+		case TEAM_GREEN:
 			bCanTouch = (m_allowTouchFlags & kAllowGreenTeam) == kAllowGreenTeam
 				&& (m_disallowTouchFlags & kAllowGreenTeam) != kAllowGreenTeam;
+			break;
+
+		case TEAM_YELLOW:
+			bCanTouch = (m_allowTouchFlags & kAllowYellowTeam) == kAllowYellowTeam
+				&& (m_disallowTouchFlags & kAllowYellowTeam) != kAllowYellowTeam;
 			break;
 		}
 	}

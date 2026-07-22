@@ -118,7 +118,7 @@ void CHudTeamScores::Paint()
 
 	Color cColor;
 
-	int iTeam = FF_TEAM_BLUE;
+	int iTeam = TEAM_BLUE;
 	C_FFTeam *pTeam = GetGlobalFFTeam( iTeam );
 	if (pTeam->Get_Teams() > -1)
 	{
@@ -127,7 +127,7 @@ void CHudTeamScores::Paint()
 		PaintNumbersRightAligned(m_hTeamScoreBlueFont, TeamScoreBlue_xpos, TeamScoreBlue_ypos, pGR->GetTeamScore( iTeam ), 5 );
 	}
 
-	iTeam = FF_TEAM_RED;
+	iTeam = TEAM_RED;
 	pTeam = GetGlobalFFTeam( iTeam );
 	if (pTeam->Get_Teams() > -1)
 	{
@@ -136,7 +136,7 @@ void CHudTeamScores::Paint()
 		PaintNumbers(m_hTeamScoreRedFont, TeamScoreRed_xpos, TeamScoreRed_ypos, pGR->GetTeamScore( iTeam ) );
 	}
 
-	iTeam = FF_TEAM_YELLOW;
+	iTeam = TEAM_YELLOW;
 	pTeam = GetGlobalFFTeam( iTeam );
 	if (pTeam->Get_Teams() > -1)
 	{
@@ -145,7 +145,7 @@ void CHudTeamScores::Paint()
 		PaintNumbersRightAligned(m_hTeamScoreYellowFont, TeamScoreYellow_xpos, TeamScoreYellow_ypos, pGR->GetTeamScore( iTeam ), 5 );
 	}
 
-	iTeam = FF_TEAM_GREEN;
+	iTeam = TEAM_GREEN;
 	pTeam = GetGlobalFFTeam( iTeam );
 	if (pTeam->Get_Teams() > -1)
 	{

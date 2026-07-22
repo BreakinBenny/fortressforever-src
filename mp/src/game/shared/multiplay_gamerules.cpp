@@ -360,7 +360,7 @@ bool CMultiplayRules::Init()
 		BaseClass::RefreshSkillData( forceUpdate );
 
 	// override some values for multiplay.
-#ifndef FF_DLL
+
 		// suitcharger
 #ifndef TF_DLL
 //=============================================================================
@@ -374,7 +374,6 @@ ConVarRef suitcharger( "sk_suitcharger" );
 //=============================================================================
 // HPE_END
 //=============================================================================
-#endif
 #endif
 	}
 

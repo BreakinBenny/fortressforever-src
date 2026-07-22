@@ -90,10 +90,10 @@ C_PlayerResource::C_PlayerResource()
 	}
 
 	m_Colors[TEAM_SPECTATOR] = TEAM_COLOR_SPECTATOR;
-	m_Colors[FF_TEAM_BLUE] = TEAM_COLOR_BLUE;
-	m_Colors[FF_TEAM_RED] = TEAM_COLOR_RED;
-	m_Colors[FF_TEAM_YELLOW] = TEAM_COLOR_YELLOW;
-	m_Colors[FF_TEAM_GREEN] = TEAM_COLOR_GREEN;
+	m_Colors[TEAM_BLUE]		 = TEAM_COLOR_BLUE;
+	m_Colors[TEAM_RED]		 = TEAM_COLOR_RED;
+	m_Colors[TEAM_YELLOW]	 = TEAM_COLOR_YELLOW;
+	m_Colors[TEAM_GREEN]	 = TEAM_COLOR_GREEN;
 
 	g_PR = this;
 }

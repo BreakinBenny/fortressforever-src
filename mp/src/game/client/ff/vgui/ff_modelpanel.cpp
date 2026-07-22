@@ -277,7 +277,7 @@ void PlayerModelPanel::SetClass(const char *pszClassname)
 
 	if (pGR)
 	{
-		m_hModel->m_nSkin = pGR->GetTeam(pLocalPlayer->entindex()) - FF_TEAM_BLUE;
+		m_hModel->m_nSkin = pGR->GetTeam(pLocalPlayer->entindex()) - TEAM_BLUE;
 	}
 }
 

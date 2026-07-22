@@ -101,9 +101,9 @@ void CFFLuaLib::InitTeam(lua_State* L)
 		.beginNamespace("Team")
 			.addProperty("kUnassigned",		[]() -> int { return TEAM_UNASSIGNED; })
 			.addProperty("kSpectator",		[]() -> int { return TEAM_SPECTATOR; })
-			.addProperty("kBlue",			[]() -> int { return FF_TEAM_BLUE; })
-			.addProperty("kRed",			[]() -> int { return FF_TEAM_RED; })
-			.addProperty("kYellow",			[]() -> int { return FF_TEAM_YELLOW; })
-			.addProperty("kGreen",			[]() -> int { return FF_TEAM_GREEN; })
+			.addProperty("kBlue",			[]() -> int { return TEAM_BLUE; })
+			.addProperty("kRed",			[]() -> int { return TEAM_RED; })
+			.addProperty("kYellow",			[]() -> int { return TEAM_YELLOW; })
+			.addProperty("kGreen",			[]() -> int { return TEAM_GREEN; })
 		.endNamespace();
 };

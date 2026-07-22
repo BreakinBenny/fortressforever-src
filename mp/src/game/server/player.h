@@ -1177,6 +1177,7 @@ protected:
 	// --> Mirv: this was put in by billdoor to access the maxspeed variable
 	friend class CFFPlayer;
 	// <-- Mirv: this was put in by billdoor to access the maxspeed variable
+	friend class CDODGameMovement;
 	
 	// Accessors for gamemovement
 	bool IsDucked( void ) const { return m_Local.m_bDucked; }

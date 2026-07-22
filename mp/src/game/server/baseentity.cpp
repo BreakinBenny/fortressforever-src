@@ -7622,23 +7622,25 @@ void CBaseEntity::StartTrail(int teamId, float startWidth, float endWidth, float
 		m_pSpriteTrail->FollowEntity(this);
 		m_pSpriteTrail->SetAttachment(this, 0);
 
-		switch (teamId)
+		if (teamId == TEAM_BLUE)
 		{
-		case FF_TEAM_BLUE:
 			m_pSpriteTrail->SetTransparency(kRenderTransAdd, 85, 95, 205, 255, kRenderFxNone);
-			break;
-		case FF_TEAM_RED:
+		}
+		else if (teamId == TEAM_RED)
+		{
 			m_pSpriteTrail->SetTransparency(kRenderTransAdd, 205, 95, 85, 255, kRenderFxNone);
-			break;
-		case FF_TEAM_GREEN:
+		}
+		else if (teamId == TEAM_GREEN)
+		{
 			m_pSpriteTrail->SetTransparency(kRenderTransAdd, 85, 205, 85, 255, kRenderFxNone);
-			break;
-		case FF_TEAM_YELLOW:
+		}
+		else if (teamId == TEAM_YELLOW)
+		{
 			m_pSpriteTrail->SetTransparency(kRenderTransAdd, 205, 205, 85, 255, kRenderFxNone);
-			break;
-		default:
+		}
+		else
+		{
 			m_pSpriteTrail->SetTransparency(kRenderTransAdd, 255, 255, 255, 255, kRenderFxNone);
-			break;
 		}
 
 		m_pSpriteTrail->SetStartWidth(startWidth);

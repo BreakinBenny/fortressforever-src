@@ -353,7 +353,7 @@ CFFSentryGun *CFFSentryGun::CreateClientSideSentryGun( const Vector& vecOrigin, 
 	pSentryGun->m_hOwner = ( C_BaseEntity * )C_BasePlayer::GetLocalPlayer();
 
 	// Mirv: Show up as the correct skin
-	pSentryGun->m_nSkin = clamp(CBasePlayer::GetLocalPlayer()->GetTeamNumber() - FF_TEAM_BLUE, 0, 3);
+	pSentryGun->m_nSkin = clamp(CBasePlayer::GetLocalPlayer()->GetTeamNumber() - TEAM_BLUE, 0, 3);
 	pSentryGun->SetClientSideOnly( true );
 	pSentryGun->SetNextClientThink( CLIENT_THINK_ALWAYS );
 
@@ -441,7 +441,7 @@ void CFFSentryGun::Spawn( void )
 	// set skin
 	CFFPlayer *pOwner = static_cast< CFFPlayer * >( m_hOwner.Get() );
 	if( pOwner ) 
-		m_nSkin = clamp( pOwner->GetTeamNumber() - FF_TEAM_BLUE, 0, 3 );	// |-- Mirv: BUG #0000118: SGs are always red	
+		m_nSkin = clamp( pOwner->GetTeamNumber() - TEAM_BLUE, 0, 3 );	// |-- Mirv: BUG #0000118: SGs are always red	
 
 	SetViewOffset(EyeOffset(ACT_IDLE));
 
@@ -2051,7 +2051,7 @@ void CFFSentryGun::MaliciouslySabotage(CFFPlayer *pSaboteur)
 	// Cancel target so it searchs for a new (friendly one)
 	SetEnemy(NULL);
 
-	m_nSkin = clamp( pSaboteur->GetTeamNumber() - FF_TEAM_BLUE, 0, 3 );
+	m_nSkin = clamp( pSaboteur->GetTeamNumber() - TEAM_BLUE, 0, 3 );
 
 	Warning("SG maliciously sabotaged\n");
 }
@@ -2116,7 +2116,7 @@ void CFFSentryGun::SpawnGibs()
 	CEffectData data;
 		data.m_nEntIndex = entindex();
 		data.m_vOrigin = GetAbsOrigin();
-		data.m_nMaterial = clamp( pOwner->GetTeamNumber() - FF_TEAM_BLUE, 0, 4 ); // using this for team colours, to colour it blue/red/yellow/green
+		data.m_nMaterial = clamp( pOwner->GetTeamNumber() - TEAM_BLUE, 0, 4 ); // using this for team colours, to colour it blue/red/yellow/green
 		data.m_nDamageType = m_iLevel; // HACK: using m_nDamageType for SG level so we can use different gibs per level
 	// UNCOMMENT THIS WHEN GIB MODELS ARE FIXED (ORIGINS) - AfterShock
 	DispatchEffect("SentryGunGib", data);

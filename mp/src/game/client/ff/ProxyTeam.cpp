@@ -37,7 +37,7 @@ void CProxyTeam::OnBind(void *pC_BaseEntity)
 	Assert(m_pResult);
 
 	if (pPlayer) 
-		SetFloatResult(pPlayer->GetTeamNumber() - (FF_TEAM_BLUE - 1));
+		SetFloatResult(pPlayer->GetTeamNumber() - (TEAM_BLUE - 1));
 	else
 		SetFloatResult(0);
 }

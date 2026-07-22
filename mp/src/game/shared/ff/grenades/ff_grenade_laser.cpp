@@ -593,13 +593,13 @@ float CFFGrenadeLaser::getLengthPercent()
 					pBeam[i]->SetBrightness( 255 );
 					if(hud_lasergren_customColor_enable.GetBool() == true)
 						pBeam[i]->SetColor( hud_lasergren_customColor_r.GetInt(), hud_lasergren_customColor_g.GetInt(), hud_lasergren_customColor_b.GetInt() );
-					else if(pgrenOwner->GetTeamNumber() == FF_TEAM_RED)
+					else if(pgrenOwner->GetTeamNumber() == TEAM_RED)
 						pBeam[i]->SetColor( 255, 64, 64 );
-					else if(pgrenOwner->GetTeamNumber() == FF_TEAM_BLUE)
+					else if(pgrenOwner->GetTeamNumber() == TEAM_BLUE)
 						pBeam[i]->SetColor( 64, 128, 255 );
-					else if(pgrenOwner->GetTeamNumber() == FF_TEAM_GREEN)
+					else if(pgrenOwner->GetTeamNumber() == TEAM_GREEN)
 						pBeam[i]->SetColor( 153, 255, 153 );
-					else if(pgrenOwner->GetTeamNumber() == FF_TEAM_YELLOW)
+					else if(pgrenOwner->GetTeamNumber() == TEAM_YELLOW)
 						pBeam[i]->SetColor( 255, 178, 0 );
 					else // just in case
 						pBeam[i]->SetColor( 204, 204, 204 );

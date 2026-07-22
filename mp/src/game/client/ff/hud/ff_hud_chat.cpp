@@ -114,22 +114,22 @@ Color GetCustomClientColor(int iPlayerIndex, int iTeamIndex/* = -1*/)
 				clr = hud_newteamcolors.GetBool() ? NEW_TEAM_COLOR_SPECTATOR : TEAM_COLOR_SPECTATOR;
 				break;
 			}
-			case FF_TEAM_BLUE:
+			case TEAM_BLUE:
 			{
 				clr = hud_newteamcolors.GetBool() ? NEW_TEAM_COLOR_BLUE : TEAM_COLOR_BLUE;
 				break;
 			}
-			case FF_TEAM_RED:
+			case TEAM_RED:
 			{
 				clr = hud_newteamcolors.GetBool() ? NEW_TEAM_COLOR_RED : TEAM_COLOR_RED;
 				break;
 			}
-			case FF_TEAM_YELLOW:
+			case TEAM_YELLOW:
 			{
 				clr = hud_newteamcolors.GetBool() ? NEW_TEAM_COLOR_RED : TEAM_COLOR_YELLOW;
 				break;
 			}
-			case FF_TEAM_GREEN:
+			case TEAM_GREEN:
 			{
 				clr = hud_newteamcolors.GetBool() ? NEW_TEAM_COLOR_GREEN : TEAM_COLOR_GREEN;
 				break;
@@ -274,10 +274,10 @@ Color CHudChat::GetClientColor(int clientIndex)
 	{
 		switch (g_PR->GetTeam(clientIndex))
 		{
-		case FF_TEAM_BLUE: return g_ColorBlue;
-		case FF_TEAM_RED: return g_ColorRed;
-		case FF_TEAM_YELLOW: return g_ColorYellow;
-		case FF_TEAM_GREEN: return g_ColorGreen;
+		case TEAM_BLUE: return g_ColorBlue;
+		case TEAM_RED: return g_ColorRed;
+		case TEAM_YELLOW: return g_ColorYellow;
+		case TEAM_GREEN: return g_ColorGreen;
 		default: return g_ColorGrey;
 		}
 	}

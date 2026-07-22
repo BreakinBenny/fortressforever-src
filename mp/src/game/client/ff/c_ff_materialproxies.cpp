@@ -548,7 +548,7 @@ EXPOSE_INTERFACE(C_FFSpyCloakMaterialProxy, IMaterialProxy, "FF_SpyCloakProxy" I
 //-----------------------------------------------------------------------------
 C_FFTeamScore_MaterialProxy::C_FFTeamScore_MaterialProxy(void)
 {
-	m_iTeam = TEAM_UNASSIGNED;
+	m_iTeam = FF_TEAM_UNASSIGNED;
 }
 
 //-----------------------------------------------------------------------------

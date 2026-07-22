@@ -65,7 +65,7 @@ int C_FFTeam::GetAllies( void )
 int C_FFTeam::GetAlliedTeams( int (&iAlliedTeams)[TEAM_COUNT] )
 {
 	int iCount = 0;
-	for (int i = FF_TEAM_BLUE; i < TEAM_COUNT; i++ )
+	for (int i = TEAM_BLUE; i < TEAM_COUNT; i++ )
 	{
 		if ( m_iTeamNum == i )
 			continue;

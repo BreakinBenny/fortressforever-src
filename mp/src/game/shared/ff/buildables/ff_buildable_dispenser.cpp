@@ -230,7 +230,7 @@ CFFDispenser *CFFDispenser::CreateClientSideDispenser( const Vector& vecOrigin, 
 	// someone accesses the m_hOwner.Get() and wants to return something
 	// that isn't NULL!
 	pDispenser->m_hOwner = ( C_BaseEntity * )C_BasePlayer::GetLocalPlayer();
-	pDispenser->m_nSkin = clamp(CBasePlayer::GetLocalPlayer()->GetTeamNumber() + 1 - FF_TEAM_BLUE, 0, 4); // dispenser skin 0 is neutral
+	pDispenser->m_nSkin = clamp(CBasePlayer::GetLocalPlayer()->GetTeamNumber() + 1 - TEAM_BLUE, 0, 4); // dispenser skin 0 is neutral
 	pDispenser->SetClientSideOnly( true );
 	pDispenser->SetNextClientThink( CLIENT_THINK_ALWAYS );
 
@@ -263,7 +263,7 @@ void CFFDispenser::Spawn( void )
 	// set skin
 	CFFPlayer *pOwner = static_cast< CFFPlayer * >( m_hOwner.Get() );
 	if( pOwner ) 
-		m_nSkin = clamp( pOwner->GetTeamNumber() + 1 - FF_TEAM_BLUE, 0, 4 );	// |-- Mirv: BUG #0000118: SGs are always red	
+		m_nSkin = clamp( pOwner->GetTeamNumber() + 1 - TEAM_BLUE, 0, 4 );	// |-- Mirv: BUG #0000118: SGs are always red	
 
 	UpdateAmmoPercentage();
 }
@@ -757,7 +757,7 @@ void CFFDispenser::SpawnGibs()
 	CEffectData data;
 		data.m_nEntIndex = entindex();
 		data.m_vOrigin = GetAbsOrigin();
-		data.m_nMaterial = clamp( pOwner->GetTeamNumber() + 1 - FF_TEAM_BLUE, 0, 4 ); // using this for skin, not sure what it's meant to be used for
+		data.m_nMaterial = clamp( pOwner->GetTeamNumber() + 1 - TEAM_BLUE, 0, 4 ); // using this for skin, not sure what it's meant to be used for
 	DispatchEffect("DispenserGib", data);
 }
 

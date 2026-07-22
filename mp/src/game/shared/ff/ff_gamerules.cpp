@@ -187,7 +187,16 @@ ConVar mp_friendlyfire_armorstrip( "mp_friendlyfire_armorstrip",
 	// --------------------------------------------------------------------------------------------------- //
 
 	// NOTE: the indices here must match TEAM_TERRORIST, TEAM_CT, TEAM_SPECTATOR, etc.
+	/*
 	char *sTeamNames[] =
+	{
+		"Unassigned",
+		"Spectator",
+		"Terrorist",
+		"Counter-Terrorist"
+	};
+	*/
+	char *sTeamNames[ ] =
 	{
 		"#FF_TEAM_UNASSIGNED",
 		"#FF_TEAM_SPECTATOR",
@@ -692,7 +701,7 @@ ConVar mp_friendlyfire_armorstrip( "mp_friendlyfire_armorstrip",
 			// For use later
 			CUtlVector< int > iChangeClassValidClasses;
 
-			bool bUseTeam = ( ( iTeam >= FF_TEAM_BLUE ) && ( iTeam <= FF_TEAM_GREEN ) );
+			bool bUseTeam = ( ( iTeam >= TEAM_BLUE ) && ( iTeam <= TEAM_GREEN ) );
 			bool bUsePlayer = !!pFFPlayer;
 
 			// Eh? Which one do we use? 
@@ -774,7 +783,7 @@ ConVar mp_friendlyfire_armorstrip( "mp_friendlyfire_armorstrip",
 
 					if( pbFlags[ AT_CHANGETEAM_SPEC ] )
 					{
-						pPlayer->ChangeTeam( TEAM_SPECTATOR );
+						pPlayer->ChangeTeam( FF_TEAM_SPEC );
 					}
 
 					if( pbFlags[ AT_DROP_ITEMS ] || pbFlags[ AT_THROW_ITEMS ] )
@@ -2030,7 +2039,7 @@ const char *CFFGameRules::GetChatLocation( bool bTeamOnly, CBasePlayer *pPlayer 
 	if( pffPlayer )
 	{
 		int iTeam = pffPlayer->GetLocationTeam();
-		if( iTeam < FF_TEAM_BLUE )
+		if( iTeam < TEAM_BLUE )
 			return pffPlayer->GetLocation();
 		else
 		{
@@ -2040,10 +2049,10 @@ const char *CFFGameRules::GetChatLocation( bool bTeamOnly, CBasePlayer *pPlayer 
 
 			switch( iTeam )
 			{
-				case FF_TEAM_BLUE: szTeam = "#FF_TEAM_BLUE"; break;
-				case FF_TEAM_RED: szTeam = "#FF_TEAM_RED"; break;
-				case FF_TEAM_YELLOW: szTeam = "#FF_TEAM_YELLOW"; break;
-				case FF_TEAM_GREEN: szTeam = "#FF_TEAM_GREEN"; break;
+				case TEAM_BLUE: szTeam = "#FF_TEAM_BLUE"; break;
+				case TEAM_RED: szTeam = "#FF_TEAM_RED"; break;
+				case TEAM_YELLOW: szTeam = "#FF_TEAM_YELLOW"; break;
+				case TEAM_GREEN: szTeam = "#FF_TEAM_GREEN"; break;
 			}
 
 			// Convert to ansi on client!
@@ -2215,14 +2224,14 @@ int CFFGameRules::IsTeam1AlliedToTeam2( int iTeam1, int iTeam2 )
 
 	// There is a spectator involved here. We let specs be allies for
 	// scoreboard stuff and possibly something else I'm forgetting.
-	if (iTeam1 < FF_TEAM_BLUE || iTeam2 < FF_TEAM_BLUE)
+	if (iTeam1 < TEAM_BLUE || iTeam2 < TEAM_BLUE)
 	{
 		return GR_TEAMMATE;
 	}
 
 	// Returns GR_TEAMMATE if iTeam1 is allied to iTeam2
-	Assert( ( iTeam1 >= FF_TEAM_BLUE ) && ( iTeam1 <= FF_TEAM_GREEN ) );
-	Assert( ( iTeam2 >= FF_TEAM_BLUE ) && ( iTeam2 <= FF_TEAM_GREEN ) );
+	Assert( ( iTeam1 >= TEAM_BLUE ) && ( iTeam1 <= TEAM_GREEN ) );
+	Assert( ( iTeam2 >= TEAM_BLUE ) && ( iTeam2 <= TEAM_GREEN ) );
 
 	// Same team, but still the result we're looking for
 	if( iTeam1 == iTeam2 )

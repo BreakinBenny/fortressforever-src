@@ -1494,7 +1494,7 @@ void C_FFPlayer::Spawn(void)
 	m_clrTeamColor = Color(255, 255, 255, 255);
 
 	// Set our team color
-	if (g_PR && (GetTeamNumber() >= FF_TEAM_BLUE) && (GetTeamNumber() <= FF_TEAM_GREEN))
+	if (g_PR && (GetTeamNumber() >= TEAM_BLUE) && (GetTeamNumber() <= TEAM_GREEN))
 		m_clrTeamColor = g_PR->GetTeamColor(GetTeamNumber());
 
 	// Reset pipebomb counter!
@@ -2059,11 +2059,11 @@ int C_FFPlayer::DrawModel(int flags)
 			// we just need to differentiate between half of them
 			if (nSkin & 1)
 			{
-				nSkin = pLocalPlayer->GetTeamNumber() - FF_TEAM_BLUE;
+				nSkin = pLocalPlayer->GetTeamNumber() - TEAM_BLUE;
 			}
 			else
 			{
-				nSkin = GetTeamNumber() - FF_TEAM_BLUE;
+				nSkin = GetTeamNumber() - TEAM_BLUE;
 			}
 
 			// This player's skin needs changing
@@ -2075,7 +2075,7 @@ int C_FFPlayer::DrawModel(int flags)
 	}
 	else
 	{
-		int nRealSkin = (IsDisguised() ? GetDisguisedTeam() : GetTeamNumber()) - FF_TEAM_BLUE;
+		int nRealSkin = (IsDisguised() ? GetDisguisedTeam() : GetTeamNumber()) - TEAM_BLUE;
 
 		// Make sure hallucinations are reset!
 		if (m_nSkin != nRealSkin)
@@ -2122,7 +2122,7 @@ const QAngle& C_FFPlayer::EyeAngles()
 		return m_angEyeAngles;
 
 	// Mapguides
-	if (!IsHLTV() && GetTeamNumber() < FF_TEAM_BLUE && m_hNextMapGuide)
+	if (!IsHLTV() && GetTeamNumber() < TEAM_BLUE && m_hNextMapGuide)
 	{
 		float t = clamp((m_flNextMapGuideTime - gpGlobals->curtime) / m_hLastMapGuide->m_flTime, 0, 1.0f);
 		t = SimpleSpline(t);
@@ -2406,7 +2406,7 @@ void C_FFPlayer::OnDataChanged(DataUpdateType_t type)
 		// The client doesn't pick up on this and so weapons' holster and deploy aren't run.
 		// This fixes it, hurrah.
 		// Added extra guards to make this safer
-		if (IsAlive() && GetTeamNumber() >= FF_TEAM_BLUE && GetActiveWeapon() != m_pOldActiveWeapon)
+		if (IsAlive() && GetTeamNumber() >= TEAM_BLUE && GetActiveWeapon() != m_pOldActiveWeapon)
 		{
 			// m_pOldActiveWeapon turns null when you drop packets and plays an infinitely looping animation for some reason.
 			// dont do this if that's the case
@@ -3175,7 +3175,7 @@ float C_FFPlayer::GetFOV()
 
 	float flMaximum = MaxSpeed() * ffdev_dynamicfov_max.GetFloat();
 
-	if (IsLocalPlayer() && (!IsAlive() || GetTeamNumber() < FF_TEAM_BLUE))
+	if (IsLocalPlayer() && (!IsAlive() || GetTeamNumber() < TEAM_BLUE))
 	{
 		// This gives a neato zoom-in effect when you spawn
 		flFOVModifier = flMaximum * 0.75f;

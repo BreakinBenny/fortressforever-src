@@ -15,7 +15,6 @@
 
 #include "utlvector.h"
 #include "team.h"
-#include "ff_shareddefs.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Team Manager

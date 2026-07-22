@@ -76,16 +76,16 @@ bool ShouldFFTriggerClipBlock( CFFTriggerClip *pTriggerClip, int iTeam, int iCli
 		// If team flags are set, then only clip things of clipped teams
 		switch( iTeam )
 		{
-			case FF_TEAM_BLUE:
+			case TEAM_BLUE:
 				if( pTriggerClip->IsClipMaskSet( LUA_CLIP_FLAG_TEAMBLUE ) ) return true;
 				else break;
-			case FF_TEAM_RED:
+			case TEAM_RED:
 				if( pTriggerClip->IsClipMaskSet( LUA_CLIP_FLAG_TEAMRED ) ) return true;
 				else break;
-			case FF_TEAM_YELLOW:
+			case TEAM_YELLOW:
 				if( pTriggerClip->IsClipMaskSet( LUA_CLIP_FLAG_TEAMYELLOW ) ) return true;
 				else break;
-			case FF_TEAM_GREEN:
+			case TEAM_GREEN:
 				if( pTriggerClip->IsClipMaskSet( LUA_CLIP_FLAG_TEAMGREEN ) ) return true;
 				else break;
 			default:
@@ -116,16 +116,16 @@ bool ShouldFFTriggerClipBlock( CFFTriggerClip *pTriggerClip, int iTeam, int iCli
 		// If team flags are set, then only clip things of clipped teams
 		switch( iTeam )
 		{
-			case FF_TEAM_BLUE:
+			case TEAM_BLUE:
 				if( pTriggerClip->IsClipMaskSet( LUA_CLIP_FLAG_TEAMBLUE ) ) return true;
 				else break;
-			case FF_TEAM_RED:
+			case TEAM_RED:
 				if( pTriggerClip->IsClipMaskSet( LUA_CLIP_FLAG_TEAMRED ) ) return true;
 				else break;
-			case FF_TEAM_YELLOW:
+			case TEAM_YELLOW:
 				if( pTriggerClip->IsClipMaskSet( LUA_CLIP_FLAG_TEAMYELLOW ) ) return true;
 				else break;
-			case FF_TEAM_GREEN:
+			case TEAM_GREEN:
 				if( pTriggerClip->IsClipMaskSet( LUA_CLIP_FLAG_TEAMGREEN ) ) return true;
 				else break;
 			default:

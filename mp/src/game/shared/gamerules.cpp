@@ -225,7 +225,7 @@ ConVar sv_spawnoffsetattempts("sv_spawnoffsetattempts", "5", 0, "4 rotations PER
 // for moving the spawn spot around the original spawn spot if other players are inside it
 Vector CGameRules::GetPlayerSpawnSpotOffset(const CBasePlayer* pPlayer, const Vector vecOrigin, const Vector vecPlayerBoundsMins, const Vector vecPlayerBoundsMaxs)
 {
-	if (pPlayer->GetTeamNumber() < FF_TEAM_BLUE)
+	if (pPlayer->GetTeamNumber() < TEAM_BLUE)
 		return Vector(0, 0, 0);
 
 	Vector vecOffset = Vector(0, 0, 0);

@@ -35,6 +35,10 @@
 
 #define SLOWFIELDGRENADE_MODEL			"models/grenades/gas/gas.mdl"
 
+//ConVar ffdev_slowfield_vmt("ffdev_slowfield_vmt", "sprites/ff_slowfieldoutline1.vmt", FCVAR_FF_FFDEV_REPLICATED, "Sprite texture");
+#define SLOWFIELDGRENADE_GLOW_SPRITE "sprites/ff_slowfieldoutline1.vmt"
+
+//#define SLOWFIELDGRENADE_GLOW_SPRITE	"sprites/ff_slowfieldoutline1.vmt"
 #define SLOWFIELDGRENADE_SOUND			"Slowfield.Explode"
 #define SLOWFIELDGRENADE_LOOP			"Slowfield.SlowLoop"
 #define SLOWFIELDGRENADE_BEAM_LOOP		"Slowfield.LaserLoop"
@@ -231,6 +235,7 @@ void CFFGrenadeSlowfield::Precache()
 {
 	PrecacheModel(SLOWFIELDGRENADE_MODEL);
 	PrecacheModel("models/grenades/conc/conceffect.mdl");
+	PrecacheModel(SLOWFIELDGRENADE_GLOW_SPRITE);
 	PrecacheScriptSound(SLOWFIELDGRENADE_SOUND);
 	PrecacheScriptSound(SLOWFIELDGRENADE_LOOP);
 	PrecacheScriptSound(SLOWFIELDGRENADE_BEAM_LOOP);
@@ -504,13 +509,13 @@ void CFFGrenadeSlowfield::UpdateOnRemove()
 				pBeam->LiveForTime(gpGlobals->interval_per_tick);
 				pBeam->SetNoise( SLOWFIELD_BEAM_NOISE );
 				pBeam->SetBrightness( (1 - flLaggedMovement) * 128 + 128 );
-				if(pGrenOwner->GetTeamNumber() == FF_TEAM_RED)
+				if(pGrenOwner->GetTeamNumber() == TEAM_RED)
 					pBeam->SetColor( 255, 64, 64 );
-				else if(pGrenOwner->GetTeamNumber() == FF_TEAM_BLUE)
+				else if(pGrenOwner->GetTeamNumber() == TEAM_BLUE)
 					pBeam->SetColor( 64, 128, 255 );
-				else if(pGrenOwner->GetTeamNumber() == FF_TEAM_GREEN)
+				else if(pGrenOwner->GetTeamNumber() == TEAM_GREEN)
 					pBeam->SetColor( 153, 255, 153 );
-				else if(pGrenOwner->GetTeamNumber() == FF_TEAM_YELLOW)
+				else if(pGrenOwner->GetTeamNumber() == TEAM_YELLOW)
 					pBeam->SetColor( 255, 178, 0 );
 				else // just in case
 					pBeam->SetColor( 204, 204, 204 );
@@ -579,6 +584,7 @@ CFFGrenadeSlowfieldGlow *CFFGrenadeSlowfieldGlow::Create(const Vector &origin, C
 
 	pSlowGlow->AddEFlags(EFL_FORCE_CHECK_TRANSMIT);
 
+	pSlowGlow->SpriteInit(SLOWFIELDGRENADE_GLOW_SPRITE, origin);
 	pSlowGlow->SetName(AllocPooledString("TEST"));
 	pSlowGlow->SetTransparency(kRenderWorldGlow, 255, 255, 255, 255, kRenderFxNoDissipation);
 	pSlowGlow->SetScale(0.25f);

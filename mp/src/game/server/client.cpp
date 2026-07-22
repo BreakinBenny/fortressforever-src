@@ -205,16 +205,16 @@ inline int FF_ParsePercentCommand(edict_t* pEdict, const char* cCommand, char* p
 
 		switch (iDisguiseTeam)
 		{
-		case FF_TEAM_BLUE:
+		case TEAM_BLUE:
 			pTeamName = bInColor ? "^1Blue" : "Blue";
 			break;
-		case FF_TEAM_RED:
+		case TEAM_RED:
 			pTeamName = bInColor ? "^2Red" : "Red";
 			break;
-		case FF_TEAM_YELLOW:
+		case TEAM_YELLOW:
 			pTeamName = bInColor ? "^3Yellow" : "Yellow";
 			break;
-		case FF_TEAM_GREEN:
+		case TEAM_GREEN:
 			pTeamName = bInColor ? "^4Green" : "Green";
 			break;
 		default:

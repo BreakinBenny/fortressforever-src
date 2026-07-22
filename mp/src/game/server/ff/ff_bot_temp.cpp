@@ -240,7 +240,7 @@ CON_COMMAND(bot_disguise, "trigger a disguise")
 
 		if (pPlayer && (pPlayer->GetFlags() & FL_FAKECLIENT))
 		{
-			pPlayer->Bot_Disguise(FF_TEAM_RED, CLASS_SOLDIER);
+			pPlayer->Bot_Disguise(TEAM_RED, CLASS_SOLDIER);
 		}
 	}
 }
@@ -260,13 +260,13 @@ CON_COMMAND(bot_disguisez, "trigger a disguise")
 			int iClass = CLASS_NONE;
 
 			if (!Q_stricmp( args[1], "blue"))
-				iTeam = FF_TEAM_BLUE;
+				iTeam = TEAM_BLUE;
 			else if( !Q_stricmp( args[1], "red" ) )
-				iTeam = FF_TEAM_RED;
+				iTeam = TEAM_RED;
 			else if( !Q_stricmp( args[1], "yellow" ) )
-				iTeam = FF_TEAM_YELLOW;
+				iTeam = TEAM_YELLOW;
 			else if( !Q_stricmp( args[1], "green" ) )
-				iTeam = FF_TEAM_GREEN;
+				iTeam = TEAM_GREEN;
 
 			if( !Q_stricmp( args[2], "scout" ) )
 				iClass = CLASS_SCOUT;
@@ -847,10 +847,10 @@ void Bot_HandleSendCmd( CFFBot *pBot )
 		}
 
 		if( Q_strcmp( "disguise12", bot_sendcmd.GetString() ) == 0 )
-			pBot->Bot_Disguise( FF_TEAM_BLUE, CLASS_SOLDIER );
+			pBot->Bot_Disguise( TEAM_BLUE, CLASS_SOLDIER );		
 
 		if( Q_strcmp( "disguise21", bot_sendcmd.GetString() ) == 0 )
-			pBot->Bot_Disguise( FF_TEAM_RED, CLASS_SCOUT );
+			pBot->Bot_Disguise( TEAM_RED, CLASS_SCOUT );
 
 		if( Q_strcmp( "primeone", bot_sendcmd.GetString() ) == 0 )
 			pBot->PrimeGrenade1();
