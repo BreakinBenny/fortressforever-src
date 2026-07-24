@@ -360,7 +360,9 @@ public:
 
 // Teamplay stuff
 	virtual const char *GetTeamID( CBaseEntity *pEntity ) = 0;// what team is this entity on?
-	//virtual int PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pTarget ) = 0;// What is the player's relationship with this entity?
+#ifndef FF
+	virtual int PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pTarget ) = 0;// What is the player's relationship with this entity?
+#endif
 	virtual bool PlayerCanHearChat( CBasePlayer *pListener, CBasePlayer *pSpeaker ) = 0;
 	virtual void CheckChatText( CBasePlayer *pPlayer, char *pText ) { return; }
 

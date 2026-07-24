@@ -7,24 +7,24 @@
 #include "cbase.h"
 #include "vcollide_parse.h"
 #include "c_gib.h"
-
+#ifdef FF
 #include "debugoverlay_shared.h"
 #include "iefx.h"
 #include "decals.h"
-
+#endif
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
-
+#ifdef FF
 int	C_Gib::m_iBloodDecal = -1;
-
+#endif
 //NOTENOTE: This is not yet coupled with the server-side implementation of CGib
 //			This is only a client-side version of gibs at the moment
-
+#ifdef FF
 C_Gib::C_Gib()
 {
 	m_bDecal = true;
 }
-
+#endif
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
@@ -144,6 +144,8 @@ void C_Gib::StartTouch( C_BaseEntity *pOther )
 //-----------------------------------------------------------------------------
 void C_Gib::HitSurface( C_BaseEntity *pOther )
 {
+	//TODO: Implement splatter or effects in child versions
+#ifdef FF
 	// Already done a decal
 	if (m_bDecal)
 		return;
@@ -159,4 +161,5 @@ void C_Gib::HitSurface( C_BaseEntity *pOther )
 	}
 
 	m_bDecal = true;
+#endif
 }

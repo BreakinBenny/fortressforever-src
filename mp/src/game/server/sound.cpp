@@ -1343,7 +1343,7 @@ void SENTENCEG_Init()
 		return;
 
 	engine->PrecacheSentenceFile( "scripts/sentences.txt" );
-
+#ifdef FF
 	// begin jon: ability to use "maps\mapname_sentences.txt" and "scripts/sentences_common.txt" as well
 	Msg("SENTENCEG_Init: precached scripts/sentences.txt\n");
 
@@ -1363,7 +1363,7 @@ void SENTENCEG_Init()
 		}
 	}
 	// end jon: ability to use "maps\mapname_sentences.txt" and "scripts/sentences_common.txt" as well
-
+#endif
 	fSentencesInit = true;
 }
 

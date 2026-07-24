@@ -10,8 +10,9 @@
 #ifdef _WIN32
 #pragma once
 #endif
-
-//#include "shareddefs.h"
+#ifndef FF
+#include "shareddefs.h"
+#endif
 #include "const.h"
 #include "c_baseentity.h"
 #include <igameresources.h>
@@ -29,7 +30,7 @@ public:
 					C_PlayerResource();
 	virtual			~C_PlayerResource();
 
-public : // IGameResources intreface
+public : // IGameResources interface
 
 	// Team data access 
 	virtual int		GetTeamScore( int index );
@@ -54,8 +55,8 @@ public : // IGameResources intreface
 	virtual int		GetDeaths( int index );
 	virtual int		GetTeam( int index );
 	virtual int		GetFrags( int index );
+	virtual int		GetHealth( int index );
 	virtual int		GetFortPoints(int index);
-	virtual int		GetHealth(int index);
 	virtual int		GetArmor(int index);
 	virtual int		GetAssists(int index);
 
@@ -67,7 +68,7 @@ public : // IGameResources intreface
 	// <-- Mirv: Extra's needed for menus
 
 	virtual void ClientThink();
-	virtual	void OnDataChanged(DataUpdateType_t updateType);
+	virtual	void	OnDataChanged(DataUpdateType_t updateType);
 
 protected:
 	void	UpdatePlayerName( int slot );

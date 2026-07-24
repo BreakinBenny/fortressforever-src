@@ -489,7 +489,7 @@ protected:
 // DATA
 	int				m_iObserverMode;	// if in spectator mode != 0
 	EHANDLE			m_hObserverTarget;	// current observer target
-	float			m_flObserverChaseDistance; // last distance to observer traget
+	float			m_flObserverChaseDistance; // last distance to observer target
 	Vector			m_vecFreezeFrameStart;
 	float			m_flFreezeFrameStartTime;	// Time at which we entered freeze frame observer mode
 	float			m_flFreezeFrameDistance;
@@ -584,10 +584,11 @@ private:
 	friend class CHL2GameMovement;
 	friend class CDODGameMovement;
 	friend class CPortalGameMovement;
+#ifdef FF
 	// --> billdoor: allow access to private member variables from our player movement code
 	friend class CFFGameMovement;
 	// <-- billdoor: allow access to private member variables from our player movement code
-	
+#endif
 	// Accessors for gamemovement
 	float GetStepSize( void ) const { return m_Local.m_flStepSize; }
 
