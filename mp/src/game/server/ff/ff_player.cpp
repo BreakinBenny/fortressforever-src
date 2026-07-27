@@ -132,12 +132,12 @@ int g_iLimbs[CLASS_CIVILIAN + 1][5] = { { 0 } };
 #define FFDEV_INFECT_DAMAGEPERTICK_EXP 0.8f //ffdev_infect_damagepertick_exp.GetFloat()
 //ConVar ffdev_infect_regaindamage("ffdev_infect_regaindamage","10",FCVAR_FF_FFDEV_REPLICATED,"Amount of damage that is not regained after infection wears off");
 #define FFDEV_INFECT_REGAINDAMAGE 10.0f //ffdev_infect_regaindamage.GetFloat()
-//ConVar ffdev_regen_freq("ffdev_regen_freq","3",0,"Frequency (in seconds) a player loses health when a medic");
-#define FFDEV_REGEN_FREQ 3.0f
-//ConVar ffdev_regen_health("ffdev_regen_health","2",0,"Amount of health a player gains while a medic");
-#define FFDEV_REGEN_HEALTH 2
-//ConVar ffdev_regen_armor("ffdev_regen_armor","4",0,"Amount of armor a player gains while a engy");
-#define FFDEV_REGEN_ARMOR 4
+//ConVar ffdev_regen_freq("ffdev_regen_freq","1",0,"Frequency (in seconds) a player loses health when a medic");
+#define FFDEV_REGEN_FREQ 1.0f
+//ConVar ffdev_regen_health("ffdev_regen_health","1",0,"Amount of health a player gains while a medic");
+#define FFDEV_REGEN_HEALTH 1
+//ConVar ffdev_regen_armor("ffdev_regen_armor","1",0,"Amount of armor a player gains while a engy");
+#define FFDEV_REGEN_ARMOR 1
 //ConVar ffdev_overhealth_freq("ffdev_overhealth_freq","3",0,"Frequency (in seconds) a player loses health when health > maxhealth");
 #define FFDEV_OVERHEALTH_FREQ 3.0f
 
@@ -916,6 +916,7 @@ void CFFPlayer::Precache()
 	PrecacheScriptSound("Item.Toss");
 	PrecacheScriptSound("Player.Pain");
 	PrecacheScriptSound("Player.Flameout");
+	PrecacheScriptSound("Player.Scream");
 	PrecacheScriptSound("medical.saveme");
 	PrecacheScriptSound("maintenance.saveme");
 	PrecacheScriptSound("infected.saveme");
@@ -985,6 +986,68 @@ void CFFPlayer::SetLastSpawn( CBaseEntity *pEntity )
 
 	if( !pEntity )
 		g_pLastSpawnRandomizer = NULL;
+}
+// "But in 3rd person so you can like rotate around it"
+bool CFFPlayer::IsValidObserverTarget(CBaseEntity* target)
+{
+	if (!target)
+	return false;
+	
+	switch (target->Classify())
+	{
+		case CLASS_SENTRYGUN:
+		case CLASS_DISPENSER:
+		case CLASS_DETPACK:
+		return true;
+		default:
+		return BaseClass::IsValidObserverTarget(target);
+	}
+}
+
+CBaseEntity* CFFPlayer::FindNextObserverTarget(bool bReverse)
+{
+	CUtlVector<CBaseEntity*> targetList;
+	for (int i = 1; i <= gpGlobals->maxClients; i++)
+	{
+		CBaseEntity* pPlayer = UTIL_PlayerByIndex(i);
+		if (pPlayer)
+		targetList.AddToTail(pPlayer);
+	}
+
+	Class_T searchClasses[] = {CLASS_INFOSCRIPT, CLASS_SENTRYGUN, CLASS_DISPENSER, CLASS_DETPACK}; // no mancannon as its useless to spectate it
+
+	for (int i = 0; i < ARRAYSIZE(searchClasses); i++)
+	{
+		bool bIsInfoScript = (searchClasses[i] == CLASS_INFOSCRIPT);
+		CBaseEntity* pEnt = gEntList.FindEntityByClassT(NULL, searchClasses[i]);
+		while (pEnt)
+		{
+			const char* pszName = bIsInfoScript ? STRING(pEnt->GetEntityName()) : NULL;
+			if (!bIsInfoScript || (pszName && (Q_stristr(pszName, "flag") || Q_stristr(pszName, "ball"))))
+			targetList.AddToTail(pEnt);
+			pEnt = gEntList.FindEntityByClassT(pEnt, searchClasses[i]);
+		}
+	}
+	
+	if (targetList.Count() == 0)
+	return NULL;
+
+	int iCurrentIndex = targetList.Find(m_hObserverTarget.Get());
+	int iDir = bReverse ? -1 : 1;
+	int iStart = (iCurrentIndex == targetList.InvalidIndex()) ? 0 : iCurrentIndex;
+	int iIndex = iStart;
+
+	do
+	{
+		iIndex += iDir;
+		if (iIndex >= targetList.Count())
+		iIndex = 0;
+		else if (iIndex < 0)
+		iIndex = targetList.Count() - 1;
+		if (IsValidObserverTarget(targetList[iIndex]))
+		return targetList[iIndex];
+	} while (iIndex != iStart);
+	return NULL;
 }
 
 CBaseEntity *CFFPlayer::EntSelectSpawnPoint()
@@ -4978,6 +5041,7 @@ void CFFPlayer::IncreaseBurnLevel( int iAmount )
 				WRITE_BYTE( FF_STATUSICON_BURNING2 );
 				WRITE_FLOAT( 0.0f );
 			MessageEnd();
+			EmitSound("Player.Scream");
 		}
 		UserMessageBegin(user, "StatusIconUpdate");
 			WRITE_BYTE( FF_STATUSICON_BURNING3 );
@@ -5469,16 +5533,19 @@ int CFFPlayer::OnTakeDamage(const CTakeDamageInfo &inputInfo)
 			if (losTrace.fraction >= 1.0f || losTrace.m_pEnt == this)
 			{
 				bool bWillKillTarget = (GetHealth() - info.GetDamage()) <= 0;
+				bool bFriendlyFire = (g_pGameRules->PlayerRelationship(this, pEHPAttacker) == GR_TEAMMATE);
 				int iTargetType = bTargetHadArmor ? 1 : 0;
 
 				if (bWillKillTarget)
 				iTargetType = 0;
+				if (bFriendlyFire)
+				iTargetType = 3;
 
 				CSingleUserRecipientFilter EHPFilter(pEHPAttacker);
 				UserMessageBegin(EHPFilter, "DamageNumber");
 				WRITE_SHORT(entindex());
 				WRITE_SHORT(iEHPDamage);
-				WRITE_BYTE(iTargetType); // 0 armorless or fragged, 1 armored, 2 buildable from ff_buildableobject.cpp
+				WRITE_BYTE(iTargetType); // 0 armorless or fragged, 1 armored, 2 buildable from ff_buildableobject.cpp, 3 friendly fire, 4 healing, 5 repairing
 				WRITE_FLOAT(CollisionProp()->WorldSpaceCenter().x);
 				WRITE_FLOAT(CollisionProp()->WorldSpaceCenter().y);
 				WRITE_FLOAT(CollisionProp()->WorldSpaceCenter().z);
@@ -6227,6 +6294,21 @@ int CFFPlayer::Heal(CFFPlayer *pHealer, float flHealth, bool healToFull)
 	UserMessageBegin( filter, "PlayerAddHealth" );
 		WRITE_SHORT( m_iHealth - iOriginalHP );
 	MessageEnd();
+
+	// Damage numbers but its not really a damage
+	int iHealAmount = m_iHealth - iOriginalHP;
+	if (pHealer && pHealer != this && iHealAmount > 0)
+	{
+		CSingleUserRecipientFilter healFilter(pHealer);
+		UserMessageBegin(healFilter, "DamageNumber");
+		WRITE_SHORT(entindex());
+		WRITE_SHORT(iHealAmount);
+		WRITE_BYTE(4);
+		WRITE_FLOAT(CollisionProp()->WorldSpaceCenter().x);
+		WRITE_FLOAT(CollisionProp()->WorldSpaceCenter().y);
+		WRITE_FLOAT(CollisionProp()->WorldSpaceCenter().z);
+		MessageEnd();
+	}
 
 	// AfterShock - scoring system: Heal x amount of health +.5*health_given (only if last damage from enemy) 
 	// Leaving the 'last damage from enemy' part out until discussion has finished about it.
