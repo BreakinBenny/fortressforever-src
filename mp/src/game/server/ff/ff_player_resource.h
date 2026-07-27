@@ -11,9 +11,7 @@
 #pragma once
 #endif
 
-#include "ff_player_shared.h"
-
-class CFFPlayerResource : public CPlayerResource, public CGameEventListener
+class CFFPlayerResource : public CPlayerResource
 {
 	DECLARE_CLASS( CFFPlayerResource, CPlayerResource );
 
@@ -22,22 +20,11 @@ public:
 
 	CFFPlayerResource();
 
-	virtual void FireGameEvent( IGameEvent *event );
-
+	virtual void ResourceThink( void );
 	virtual void UpdatePlayerData( void );
 	virtual void Spawn( void );
 
-	int	GetTotalScore( int iIndex );
-
-	void SetEventTeamStatus( int iValue ) { m_iEventTeamStatus = iValue; }
-	uint32 GetEventTeamStatus( void ) { return m_iEventTeamStatus; }
-
-	void SetPlayerClassWhenKilled( int iIndex, int iClass );
-
 protected:
-	virtual void UpdateConnectedPlayer( int iIndex, CBasePlayer *pPlayer ) OVERRIDE;
-	virtual void UpdateDisconnectedPlayer( int iIndex ) OVERRIDE;
-
 	CNetworkArray( int, m_iFortPoints, MAX_PLAYERS + 1 );
 	CNetworkArray( int, m_iArmor, MAX_PLAYERS + 1 );
 	CNetworkArray( int, m_iClass, MAX_PLAYERS + 1 );	// |-- Mirv: Class info

@@ -13,32 +13,16 @@
 
 // Datatable
 IMPLEMENT_SERVERCLASS_ST( CFFPlayerResource, DT_FFPlayerResource )
-	SendPropArray3( SENDINFO_ARRAY3( m_iTotalScore ), SendPropInt( SENDINFO_ARRAY( m_iTotalScore ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iMaxHealth ), SendPropInt( SENDINFO_ARRAY( m_iMaxHealth ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iMaxBuffedHealth ), SendPropInt( SENDINFO_ARRAY( m_iMaxBuffedHealth ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iPlayerClass ), SendPropInt( SENDINFO_ARRAY( m_iPlayerClass ), 5, SPROP_UNSIGNED ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_bArenaSpectator ), SendPropBool( SENDINFO_ARRAY( m_bArenaSpectator ) ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iActiveDominations ), SendPropInt( SENDINFO_ARRAY( m_iActiveDominations ), 6, SPROP_UNSIGNED ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_flNextRespawnTime ), SendPropTime( SENDINFO_ARRAY( m_flNextRespawnTime ) ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iChargeLevel ), SendPropInt( SENDINFO_ARRAY( m_iChargeLevel ), 8, SPROP_UNSIGNED ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iDamage ), SendPropInt( SENDINFO_ARRAY( m_iDamage ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iDamageAssist ), SendPropInt( SENDINFO_ARRAY( m_iDamageAssist ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iDamageBoss ), SendPropInt( SENDINFO_ARRAY( m_iDamageBoss ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iHealing ), SendPropInt( SENDINFO_ARRAY( m_iHealing ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iHealingAssist ), SendPropInt( SENDINFO_ARRAY( m_iHealingAssist ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iDamageBlocked ), SendPropInt( SENDINFO_ARRAY( m_iDamageBlocked ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iCurrencyCollected ), SendPropInt( SENDINFO_ARRAY( m_iCurrencyCollected ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iBonusPoints ), SendPropInt( SENDINFO_ARRAY( m_iBonusPoints ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iPlayerLevel ), SendPropInt( SENDINFO_ARRAY( m_iPlayerLevel ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iStreaks ), SendPropInt( SENDINFO_ARRAY( m_iStreaks ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iUpgradeRefundCredits ), SendPropInt( SENDINFO_ARRAY( m_iUpgradeRefundCredits ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iBuybackCredits ), SendPropInt( SENDINFO_ARRAY( m_iBuybackCredits ), -1, SPROP_UNSIGNED | SPROP_VARINT ) ),
-	SendPropInt( SENDINFO( m_iPartyLeaderRedTeamIndex ), -1, SPROP_UNSIGNED | SPROP_VARINT ),
-	SendPropInt( SENDINFO( m_iPartyLeaderBlueTeamIndex ), -1, SPROP_UNSIGNED | SPROP_VARINT ),
-	SendPropInt( SENDINFO( m_iEventTeamStatus ), -1, SPROP_UNSIGNED | SPROP_VARINT ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iPlayerClassWhenKilled ), SendPropInt( SENDINFO_ARRAY( m_iPlayerClassWhenKilled ), 5, SPROP_UNSIGNED ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_iConnectionState ), SendPropInt( SENDINFO_ARRAY( m_iConnectionState ), 3, SPROP_UNSIGNED ) ),
-	SendPropArray3( SENDINFO_ARRAY3( m_flConnectTime ), SendPropTime( SENDINFO_ARRAY( m_flConnectTime ) ) ),
+	SendPropArray3(SENDINFO_ARRAY3(m_iScore), SendPropInt(SENDINFO_ARRAY(m_iScore), 15)),	// |- Mirv: Upped transmission bits from 12->15
+	SendPropArray3(SENDINFO_ARRAY3(m_iFortPoints), SendPropInt(SENDINFO_ARRAY(m_iFortPoints), 20)),	// |- Shock: Upped transmission bits from 15->20 (needs to be big!)
+	SendPropArray3(SENDINFO_ARRAY3(m_iArmor), SendPropInt(SENDINFO_ARRAY(m_iArmor), 9, SPROP_UNSIGNED)),
+	SendPropArray3(SENDINFO_ARRAY3(m_iClass), SendPropInt(SENDINFO_ARRAY(m_iClass), 5)),	// |-- Mirv: Current class
+
+	SendPropArray3(SENDINFO_ARRAY3(m_iChannel), SendPropInt(SENDINFO_ARRAY(m_iChannel), 4)), // |-- Mirv: Channel info
+
+	SendPropArray3(SENDINFO_ARRAY3(m_iAssists), SendPropInt(SENDINFO_ARRAY(m_iAssists), 12)),
+
+	SendPropBool(SENDINFO(m_bIsIntermission)),
 END_SEND_TABLE()
 
 LINK_ENTITY_TO_CLASS( ff_player_manager, CFFPlayerResource );
@@ -48,61 +32,7 @@ LINK_ENTITY_TO_CLASS( ff_player_manager, CFFPlayerResource );
 //-----------------------------------------------------------------------------
 CFFPlayerResource::CFFPlayerResource( void )
 {
-	ListenForGameEvent( "mvm_wave_complete" );
 
-	m_flNextDamageAndHealingSend = 0.f;
-
-	m_iPartyLeaderRedTeamIndex = 0;
-	m_iPartyLeaderBlueTeamIndex = 0;
-	m_iEventTeamStatus = 0;
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CFFPlayerResource::FireGameEvent( IGameEvent * event )
-{
-	const char *pszEvent = event->GetName();
-
-	if ( !Q_strcmp( pszEvent, "mvm_wave_complete" ) )
-	{
-		// Force a re-send on wave complete
-		m_flNextDamageAndHealingSend = 0.f;
-		UpdatePlayerData();
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CFFPlayerResource::SetPartyLeaderIndex( int iTeam, int iIndex )
-{
-	Assert( iIndex >= 0 && iIndex <= MAX_PLAYERS );
-
-	switch( iTeam )
-	{
-	case TF_TEAM_RED:
-		m_iPartyLeaderRedTeamIndex = iIndex;
-		break;
-	case TF_TEAM_BLUE:
-		m_iPartyLeaderBlueTeamIndex = iIndex;
-		break;
-	default:
-		break;
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-int CFFPlayerResource::GetPartyLeaderIndex( int iTeam )
-{
-	if ( iTeam == TF_TEAM_RED )
-		return m_iPartyLeaderRedTeamIndex;
-	else if ( iTeam == TF_TEAM_BLUE )
-		return m_iPartyLeaderBlueTeamIndex;
-
-	return 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -110,236 +40,50 @@ int CFFPlayerResource::GetPartyLeaderIndex( int iTeam )
 //-----------------------------------------------------------------------------
 void CFFPlayerResource::UpdatePlayerData( void )
 {
-	m_vecRedPlayers.RemoveAll();
-	m_vecBluePlayers.RemoveAll();
-	m_vecFreeSlots.RemoveAll();
-
-	BaseClass::UpdatePlayerData();
-
-	// check if player is still part of the match
-	CMatchInfo *pMatch = GTFGCClientSystem()->GetMatch();
-	if ( pMatch && TFGameRules() )
+	for (int i = 1; i <= gpGlobals->maxClients; i++)
 	{
-		for ( int i=0; i<pMatch->GetNumTotalMatchPlayers(); ++i )
+		CFFPlayer* pPlayer = (CFFPlayer*)UTIL_PlayerByIndex(i);	// |-- Mirv: Use our class instead
+
+		if (pPlayer && pPlayer->IsConnected())
 		{
-			AssertMsg( m_vecFreeSlots.Count() > 0, "There should always be free slots for player to join" );
+			m_iScore.Set(i, pPlayer->FragCount());
+			m_iFortPoints.Set(i, pPlayer->FortPointsCount());
+			m_iDeaths.Set(i, pPlayer->DeathCount());
+			m_bConnected.Set(i, 1);
+			m_iTeam.Set(i, pPlayer->GetTeamNumber());
+			m_bAlive.Set(i, pPlayer->IsAlive() ? 1 : 0);
+			m_iHealth.Set(i, MAX(0, pPlayer->GetHealth()));
+			m_iArmor.Set(i, MAX(0, pPlayer->GetArmor()));
+			m_iClass.Set(i, pPlayer->GetClassSlot());	// |-- Mirv: Update our class
+			m_iAssists.Set(i, pPlayer->AssistsCount());
 
-			CMatchInfo::PlayerMatchData_t *pData = pMatch->GetMatchDataForPlayer( i );
-			uint32 unAccountID = pData->steamID.GetAccountID();
-			int iTeam = TFGameRules()->GetGameTeamForGCTeam( pData->eGCTeam );
-			CUtlVector< uint32 >* pVecPlayers = iTeam == TF_TEAM_RED ? &m_vecRedPlayers : &m_vecBluePlayers;
+			// Don't update ping / packetloss everytime
 
-			// add players that are not yet connected to the server
-			if ( !pData->bDropped && pVecPlayers->Find( unAccountID ) == pVecPlayers->InvalidIndex() && m_vecFreeSlots.Count() > 0 )
+			if (!(m_nUpdateCounter % 20))
 			{
-				int iIndex = m_vecFreeSlots[0];
-				m_vecFreeSlots.Remove( 0 );
+				// update ping all 20 think ticks = (20*0.1=2seconds)
+				int ping, packetloss;
+				UTIL_GetPlayerConnectionInfo(i, ping, packetloss);
 
-				AssertMsg( m_iAccountID[iIndex] == 0, "No account should be assigned to this slot" );
+				// calc avg for scoreboard so it's not so jittery
+				ping = 0.8f * m_iPing.Get(i) + 0.2f * ping;
 
-				Init( iIndex );
-				m_iAccountID.Set( iIndex, unAccountID );
-				m_bValid.Set( iIndex, 1 );
-				m_iTeam.Set( iIndex, iTeam );
-				m_iConnectionState.Set( iIndex, pData->GetConnectionState() );
+
+				m_iPing.Set(i, ping);
+				// m_iPacketloss.Set( i, packetloss );
+
+				// --> Mirv: Update the player's channel
+				CFFPlayer* plyr = (CFFPlayer*)pPlayer;
+				m_iChannel.Set(i, plyr->m_iChannel);
+				// <-- Mirv: Update the player's channel
 			}
-		}
-
-		// do we need to set m_bValid on these?
-		if ( GTFGCClientSystem()->BLateJoinEligible() )
-		{
-			int iTeamSize = pMatch->GetCanonicalMatchSize() / 2;
-
-			int iRedWaiting = iTeamSize-m_vecRedPlayers.Count();
-			for ( int i=0; i<iRedWaiting && m_vecFreeSlots.Count() > 0; ++i )
-			{
-				int iIndex = m_vecFreeSlots[0];
-				m_vecFreeSlots.Remove( 0 );
-
-				AssertMsg( m_iAccountID[iIndex] == 0, "No account should be assigned to this slot" );
-
-				m_iTeam.Set( iIndex, TF_TEAM_RED );
-				m_iConnectionState.Set( iIndex, MM_WAITING_FOR_PLAYER );
-			}
-
-			int iBlueWaiting = iTeamSize-m_vecBluePlayers.Count();
-			for ( int i=0; i<iBlueWaiting && m_vecFreeSlots.Count() > 0; ++i )
-			{
-				int iIndex = m_vecFreeSlots[0];
-				m_vecFreeSlots.Remove( 0 );
-
-				AssertMsg( m_iAccountID[iIndex] == 0, "No account should be assigned to this slot" );
-
-				m_iTeam.Set( iIndex, TF_TEAM_BLUE );
-				m_iConnectionState.Set( iIndex, MM_WAITING_FOR_PLAYER );
-			}
-		}
-	}
-
-	if ( gpGlobals->curtime > m_flNextDamageAndHealingSend )
-	{
-		m_flNextDamageAndHealingSend = gpGlobals->curtime + STATS_SEND_FREQUENCY;
-	}
-
-	if ( pMatch && m_iEventTeamStatus != (int)pMatch->m_unEventTeamStatus )
-	{
-		m_iEventTeamStatus = pMatch->m_unEventTeamStatus;
-	}
-}
-
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CFFPlayerResource::UpdateConnectedPlayer( int iIndex, CBasePlayer *pPlayer )
-{
-	BaseClass::UpdateConnectedPlayer( iIndex, pPlayer );
-
-	CFFPlayer *pFFPlayer = ToFFPlayer( pPlayer );
-
-	m_iMaxHealth.Set( iIndex, pTFPlayer->GetMaxHealth() );
-
-	// m_iMaxBuffedHealth is misnamed -- it should be m_iMaxHealthForBuffing, but we don't want to change it now due to demos.
-	m_iMaxBuffedHealth.Set( iIndex, pTFPlayer->GetMaxHealthForBuffing() );
-	m_iPlayerClass.Set( iIndex, pTFPlayer->GetPlayerClass()->GetClassIndex() );
-
-	m_iActiveDominations.Set( iIndex, pTFPlayer->GetNumberofDominations() );
-
-	int iTotalScore = CTFGameRules::CalcPlayerScore( &pTFPlayerStats->statsAccumulated, pTFPlayer );
-
-	if ( m_iTotalScore.Get( iIndex ) != iTotalScore )
-	{
-		int nDelta = iTotalScore -  m_iTotalScore.Get( iIndex );
-		if ( TFGameRules()->IsMannVsMachineMode() )
-		{
-			MannVsMachineStats_PlayerEvent_PointsChanged( pTFPlayer, nDelta );
 		}
 		else
 		{
-			// Kill eater points-scored tracking.  Increment all equipped items with this kill eater type.  
-			// We only do this when we're NOT in MvM
-			HatAndMiscEconEntities_OnOwnerKillEaterEventNoParter( pTFPlayer, kKillEaterEvent_PointsScored, nDelta );
+			m_bConnected.Set(i, 0);
 		}
 	}
-		
-	m_iTotalScore.Set( iIndex, iTotalScore );
-	m_bArenaSpectator.Set( iIndex, pTFPlayer->IsArenaSpectator() );
-
-	if ( TFGameRules()->IsInTournamentMode() )
-	{
-		float flCharge = pTFPlayer->MedicGetChargeLevel();
-		m_iChargeLevel.Set( iIndex, (int)(flCharge * 100) );
-	}
-	else
-	{
-		m_iChargeLevel.Set( iIndex, 0 );
-	}
-
-	float flRespawnTime = pTFPlayer->IsAlive() ? 0 : TFGameRules()->GetNextRespawnWave( pTFPlayer->GetTeamNumber(), pTFPlayer );
-	if ( pTFPlayer->GetRespawnTimeOverride() != -1.f )
-	{
-		flRespawnTime = pTFPlayer->GetDeathTime() + pTFPlayer->GetRespawnTimeOverride();
-	}
-	m_flNextRespawnTime.Set( iIndex, flRespawnTime );
-
-	m_flConnectTime.Set( iIndex, pTFPlayer->GetConnectionTime() );
-
-	for ( int streak_type = 0; streak_type < CTFPlayerShared::kTFStreak_COUNT; streak_type++ )
-	{
-		m_iStreaks.Set( iIndex * CTFPlayerShared::kTFStreak_COUNT + streak_type, pTFPlayer->m_Shared.GetStreak( (CTFPlayerShared::ETFStreak)streak_type ) );
-	}
-
-	if ( g_pPopulationManager )
-	{
-		// Only update when we have new data
-		int nRespecs = g_pPopulationManager->GetNumRespecsAvailableForPlayer( pTFPlayer );
-		m_iUpgradeRefundCredits.Set( iIndex, nRespecs );
-
-		int nBuybacks = g_pPopulationManager->GetNumBuybackCreditsForPlayer( pTFPlayer );
-		m_iBuybackCredits.Set( iIndex, nBuybacks );
-	}
-
-	CSteamID steamID;
-	pTFPlayer->GetSteamID( &steamID );
-
-	int iTeam = pPlayer->GetTeamNumber();
-
-	CMatchInfo *pMatch = GTFGCClientSystem()->GetMatch();
-	if ( pMatch )
-	{
-		CMatchInfo::PlayerMatchData_t *pData = pMatch->GetMatchDataForPlayer( steamID );
-		if ( pData )
-		{
-			int iGCTeam = TFGameRules()->GetGameTeamForGCTeam( pData->eGCTeam );
-
-			// if the team hasn't been set yet in-game, we want to show them on the
-			// team the GC has assigned them to instead of spectator or unassigned
-			if ( ( iTeam == TEAM_UNASSIGNED ) || ( iTeam == TEAM_SPECTATOR ) )
-			{
-				m_iTeam.Set( iIndex, iGCTeam );
-			}
-
-			iTeam = iGCTeam;
-		}
-	}
-
-	CUtlVector< uint32 >* pVecPlayers = ( iTeam == TF_TEAM_RED ) ? &m_vecRedPlayers : ( ( iTeam == TF_TEAM_BLUE ) ? &m_vecBluePlayers : NULL );
-	if ( pVecPlayers )
-	{
-		if ( pVecPlayers->Find( steamID.GetAccountID() ) == pVecPlayers->InvalidIndex()	)
-		{
-			pVecPlayers->AddToTail( steamID.GetAccountID() );
-		}
-	}
-
-	m_iConnectionState.Set( iIndex, MM_CONNECTED );
 }
-
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CFFPlayerResource::UpdateDisconnectedPlayer( int iIndex )
-{
-	// cache accountID to see if we should preserve this account
-	uint32 unAccountID = m_iAccountID[iIndex];
-
-	BaseClass::UpdateDisconnectedPlayer( iIndex );
-
-	// preserve if player is still in part of the match, and still gone
-	CMatchInfo *pMatch = GTFGCClientSystem()->GetMatch();
-	if ( pMatch )
-	{
-		CSteamID steamID( unAccountID, GetUniverse(), k_EAccountTypeIndividual );
-		if ( steamID.IsValid() )
-		{
-			CBasePlayer *pPlayer = (CBasePlayer*)UTIL_PlayerBySteamID( steamID );
-			CMatchInfo::PlayerMatchData_t *pData = pMatch->GetMatchDataForPlayer( steamID );
-			// Skip if they're connected
-			if ( pData && ( !pPlayer || !pPlayer->IsConnected() ) )
-			{
-				if ( !pData->bDropped )
-				{
-					int iTeam = TFGameRules()->GetGameTeamForGCTeam( pData->eGCTeam );
-					m_iConnectionState.Set( iIndex, pData->GetConnectionState() );
-					// re-apply the accountID to keep the data
-					m_iAccountID.Set( iIndex, unAccountID );
-					m_iTeam.Set( iIndex, iTeam );
-					m_bValid.Set( iIndex, 1 );
-
-					CUtlVector< uint32 >* pVecPlayers = iTeam == TF_TEAM_RED ? &m_vecRedPlayers : &m_vecBluePlayers;
-					pVecPlayers->AddToTail( unAccountID );
-					return;
-				}
-			}
-		}
-	}
-	
-	// free up the slot if we're not preserving it
-	m_iConnectionState.Set( iIndex, MM_DISCONNECTED );
-	m_vecFreeSlots.AddToTail( iIndex );
-}
-
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -347,48 +91,77 @@ void CFFPlayerResource::UpdateDisconnectedPlayer( int iIndex )
 void CFFPlayerResource::Spawn( void )
 {
 	BaseClass::Spawn();
-}
+	for ( int i=0; i < MAX_PLAYERS+1; i++ )
+	{
+		m_iFortPoints.Set(i, 0);
+		m_iClass.Set(i, 0);	// |-- Mirv: Current class
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CFFPlayerResource::Init( int iIndex )
-{
-	BaseClass::Init( iIndex );
+		m_iChannel.Set(i, 0);	// |-- Mirv: Channel info
 
-	m_iTotalScore.Set( iIndex, 0 );
-	m_iMaxHealth.Set( iIndex, TF_HEALTH_UNDEFINED );
-	m_iMaxBuffedHealth.Set( iIndex, TF_HEALTH_UNDEFINED );
-	m_iPlayerClass.Set( iIndex, TF_CLASS_UNDEFINED );
-	m_iActiveDominations.Set( iIndex, 0 );
-	m_iPlayerClassWhenKilled.Set( iIndex, TF_CLASS_UNDEFINED );
-	m_iConnectionState.Set( iIndex, MM_DISCONNECTED );
-	m_bValid.Set( iIndex, 0 );
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: Gets a value from an array member
-//-----------------------------------------------------------------------------
-int CFFPlayerResource::GetTotalScore( int iIndex )
-{
-	Assert( iIndex >= 0 && iIndex <= MAX_PLAYERS );
-
-	CTFPlayer *pPlayer = (CTFPlayer*)UTIL_PlayerByIndex( iIndex );
-
-	if ( pPlayer && pPlayer->IsConnected() )
-	{	
-		return m_iTotalScore[iIndex];
+		m_iAssists.Set(i, 0);
 	}
 
-	return 0;
+	m_bIsIntermission = false;
+}
+extern bool Server_IsIntermission();
+
+//-----------------------------------------------------------------------------
+// Purpose: Wrapper for the virtual GrabPlayerData Think function
+//-----------------------------------------------------------------------------
+void CFFPlayerResource::ResourceThink( void )
+{
+	m_nUpdateCounter++;
+
+	UpdatePlayerData();
+
+	m_bIsIntermission = Server_IsIntermission();
+
+	SetNextThink( gpGlobals->curtime + 0.1f );
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
-void CFFPlayerResource::SetPlayerClassWhenKilled( int iIndex, int iClass )
+void CFFPlayerResource::UpdatePlayerData( void )
 {
-	Assert( iIndex >= 0 && iIndex <= MAX_PLAYERS );
+	for ( int i = 1; i <= gpGlobals->maxClients; i++ )
+	{
+		CFFPlayer *pPlayer = ( CFFPlayer* )UTIL_PlayerByIndex( i );	// |-- Mirv: Use our class instead
+		
+		if ( pPlayer && pPlayer->IsConnected() )
+		{
+			m_iScore.Set( i, pPlayer->FragCount() );
+			m_iFortPoints.Set(i, pPlayer->FortPointsCount());
+			m_iDeaths.Set( i, pPlayer->DeathCount() );
+			m_bConnected.Set( i, 1 );
+			m_iTeam.Set( i, pPlayer->GetTeamNumber() );
+			m_bAlive.Set( i, pPlayer->IsAlive()?1:0 );
+			m_iHealth.Set(i, MAX( 0, pPlayer->GetHealth() ) );
+			m_iArmor.Set(i, MAX( 0, pPlayer->GetArmor() ) );
+			m_iClass.Set(i, pPlayer->GetClassSlot() );	// |-- Mirv: Update our class
+			m_iAssists.Set( i, pPlayer->AssistsCount() );
 
-	m_iPlayerClassWhenKilled.Set( iIndex, iClass );
+			// Don't update ping / packetloss everytime
+
+			if ( !(m_nUpdateCounter%20) )
+			{
+				// update ping all 20 think ticks = (20*0.1=2seconds)
+				int ping, packetloss;
+				UTIL_GetPlayerConnectionInfo( i, ping, packetloss );
+				
+				// calc avg for scoreboard so it's not so jittery
+				ping = 0.8f * m_iPing.Get(i) + 0.2f * ping;
+
+				
+				m_iPing.Set( i, ping );
+				// m_iPacketloss.Set( i, packetloss );
+
+				// --> Mirv: Update the player's channel
+				CFFPlayer* plyr = (CFFPlayer*)pPlayer;
+				m_iChannel.Set(i, plyr->m_iChannel);
+				// <-- Mirv: Update the player's channel
+			}
+		}
+		else
+		{
+			m_bConnected.Set( i, 0 );
+		}
+	}
 }

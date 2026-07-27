@@ -6,6 +6,8 @@
 //=============================================================================//
 #include "cbase.h"
 #include "c_ff_playerresource.h"
+#include "c_team.h"
+#include "c_ff_team.h"
 #include <shareddefs.h>
 #include <ff_shareddefs.h>
 #include "ff_gamerules.h"
@@ -45,7 +47,7 @@ C_FF_PlayerResource::C_FF_PlayerResource()
 	m_Colors[FF_TEAM_YELLOW] = TEAM_COLOR_YELLOW;
 	m_Colors[FF_TEAM_GREEN] = TEAM_COLOR_GREEN;
 
-	g_TF_PR = this;
+	g_FF_PR = this;
 }
 
 //-----------------------------------------------------------------------------

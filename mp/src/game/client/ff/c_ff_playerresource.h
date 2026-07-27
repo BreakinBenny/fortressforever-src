@@ -13,7 +13,6 @@
 
 #include "ff_shareddefs.h"
 #include "c_playerresource.h"
-#include "ff_player_shared.h"
 
 class C_FF_PlayerResource : public C_PlayerResource
 {
@@ -24,10 +23,12 @@ public:
 	C_FF_PlayerResource();
 	virtual ~C_FF_PlayerResource();
 
-	float	GetTeamScoreTime(int index);
+	// Team data
+	float		GetTeamScoreTime(int index);
 	int		GetTeamFortPoints(int index);
 	int		GetTeamDeaths(int index);
 
+	// Player data
 	int		GetFortPoints(int index);
 	int		GetArmor(int index);
 	int		GetAssists(int index);
@@ -39,7 +40,7 @@ public:
 	int		GetTeamLimits(int index);
 	// <-- Mirv: Extra's needed for menus
 
-	bool		m_bIsIntermission;
+	bool		m_bIsIntermission = false;
 
 protected:
 	int		m_iFortPoints[MAX_PLAYERS + 1];	//BreakinBenny: This will be MAX_PLAYERS_ARRAY_SAFE in TF2 SDK
