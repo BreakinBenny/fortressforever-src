@@ -158,6 +158,22 @@ void CFFWeaponMedkit::Hit(trace_t &traceHit, Activity nHitActivity)
 #ifdef GAME_DLL
 				// otherwise, if they are bad people, then infect them
 				pTarget->Infect(pPlayer);
+				bool bFriendlyFire = (g_pGameRules->PlayerRelationship(pTarget, pPlayer) == GR_TEAMMATE);
+				bool bWillKillInfect = !pTarget->IsAlive();
+				int iInfectTargetType = pTarget->GetArmor() > 0 ? 1 : 0;
+				if (bWillKillInfect)
+				iInfectTargetType = 0;
+				if (bFriendlyFire)
+				iInfectTargetType = 3;
+				CSingleUserRecipientFilter infectTextFilter(pPlayer);
+				UserMessageBegin(infectTextFilter, "SpecialText");
+				WRITE_SHORT(pTarget->entindex());
+				WRITE_BYTE(6);
+				WRITE_BYTE(iInfectTargetType);
+				WRITE_FLOAT(pTarget->CollisionProp()->WorldSpaceCenter().x);
+				WRITE_FLOAT(pTarget->CollisionProp()->WorldSpaceCenter().y);
+				WRITE_FLOAT(pTarget->CollisionProp()->WorldSpaceCenter().z);
+				MessageEnd();
 #endif
 				wpnSound = SPECIAL2;
 			}
