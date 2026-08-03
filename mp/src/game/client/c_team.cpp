@@ -51,12 +51,12 @@ END_RECV_TABLE()
 BEGIN_PREDICTION_DATA( C_Team )
 	DEFINE_PRED_ARRAY( m_szTeamname, FIELD_CHARACTER, MAX_TEAM_NAME_LENGTH, FTYPEDESC_PRIVATE ),
 	DEFINE_PRED_FIELD( m_iScore, FIELD_INTEGER, FTYPEDESC_PRIVATE ),
-	DEFINE_PRED_FIELD( m_iFortPoints, FIELD_INTEGER, FTYPEDESC_PRIVATE ),
 	DEFINE_PRED_FIELD( m_iRoundsWon, FIELD_INTEGER, FTYPEDESC_PRIVATE ),
 	DEFINE_PRED_FIELD( m_iDeaths, FIELD_INTEGER, FTYPEDESC_PRIVATE ),
 	DEFINE_PRED_FIELD( m_iPing, FIELD_INTEGER, FTYPEDESC_PRIVATE ),
 	DEFINE_PRED_FIELD( m_iPacketloss, FIELD_INTEGER, FTYPEDESC_PRIVATE ),
 	DEFINE_PRED_FIELD( m_iTeamNum, FIELD_INTEGER, FTYPEDESC_PRIVATE ),
+	DEFINE_PRED_FIELD( m_iFortPoints, FIELD_INTEGER, FTYPEDESC_PRIVATE ),
 	DEFINE_PRED_FIELD( m_flScoreTime, FIELD_TIME, FTYPEDESC_PRIVATE ),
 END_PREDICTION_DATA();
 
@@ -72,13 +72,13 @@ CUtlVector< C_Team * > g_Teams;
 C_Team::C_Team()
 {
 	m_iScore = 0;
-	m_iFortPoints = 0;
 	m_iRoundsWon = 0;
 	memset( m_szTeamname, 0, sizeof(m_szTeamname) );
 
 	m_iDeaths = 0;
 	m_iPing = 0;
 	m_iPacketloss = 0;
+	m_iFortPoints = 0;
 	m_flScoreTime = 0.0f;
 
 	// Add myself to the global list of team entities

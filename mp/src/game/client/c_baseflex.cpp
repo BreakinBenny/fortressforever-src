@@ -612,7 +612,7 @@ Vector C_BaseFlex::SetViewTarget( CStudioHdr *pStudioHdr )
 		eyeDeflect.x = 0;
 
 		// reduce deflection the more the eye is off center
-		// FIXME: this angles make no damn sense
+		// FIXME: the angles make no sense
 		eyeDeflect = eyeDeflect * (local.x * local.x);
 		local = local + eyeDeflect;
 		VectorNormalize( local );

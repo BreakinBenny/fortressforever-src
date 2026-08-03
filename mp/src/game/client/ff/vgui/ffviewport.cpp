@@ -38,6 +38,11 @@
 #include "hud.h"
 #include <voice_status.h>
 
+// FF's dialogs
+#include "classmenu.h"
+#include "mapscreen.h"
+#include "teammenu.h"
+
 // viewport definitions
 #include <baseviewport.h>
 #include "ffviewport.h"
@@ -66,8 +71,26 @@ IViewPortPanel* FFViewport::CreatePanelByName(const char *szPanelName)
 //		newpanel = new CCSMapOverview( this );
 //	}
 
-	// create a generic base panel, don't add twice
-	newpanel = BaseClass::CreatePanelByName( szPanelName );
+	// --> Mirv: Pick up new panels
+	if (Q_strcmp(PANEL_TEAM, szPanelName) == 0)
+	{
+		newpanel = new CTeamMenu(this);
+	}
+	else if (Q_strcmp(PANEL_CLASS, szPanelName) == 0)
+	{
+		newpanel = new CClassMenu(this);
+	}
+	else if (Q_strcmp(PANEL_MAP, szPanelName) == 0)
+	{
+		newpanel = new CMapScreen(this);
+	}
+	// <--
+
+	else
+	{
+		// create a generic base panel, don't add twice
+		newpanel = BaseClass::CreatePanelByName( szPanelName );
+	}
 
 	return newpanel; 
 }
@@ -79,6 +102,10 @@ void FFViewport::CreateDefaultPanels( void )
 	// "CBaseViewport::AddNewPanel: NULL panel."
 	// message in the console
 	//AddNewPanel( CreatePanelByName( PANEL_OVERVIEW ) );	// |-- Mirv: Overview!
+	// --> Mirv: FF panels
+	AddNewPanel( CreatePanelByName( PANEL_TEAM ), "PANEL_TEAM" );
+	AddNewPanel( CreatePanelByName( PANEL_CLASS ), "PANEL_CLASS" );
+	AddNewPanel( CreatePanelByName( PANEL_MAP ), "PANEL_MAP" );
 
 	BaseClass::CreateDefaultPanels();
 }

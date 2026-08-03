@@ -13,7 +13,7 @@
 #include "iinput.h"
 #include "view_shared.h"
 #include "iviewrender.h"
-// #include "hud_basechat.h"
+//#include "hud_basechat.h"
 #include "ff_hud_chat.h"
 #include "weapon_selection.h"
 #include <vgui/IVGui.h>
@@ -62,8 +62,10 @@ extern ConVar replay_rendersetting_renderglow;
 #endif
 
 #if defined( TF_CLIENT_DLL )
+#include "tf_gc_client.h"
 #include "c_tf_player.h"
 #include "econ_item_description.h"
+#include "c_tf_team.h"
 #endif
 
 #include "c_ff_player.h"
@@ -82,8 +84,6 @@ class CHudChat;
 class CHudVote;
 
 static vgui::HContext s_hVGuiContext = vgui::DEFAULT_VGUI_CONTEXT;
-
-
 // Yeah, don't want this to be a cheat
 ConVar cl_drawhud( "cl_drawhud", "1", FCVAR_CLIENTDLL | FCVAR_ARCHIVE, "Enable the rendering of the hud" );
 ConVar hud_takesshots( "hud_takesshots", "0", FCVAR_CLIENTDLL | FCVAR_ARCHIVE, "Auto-save a scoreboard screenshot at the end of a map." );
@@ -362,10 +362,9 @@ void ClientModeShared::Init()
 	ListenForGameEvent( "server_cvar" );
 	ListenForGameEvent( "player_changename" );
 	ListenForGameEvent( "teamplay_broadcast_audio" );
-
-	// obsolete, for now
-	//ListenForGameEvent( "achievement_earned" );
-
+#ifndef FF	// obsolete, for now
+	ListenForGameEvent( "achievement_earned" );
+#endif
 #if defined( TF_CLIENT_DLL )
 	ListenForGameEvent( "item_found" );
 #endif 
@@ -673,7 +672,7 @@ int	ClientModeShared::KeyInput( int down, ButtonCode_t keynum, const char *pszCu
 		return 1;
 	
 	// Should we start typing a message?
-	if ( pszCurrentBinding)
+	if ( pszCurrentBinding )
 	{
 		//////////////////////////////////////////////////////////////////////////
 		// Say
@@ -681,7 +680,7 @@ int	ClientModeShared::KeyInput( int down, ButtonCode_t keynum, const char *pszCu
 		bool bSay = !Q_strcmp(pszCurrentBinding, "say");
 		if (bMessageMode || bSay)
 		{
-			if (down)
+			if ( down )
 			{
 				if (bMessageMode)
 					StartMessageMode(MM_MESSAGEMODE);
@@ -905,6 +904,31 @@ void ClientModeShared::StartMessageMode( int iMessageModeType )
 	{
 		return;
 	}
+	
+#if defined( TF_CLIENT_DLL )
+	if ( iMessageModeType == MM_SAY || iMessageModeType == MM_SAY_TEAM )
+	{
+		bool bSuspensionInMatch = GTFGCClientSystem() && GTFGCClientSystem()->BHaveChatSuspensionInCurrentMatch();
+		if ( !cl_enable_text_chat.GetBool() || bSuspensionInMatch )
+		{
+			CBaseHudChat *pHUDChat = ( CBaseHudChat * ) GET_HUDELEMENT( CHudChat );
+			if ( pHUDChat )
+			{
+				const char *pszReason = "#TF_Chat_Disabled";
+				if ( bSuspensionInMatch )
+				{
+					pszReason = "#TF_Chat_Unavailable";
+				}
+
+				char szLocalized[100];
+				g_pVGuiLocalize->ConvertUnicodeToANSI( g_pVGuiLocalize->Find( pszReason ), szLocalized, sizeof( szLocalized ) );
+				pHUDChat->ChatPrintf( 0, CHAT_FILTER_NONE, "%s ", szLocalized );
+			}
+			return;
+		}
+	}
+#endif // TF_CLIENT_DLL
+
 	if ( m_pChatElement )
 	{
 		m_pChatElement->StartMessageMode( iMessageModeType );

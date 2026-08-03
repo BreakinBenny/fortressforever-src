@@ -254,7 +254,11 @@ void CInput::Init_Mouse (void)
 
 	m_flPreviousMouseXPosition = 0.0f;
 	m_flPreviousMouseYPosition = 0.0f;
+
 	
+	
+	
+
 	m_fMouseInitialized = true;
 
 	m_fMouseParmsValid = false;
@@ -324,14 +328,14 @@ void CInput::ResetMouse( void )
 {
 	int x, y;
 	GetWindowCenter( x,  y );
-	SetMousePos( x, y );	
+	SetMousePos( x, y );
 }
-
+#ifdef FF
 extern bool ActivateScoreboard();	// |-- Mirv: For scoreboard mouse activation
 extern bool CanStealMouseForAimSentry(); // |-- Mulch: For stealing mouse button to do aimsentry post radial menu
 extern void SetStealMouseForAimSentry(bool bValue);
 //extern bool CanStealMouseForCloak(); // |-- Mulch: For stealing mouse button to do cloak
-
+#endif
 //-----------------------------------------------------------------------------
 // Purpose: GetAccumulatedMouse -- the mouse can be sampled multiple times per frame and
 //  these results are accumulated each time. This function gets the accumulated mouse changes and resets the accumulators

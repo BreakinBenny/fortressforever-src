@@ -120,6 +120,7 @@
 #include "tf_hud_disconnect_prompt.h"
 #include "../engine/audio/public/sound.h"
 #include "tf_shared_content_manager.h"
+#include "tf_gamerules.h"
 #endif
 #include "renamed_recvtable_compat.h"
 #include "mouthinfo.h"
@@ -134,6 +135,7 @@
 #include "haptics/haptic_msgs.h"
 
 #if defined( TF_CLIENT_DLL )
+#include "tf_gc_client.h"
 #include "abuse_report.h"
 #endif
 
@@ -1485,6 +1487,8 @@ void CHLClient::View_Fade( ScreenFade_t *pSF )
 //-----------------------------------------------------------------------------
 void CHLClient::LevelInitPreEntity( char const* pMapName )
 {
+	
+
 	// HACK: Bogus, but the logic is too complicated in the engine
 	if (g_bLevelInitialized)
 		return;
@@ -2068,6 +2072,7 @@ void OnRenderStart()
 	C_BaseEntity::SetAbsQueriesValid( false );
 
 	Rope_ResetCounters();
+	
 
 	// Interpolate server entities and move aiments.
 	{

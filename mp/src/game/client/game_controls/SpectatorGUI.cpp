@@ -64,6 +64,7 @@ ConVar spec_scoreboard( "spec_scoreboard", "0", FCVAR_CLIENTDLL | FCVAR_ARCHIVE 
 
 CSpectatorGUI *g_pSpectatorGUI = NULL;
 
+
 // NB disconnect between localization text and observer mode enums
 static const char *s_SpectatorModes[] =
 {

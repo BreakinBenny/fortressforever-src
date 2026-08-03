@@ -134,12 +134,11 @@ void C_Fish::ClientThink()
 {
 	if (FishDebug.GetBool())
 	{
-		debugoverlay->AddLineOverlay( m_pos, m_actualPos, 255, 0, 0, true, 0.1f );
-		switch( m_localLifeState )
+		if ( debugoverlay )
 		{
-			
-			
-			
+			debugoverlay->AddLineOverlay( m_pos, m_actualPos, 255, 0, 0, true, 0.1f );
+			switch( m_localLifeState )
+			{
 				case LIFE_DYING:
 					debugoverlay->AddTextOverlay( m_pos, 0.1f, "DYING" );
 					break;
@@ -147,7 +146,7 @@ void C_Fish::ClientThink()
 				case LIFE_DEAD:
 					debugoverlay->AddTextOverlay( m_pos, 0.1f, "DEAD" );
 					break;
-			
+			}
 		}
 	}
 
