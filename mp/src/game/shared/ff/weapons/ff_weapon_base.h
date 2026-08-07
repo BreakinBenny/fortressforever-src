@@ -205,6 +205,7 @@ public:
 
 	virtual void		Spawn( void );
 	virtual void		Precache( void );
+	virtual void		GetHeatLevel(int _firemode, float &_current, float &_max) { _current = 0.f; _max = 0.f; }
 
 	// All FF weapons are predicted
 	virtual bool		IsPredicted() const { return true; }

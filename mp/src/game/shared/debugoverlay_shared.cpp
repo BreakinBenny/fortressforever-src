@@ -112,7 +112,7 @@ void NDebugOverlay::Line( const Vector &origin, const Vector &target, int r, int
 	// Clip line that is behind the client 
 	Vector clientForward;
 	player->EyeVectors( &clientForward );
-#ifndef FF
+
 	Vector toOrigin		= origin - player->GetAbsOrigin();
 	Vector toTarget		= target - player->GetAbsOrigin();
  	float  dotOrigin	= DotProduct(clientForward,toOrigin);
@@ -120,7 +120,7 @@ void NDebugOverlay::Line( const Vector &origin, const Vector &target, int r, int
 	
 	if (dotOrigin < 0 && dotTarget < 0) 
 		return;
-#endif
+
 	if ( debugoverlay )
 	{
 		debugoverlay->AddLineOverlay( origin, target, r, g, b, noDepthTest, duration );
@@ -640,10 +640,10 @@ void NDebugOverlay::Circle( const Vector &position, const Vector &xAxis, const V
 		// If we have an alpha value, then draw the fan
 		if ( a && i > 1 )
 		{		
-			
-			
+			if ( debugoverlay )
+			{
 				debugoverlay->AddTriangleOverlay( vecStart, vecLastPosition, vecPosition, r, g, b, a, bNoDepthTest, flDuration );
-			
+			}
 		}
 	}
 }

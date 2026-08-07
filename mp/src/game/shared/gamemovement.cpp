@@ -1958,8 +1958,8 @@ void CGameMovement::Accelerate( Vector& wishdir, float wishspeed, float accel )
 	// If not going to add any speed, done.
 	if (addspeed <= 0)
 		return;
-
-#ifndef FF	// Determine amount of accleration.
+#ifndef FF
+	// Determine amount of accleration.
 	accelspeed = accel * gpGlobals->frametime * wishspeed * player->m_surfaceFriction;
 #else
 	accelspeed = accel * gpGlobals->frametime * wishspeed * /*player->m_surfaceFriction*/ 1.0f;	// |-- Mirv: More TFC Feeling (tm) friction
@@ -2888,8 +2888,8 @@ int CGameMovement::TryPlayerMove( Vector *pFirstDest, trace_t *pFirstTrace )
 				}
 				else
 				{
-					ClipVelocity( original_velocity, planes[i], new_velocity,
-					              1.0 + sv_bounce.GetFloat() * (1 - /*player->m_surfaceFriction*/ 1.0f));	// |-- Mirv: More TFC Feeling (tm) friction
+					ClipVelocity( original_velocity, planes[i], new_velocity, 1.0 + sv_bounce.GetFloat() * (1 - /*player->m_surfaceFriction*/ 1.0f) );
+					// |-- Mirv: More TFC Feeling (tm) friction
 				}
 			}
 
@@ -4342,7 +4342,34 @@ void CGameMovement::FinishUnDuck( void )
 	Vector newOrigin;
 
 	VectorCopy( mv->GetAbsOrigin(), newOrigin );
+#ifndef FF
+	if ( player->GetGroundEntity() != NULL )
+	{
+		for ( i = 0; i < 3; i++ )
+		{
+			newOrigin[i] += ( VEC_DUCK_HULL_MIN_SCALED( player )[i] - VEC_HULL_MIN_SCALED( player )[i] );
+		}
+	}
+	else
+	{
+		// If in air an letting go of crouch, make sure we can offset origin to make
+		//  up for uncrouching
+		Vector hullSizeNormal = VEC_HULL_MAX_SCALED( player ) - VEC_HULL_MIN_SCALED( player );
+		Vector hullSizeCrouch = VEC_DUCK_HULL_MAX_SCALED( player ) - VEC_DUCK_HULL_MIN_SCALED( player );
+		Vector viewDelta = ( hullSizeNormal - hullSizeCrouch );
+		viewDelta.Negate();
+		VectorAdd( newOrigin, viewDelta, newOrigin );
+	}
 
+	player->m_Local.m_bDucked = false;
+	player->RemoveFlag( FL_DUCKING );
+	player->m_Local.m_bDucking  = false;
+	player->m_Local.m_bInDuckJump  = false;
+	player->SetViewOffset( GetPlayerViewOffset( false ) );
+	player->m_Local.m_flDucktime = 0;
+
+	mv->SetAbsOrigin( newOrigin );
+#else
 	// The extra check (m_Local.m_bDucked) added because players were popping up 
 	// into the air when they hadn't yet been moved down for the duck
 	if ( player->GetGroundEntity() != NULL && player->m_Local.m_bDucked )
@@ -4384,40 +4411,15 @@ void CGameMovement::FinishUnDuck( void )
 		// Recatagorize position since ducking can change origin
 		CategorizePosition();
 	}
-
-	//if ( player->GetGroundEntity() != NULL )
-	//{
-	//	for ( i = 0; i < 3; i++ )
-	//	{
-	//		newOrigin[i] += ( VEC_DUCK_HULL_MIN_SCALED( player )[i] - VEC_HULL_MIN_SCALED( player )[i] );
-	//	}
-	//}
-	//else
-	//{
-	//	// If in air an letting go of crouch, make sure we can offset origin to make
-	//	//  up for uncrouching
-	//	Vector hullSizeNormal = VEC_HULL_MAX_SCALED( player ) - VEC_HULL_MIN_SCALED( player );
-	//	Vector hullSizeCrouch = VEC_DUCK_HULL_MAX_SCALED( player ) - VEC_DUCK_HULL_MIN_SCALED( player );
-	//	Vector viewDelta = ( hullSizeNormal - hullSizeCrouch );
-	//	viewDelta.Negate();
-	//	VectorAdd( newOrigin, viewDelta, newOrigin );
-	//}
-
-	//player->m_Local.m_bDucked = false;
-	//player->RemoveFlag( FL_DUCKING );
-	//player->m_Local.m_bDucking  = false;
-	//player->m_Local.m_bInDuckJump  = false;
-	//player->SetViewOffset( GetPlayerViewOffset( false ) );
-	//player->m_Local.m_flDucktime = 0;
-
-	//mv->SetAbsOrigin( newOrigin );
+#endif
 
 #ifdef CLIENT_DLL
 	player->ResetLatched();
 #endif // CLIENT_DLL
-
+#ifndef FF
 	// Recategorize position since ducking can change origin
-	//CategorizePosition();
+	CategorizePosition();
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -4514,9 +4516,8 @@ void CGameMovement::FinishDuck( void )
 		Vector out;
    		VectorAdd( mv->GetAbsOrigin(), viewDelta, out );
 		mv->SetAbsOrigin( out );
-#ifndef FF
-		ResetDuckLatched();
-#elif FF_CLIENT_DLL
+
+#ifdef CLIENT_DLL
 		player->ResetLatched();
 #endif // CLIENT_DLL
 	}
@@ -4649,18 +4650,18 @@ void CGameMovement::Duck( void )
 		mv->m_nOldButtons &= ~IN_DUCK;
 	}
 
-	//if ( player->GetFlags() & FL_DUCKING )
-	//{
-	//	pmove->cmd.forwardmove *= 0.333;
-	//	pmove->cmd.sidemove    *= 0.333;
-	//	pmove->cmd.upmove      *= 0.333;
-	//}
+	// Handle death.
+	if ( IsDead() )
+		return;
 
+	// Slow down ducked players.
 	HandleDuckingSpeedCrop();
 
-	if ((mv->m_nButtons & IN_DUCK) || (player->m_Local.m_bDucking) || (player->GetFlags() & FL_DUCKING))
+	// If the player is holding down the duck button, the player is in duck transition, ducking, or duck-jumping.
+	if ( ( mv->m_nButtons & IN_DUCK ) || (player->m_Local.m_bDucking) || (player->GetFlags() & FL_DUCKING))
 	{
-		if (mv->m_nButtons & IN_DUCK)
+		// DUCK
+		if ( mv->m_nButtons & IN_DUCK )
 		{
 			if ((nButtonPressed & IN_DUCK) && !(player->GetFlags() & FL_DUCKING))
 			{
@@ -4668,9 +4669,8 @@ void CGameMovement::Duck( void )
 				player->m_Local.m_flDucktime = 1000;
 				player->m_Local.m_bDucking = true;
 			}
-
+			
 			time = max(0.0, (1.0 - (float)player->m_Local.m_flDucktime / 1000.0));
-
 			if (player->m_Local.m_bDucking)
 			{
 				// Finish ducking immediately if duck time is over or not on ground

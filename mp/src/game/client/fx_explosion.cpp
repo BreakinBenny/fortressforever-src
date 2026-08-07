@@ -254,16 +254,16 @@ void C_BaseExplosionEffect::CreateCore( void )
 
 	//Spread constricts as force rises
 	float force = m_flForce;
-
+#ifndef FF
 	// --> Mirv: Remove the cap for now
 	//Cap our force
-	/*if ( force < EXPLOSION_FORCE_MIN )
+	if ( force < EXPLOSION_FORCE_MIN )
 		force = EXPLOSION_FORCE_MIN;
 	
 	if ( force > EXPLOSION_FORCE_MAX )
-		force = EXPLOSION_FORCE_MAX;*/
+		force = EXPLOSION_FORCE_MAX;
 		// <--
-
+#endif
 	float spread = 1.0f - (0.15f*force);
 
 	SimpleParticle	*pParticle;

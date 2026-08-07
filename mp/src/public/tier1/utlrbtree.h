@@ -376,8 +376,8 @@ protected:
 
 template < class T, class I, typename L, class M >
 inline CUtlRBTree<T, I, L, M>::CUtlRBTree( int growSize, int initSize, const LessFunc_t &lessfunc ) : 
-m_LessFunc( lessfunc ),
 m_Elements( growSize, initSize ),
+m_LessFunc( lessfunc ),
 m_Root( InvalidIndex() ),
 m_NumElements( 0 ),
 m_FirstFree( InvalidIndex() ),
@@ -431,7 +431,6 @@ inline void CUtlRBTree<T, I, L, M>::CopyFrom( const CUtlRBTree<T, I, L, M> &othe
 template < class T, class I, typename L, class M >
 inline T &CUtlRBTree<T, I, L, M>::Element( I i )        
 {
-	
 	return m_Elements[i].m_Data; 
 }
 

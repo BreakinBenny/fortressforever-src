@@ -11,12 +11,13 @@
 #endif
 
 #define FLAME_DAMAGE_INTERVAL			0.2f // How often to deal damage.
-//#define FLAME_DIRECT_DAMAGE_PER_SEC		5.0f
-//#define FLAME_RADIUS_DAMAGE_PER_SEC		4.0f
-
-#define FLAME_DIRECT_DAMAGE_PER_SEC		0 // 5.0f	// |-- Mirv: We seem to be handling dmg ourself
-#define FLAME_RADIUS_DAMAGE_PER_SEC		0 // 4.0f	// |-- Mirv: We seem to be handling dmg ourself
-
+#ifndef FF
+#define FLAME_DIRECT_DAMAGE_PER_SEC		5.0f
+#define FLAME_RADIUS_DAMAGE_PER_SEC		4.0f
+#else
+#define FLAME_DIRECT_DAMAGE_PER_SEC		0 // |-- Mirv: We seem to be handling dmg ourself
+#define FLAME_RADIUS_DAMAGE_PER_SEC		0 // |-- Mirv: We seem to be handling dmg ourself
+#endif
 #define FLAME_DIRECT_DAMAGE ( FLAME_DIRECT_DAMAGE_PER_SEC * FLAME_DAMAGE_INTERVAL )
 #define FLAME_RADIUS_DAMAGE ( FLAME_RADIUS_DAMAGE_PER_SEC * FLAME_DAMAGE_INTERVAL )
 
@@ -29,18 +30,20 @@ public:
 	DECLARE_CLASS( CEntityFlame, CBaseEntity );
 
 	CEntityFlame( void );
-
+#ifndef FF
+	static CEntityFlame	*Create( CBaseEntity *pTarget, bool useHitboxes = true );
+#else
 	static CEntityFlame	*Create( CBaseEntity *pTarget, bool useHitboxes = true, float flameSize = 1.0f);
-
+#endif
 	void	AttachToEntity( CBaseEntity *pTarget );
 	void	SetLifetime( float lifetime );
 	void	SetUseHitboxes( bool use );
 	void	SetNumHitboxFires( int iNumHitBoxFires );
 	void	SetHitboxFireScale( float flHitboxFireScale );
 
-	// Mulchman
+#ifdef FF	// Mulchman
 	void	Extinguish(void);
-
+#endif
 	float	GetRemainingLife( void );
 	int		GetNumHitboxFires( void );
 	float	GetHitboxFireScale( void );
@@ -49,9 +52,9 @@ public:
 	virtual void UpdateOnRemove();
 
 	void	SetSize( float size ) { m_flSize = size; }
-
+#ifdef FF
 	friend class CFFPlayer;		// |-- Mirv: Bug #0000162: Switching class while on fire, keeps playing burn sound
-
+#endif
 	DECLARE_DATADESC();
 
 protected:

@@ -42,7 +42,6 @@ extern "C"
 #include "ff_menuman.h"
 
 #include "ff_luacontext.h"
-#include "ff_scriptman.h"
 
 #include "LuaBridge/LuaBridge.h"
 

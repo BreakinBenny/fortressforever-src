@@ -29,9 +29,9 @@ public:
 
 	// Tell the client that this camera needs to be rendered
 	void SetActive( bool bActive );
-	
+	//int  ShouldTransmit( const CCheckTransmitInfo *pInfo );
 	int  UpdateTransmitState( void );
-	
+	//void TransmitToPlayer( int nPlayerIndex, bool bTransmit );
 
 	void ChangeFOVThink( void );
 

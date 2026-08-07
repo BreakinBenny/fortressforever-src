@@ -42,23 +42,22 @@ ConVar log_verbose_enable( "log_verbose_enable", "0", FCVAR_GAMEDLL, "Set to 1 t
 ConVar log_verbose_interval( "log_verbose_interval", "3.0", FCVAR_GAMEDLL, "Determines the interval (in seconds) for the verbose server log." );
 #endif // CLIENT_DLL
 
-// --> Mirv: Changed some of the values
-//static CViewVectors g_DefaultViewVectors(
-//	Vector( 0, 0, 64 ),			//VEC_VIEW (m_vView)
-//								
-//	Vector(-16, -16, 0 ),		//VEC_HULL_MIN (m_vHullMin)
-//	Vector( 16,  16,  72 ),		//VEC_HULL_MAX (m_vHullMax)
-//													
-//	Vector(-16, -16, 0 ),		//VEC_DUCK_HULL_MIN (m_vDuckHullMin)
-//	Vector( 16,  16,  36 ),		//VEC_DUCK_HULL_MAX	(m_vDuckHullMax)
-//	Vector( 0, 0, 28 ),			//VEC_DUCK_VIEW		(m_vDuckView)
-//													
-//	Vector(-10, -10, -10 ),		//VEC_OBS_HULL_MIN	(m_vObsHullMin)
-//	Vector( 10,  10,  10 ),		//VEC_OBS_HULL_MAX	(m_vObsHullMax)
-//													
-//	Vector( 0, 0, 14 )			//VEC_DEAD_VIEWHEIGHT (m_vDeadViewHeight)
-//);													
 static CViewVectors g_DefaultViewVectors(
+#ifndef FF	// --> Mirv: Changed some of the values
+	Vector( 0, 0, 64 ),			//VEC_VIEW (m_vView)
+								
+	Vector(-16, -16, 0 ),		//VEC_HULL_MIN (m_vHullMin)
+	Vector( 16,  16,  72 ),		//VEC_HULL_MAX (m_vHullMax)
+													
+	Vector(-16, -16, 0 ),		//VEC_DUCK_HULL_MIN (m_vDuckHullMin)
+	Vector( 16,  16,  36 ),		//VEC_DUCK_HULL_MAX	(m_vDuckHullMax)
+	Vector( 0, 0, 28 ),			//VEC_DUCK_VIEW		(m_vDuckView)
+													
+	Vector(-10, -10, -10 ),		//VEC_OBS_HULL_MIN	(m_vObsHullMin)
+	Vector( 10,  10,  10 ),		//VEC_OBS_HULL_MAX	(m_vObsHullMax)
+													
+	Vector( 0, 0, 14 )			//VEC_DEAD_VIEWHEIGHT (m_vDeadViewHeight)
+#else
 	Vector( 0, 0, 28 ),			// m_vView
 								
 	Vector(-16, -16, -36 ),		// m_vHullMin
@@ -72,8 +71,9 @@ static CViewVectors g_DefaultViewVectors(
 	Vector( 10,  10,  10 ),		// m_vObsHullMax
 													
 	Vector( 0, 0, -2 )			// m_vDeadViewHeight
+#endif // <-- Mirv: Changed some of the values
 );													
-// <-- Mirv: Changed some of the values
+													
 
 // ------------------------------------------------------------------------------------ //
 // CGameRulesProxy implementation.

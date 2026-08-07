@@ -1601,11 +1601,9 @@ void RespawnEntities()
 {
 	g_EntityListSystem.m_bRespawnAllEntities = true;
 }
-
-// Jiggles: No, this crashes the hell out of FF
-// YoYo178: not tested in sdk 2013
-//static ConCommand restart_entities( "respawn_entities", RespawnEntities, "Respawn all the entities in the map.", FCVAR_CHEAT | FCVAR_SPONLY );
-
+#ifndef FF // Jiggles & YoYo178 (respectively): "No, this crashes the hell out of FF." "not tested in sdk 2013"
+static ConCommand restart_entities( "respawn_entities", RespawnEntities, "Respawn all the entities in the map.", FCVAR_CHEAT | FCVAR_SPONLY );
+#endif
 class CSortedEntityList
 {
 public:

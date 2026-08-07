@@ -129,8 +129,7 @@ const char *MapEntity_ParseToken( const char *data, char *newToken )
 		}
 	}
 		
-	
-	// skip whitespace
+// skip whitespace
 skipwhite:
 	while ( (c = *data) <= ' ')
 	{

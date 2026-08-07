@@ -135,33 +135,20 @@ template< class T >
 class CClassMemoryPool : public CUtlMemoryPool
 {
 public:
-	
-	
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	
+	CClassMemoryPool(int numElements, int growMode = GROW_FAST, int nAlignment = 0 ) :
+		CUtlMemoryPool( sizeof(T), numElements, growMode, MEM_ALLOC_CLASSNAME(T), nAlignment ) {
+			#ifdef PLATFORM_64BITS 
+				COMPILE_TIME_ASSERT( sizeof(CUtlMemoryPool) == 64 );
+			#else
+				COMPILE_TIME_ASSERT( sizeof(CUtlMemoryPool) == 48 );
+			#endif
+		}
 
-    CClassMemoryPool(int numElements, int growMode = GROW_FAST, int nAlignment = 0 ) :
-        CUtlMemoryPool( sizeof(T), numElements, growMode, MEM_ALLOC_CLASSNAME(T), nAlignment ) {
-            #ifdef PLATFORM_64BITS 
-                COMPILE_TIME_ASSERT( sizeof(CUtlMemoryPool) == 64 );
-            #else
-                COMPILE_TIME_ASSERT( sizeof(CUtlMemoryPool) == 48 );
-            #endif
-        }
+	T*		Alloc();
+	T*		AllocZero();
+	void	Free( T *pMem );
 
-    T*        Alloc();
-    T*        AllocZero();
-    void    Free( T *pMem );
-
-    void    Clear();
+	void	Clear();
 };
 
 

@@ -649,15 +649,16 @@ void Host_Say( edict_t *pEdict, const CCommand &args, bool teamonly )
 
 	if ( pszPrefix && strlen( pszPrefix ) > 0 )
 	{
-		// Mulch: don't do CS:S style locations
-		//if ( pszLocation && strlen( pszLocation ) )
-		//{
-		//	Q_snprintf( text, sizeof(text), "%s %s @ %s: ", pszPrefix, pszPlayerName, pszLocation );
-		//}
-		//else
-		//{
+#ifndef FF	// Mulch: don't do CS:S style locations
+		if ( pszLocation && strlen( pszLocation ) )
+		{
+			Q_snprintf( text, sizeof(text), "%s %s @ %s: ", pszPrefix, pszPlayerName, pszLocation );
+		}
+		else
+		{
 			Q_snprintf( text, sizeof(text), "%s %s: ", pszPrefix, pszPlayerName );
-		//}
+		}
+#endif
 	}
 	else
 	{
@@ -715,25 +716,25 @@ void Host_Say( edict_t *pEdict, const CCommand &args, bool teamonly )
 			if (!(client->IsNetClient()))	// Not a client ? (should never be true)
 				continue;
 
-			if (teamonly && g_pGameRules->PlayerCanHearChat(client, pPlayer) != GR_TEAMMATE)
+			if ( teamonly && g_pGameRules->PlayerCanHearChat( client, pPlayer ) != GR_TEAMMATE )
 				continue;
 
-			if (pPlayer && !client->CanHearAndReadChatFrom(pPlayer))
+			if ( pPlayer && !client->CanHearAndReadChatFrom( pPlayer ) )
 				continue;
 
-			if (pPlayer && GetVoiceGameMgr() && GetVoiceGameMgr()->IsPlayerIgnoringPlayer(pPlayer->entindex(), i))
+			if ( pPlayer && GetVoiceGameMgr() && GetVoiceGameMgr()->IsPlayerIgnoringPlayer( pPlayer->entindex(), i ) )
 				continue;
 
-			CSingleUserRecipientFilter user(client);
+			CSingleUserRecipientFilter user( client );
 			user.MakeReliable();
 
-			if (pszFormat)
+			if ( pszFormat )
 			{
-				UTIL_SayText2Filter(user, pPlayer, true, pszFormat, pszPlayerName, p, pszLocation);
+				UTIL_SayText2Filter( user, pPlayer, true, pszFormat, pszPlayerName, p, pszLocation );
 			}
 			else
 			{
-				UTIL_SayTextFilter(user, text, pPlayer, true);
+				UTIL_SayTextFilter( user, text, pPlayer, true );
 			}
 		}
 
@@ -745,11 +746,11 @@ void Host_Say( edict_t *pEdict, const CCommand &args, bool teamonly )
 
 			if (pszFormat)
 			{
-				UTIL_SayText2Filter(user, pPlayer, true, pszFormat, pszPlayerName, p, pszLocation);
+				UTIL_SayText2Filter( user, pPlayer, true, pszFormat, pszPlayerName, p, pszLocation );
 			}
 			else
 			{
-				UTIL_SayTextFilter(user, text, pPlayer, true);
+				UTIL_SayTextFilter( user, text, pPlayer, true );
 			}
 		}
 

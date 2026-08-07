@@ -345,7 +345,9 @@ BEGIN_DATADESC( CBasePlayer )
 	DEFINE_FIELD( m_iBonusChallenge, FIELD_INTEGER ),
 	DEFINE_FIELD( m_lastDamageAmount, FIELD_INTEGER ),
 	DEFINE_FIELD( m_tbdPrev, FIELD_TIME ),
-	//DEFINE_FIELD( m_flStepSoundTime, FIELD_TIME ),	|-- Mirv: Removed to fix footsteps
+#ifndef FF
+	DEFINE_FIELD( m_flStepSoundTime, FIELD_FLOAT ),	// |-- Mirv: Removed to fix footsteps
+#endif
 	DEFINE_ARRAY( m_szNetname, FIELD_CHARACTER, MAX_PLAYER_NAME_LENGTH ),
 
 	//DEFINE_FIELD( m_flgeigerRange, FIELD_FLOAT ),	// Don't restore, reset in Precache()
@@ -379,11 +381,13 @@ BEGIN_DATADESC( CBasePlayer )
 	//DEFINE_FIELD( m_lasty, FIELD_INTEGER ),
 
 	DEFINE_FIELD( m_iFrags, FIELD_INTEGER ),
-	DEFINE_FIELD( m_iFortPoints, FIELD_INTEGER ),
 	DEFINE_FIELD( m_iDeaths, FIELD_INTEGER ),
 	DEFINE_FIELD( m_bAllowInstantSpawn, FIELD_BOOLEAN ),
 	DEFINE_FIELD( m_flNextDecalTime, FIELD_TIME ),
+#ifdef FF
+	DEFINE_FIELD( m_iFortPoints, FIELD_INTEGER ),
 	DEFINE_FIELD( m_iAssists, FIELD_INTEGER ),
+#endif
 	//DEFINE_AUTO_ARRAY( m_szTeamName, FIELD_STRING ), // mp
 
 	//DEFINE_FIELD( m_iConnected, FIELD_INTEGER ),
@@ -712,13 +716,11 @@ void CBasePlayer::SetupVisibility( CBaseEntity *pViewEntity, unsigned char *pvs,
 
 int	CBasePlayer::UpdateTransmitState()
 {
-	// --> FF
-#ifdef GAME_DLL
+#ifdef FF	// --> FF
 	// always transmit if you're an objective
 	if (m_ObjectivePlayerRefs.Count() > 0)
 		return SetTransmitState(FL_EDICT_ALWAYS);
-#endif // GAME_DLL
-	// <-- FF
+#endif // <-- FF
 
 	// always call ShouldTransmit() for players
 	return SetTransmitState( FL_EDICT_FULLCHECK );
@@ -767,11 +769,11 @@ int CBasePlayer::ShouldTransmit( const CCheckTransmitInfo *pInfo )
 
 bool CBasePlayer::WantsLagCompensationOnEntity( const CBasePlayer *pPlayer, const CUserCmd *pCmd, const CBitVec<MAX_EDICTS> *pEntityTransmitBits ) const
 {
-	/*  Jiggles: We need to predict team members for our Medpack and Wrench
+#ifndef FF	// Jiggles: We need to predict team members for our Medpack and Wrench
 	// Team members shouldn't be adjusted unless friendly fire is on.
 	if ( !friendlyfire.GetInt() && pPlayer->GetTeamNumber() == GetTeamNumber() )
-		return false;*/
-
+		return false;
+#endif
 	// If this entity hasn't been transmitted to us and acked, then don't bother lag compensating it.
 	if ( pEntityTransmitBits && !pEntityTransmitBits->Get( pPlayer->entindex() ) )
 		return false;
@@ -873,13 +875,13 @@ void CBasePlayer::DeathSound( const CTakeDamageInfo &info )
 		EmitSound( "Player.Death" );
 	}
 
-	// --> Mirv: Don't play suit sound'
+#ifndef FF	// --> Mirv: Don't play suit sound'
 	// play one of the suit death alarms
-	/*if ( IsSuitEquipped() )
+	if ( IsSuitEquipped() )
 	{
 		UTIL_EmitGroupnameSuit(edict(), "HEV_DEAD");
-	}*/
-	// <-- Mirv: Don't play suit sound
+	}
+#endif	// <-- Mirv: Don't play suit sound
 }
 
 // override takehealth
@@ -948,8 +950,8 @@ void CBasePlayer::TraceAttack( const CTakeDamageInfo &inputInfo, const Vector &v
 			// --------------------------------------------------
 			//  If an NPC check if friendly fire is disallowed
 			// --------------------------------------------------
-			// --> Mirv: All this disabled so we can impact friendlies
-			/*CAI_BaseNPC *pNPC = info.GetAttacker()->MyNPCPointer();
+#ifndef FF	// --> Mirv: All this disabled so we can impact friendlies
+			CAI_BaseNPC *pNPC = info.GetAttacker()->MyNPCPointer();
 			if ( pNPC && (pNPC->CapabilitiesGet() & bits_CAP_NO_HIT_PLAYER) && pNPC->IRelationType( this ) != D_HT )
 				return;
 
@@ -958,13 +960,14 @@ void CBasePlayer::TraceAttack( const CTakeDamageInfo &inputInfo, const Vector &v
 			{
 				if ( !g_pGameRules->FPlayerCanTakeDamage( this, info.GetAttacker(), info ) )
 					return;
-			}*/
+			}
+#endif
 		}
 
 		SetLastHitGroup( ptr->hitgroup );
 
-		// --> Mirv: No location damage please
-		/*switch ( ptr->hitgroup )
+#ifndef FF	// --> Mirv: No location damage please
+		switch ( ptr->hitgroup )
 		{
 		case HITGROUP_GENERIC:
 			break;
@@ -987,8 +990,8 @@ void CBasePlayer::TraceAttack( const CTakeDamageInfo &inputInfo, const Vector &v
 			break;
 		default:
 			break;
-		}*/
-		// <-- Mirv: No location damage please
+		}
+#endif	// <-- Mirv: No location damage please
 
 #ifdef HL2_EPISODIC
 		// If this damage type makes us bleed, then do so
@@ -1735,12 +1738,12 @@ void CBasePlayer::Event_Killed( const CTakeDamageInfo &info )
 
 	// don't let the status bar glitch for players with <0 health.
 	// UNDONE: Check status bar in the actual display. We need to
-	// allow health to go way negative for gibbing
-	/*if (m_iHealth < -99)
+#ifndef FF	// allow health to go way negative for gibbing
+	if (m_iHealth < -99)
 	{
 		m_iHealth = 0;
-	}*/
-
+	}
+#endif
 	// holster the current weapon
 	if ( GetActiveWeapon() )
 	{
@@ -1751,10 +1754,11 @@ void CBasePlayer::Event_Killed( const CTakeDamageInfo &info )
 
 	if ( !IsObserver() )
 	{
-		// Jiggles: We're not doing the death view change here now -- see C_FFPlayer::CalcView() instead
+#ifndef FF	// Jiggles: We're not doing the death view change here now -- see C_FFPlayer::CalcView() instead
 		// 2013-CHANGELATER
 		// NOTES: need tests on this one, sdk 2006 used VEC_DEAD_VIEWHEIGHT
-		//SetViewOffset( VEC_DEAD_VIEWHEIGHT_SCALED( this ) );
+		SetViewOffset( VEC_DEAD_VIEWHEIGHT_SCALED( this ) );
+#endif
 	}
 	m_lifeState		= LIFE_DYING;
 
@@ -2829,11 +2833,11 @@ bool CBasePlayer::IsValidObserverTarget(CBaseEntity * target)
 		{
 			switch ( mp_forcecamera.GetInt() )
 			{
-				case OBS_ALLOW_ALL	:	break;
-				case OBS_ALLOW_TEAM :	if ( GetTeamNumber() != target->GetTeamNumber() )
-											 return false;
-										break;
-				case OBS_ALLOW_NONE :	return false;
+			case OBS_ALLOW_ALL	:	break;
+			case OBS_ALLOW_TEAM :	if ( GetTeamNumber() != target->GetTeamNumber() )
+										 return false;
+									break;
+			case OBS_ALLOW_NONE :	return false;
 			}
 		}
 	}
@@ -7089,7 +7093,9 @@ void CBasePlayer::UpdateClientData( void )
 		gInitHUD = false;
 
 		UserMessageBegin( user, "ResetHUD" );
-			//WRITE_BYTE( 0 );
+#ifndef FF
+			WRITE_BYTE( 0 );
+#endif
 		MessageEnd();
 
 		if ( !m_fGameHUDInitialized )

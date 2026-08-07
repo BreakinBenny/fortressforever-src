@@ -1227,7 +1227,7 @@ void CBaseDoor::DoorHitBottom( void )
 	}
 
 	// Close the area portals just after the door closes, to prevent visual artifacts in multiplayer games
-	SetContextThink( &CBaseDoor::CloseAreaPortalsThink, gpGlobals->curtime + 1.0f, CLOSE_AREAPORTAL_THINK_CONTEXT ); // was 0.5f
+	SetContextThink( &CBaseDoor::CloseAreaPortalsThink, gpGlobals->curtime + 0.5f, CLOSE_AREAPORTAL_THINK_CONTEXT );
 }
 
 

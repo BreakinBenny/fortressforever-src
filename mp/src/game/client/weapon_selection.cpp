@@ -144,15 +144,16 @@ void CBaseHudWeaponSelection::VidInit(void)
 //-----------------------------------------------------------------------------
 void CBaseHudWeaponSelection::OnThink(void)
 {
-	// Don't allow weapon selection if we're frozen in place
-	//C_BasePlayer *pPlayer = C_BasePlayer::GetLocalPlayer();
-	//if ( pPlayer->GetFlags() & FL_FROZEN || pPlayer->IsPlayerDead() )
-	//{
-	//	if ( IsInSelectionMode() )
-	//	{
-	//		CancelWeaponSelection();
-	//	}
-	//}
+#ifndef FF	// Don't allow weapon selection if we're frozen in place
+	C_BasePlayer *pPlayer = C_BasePlayer::GetLocalPlayer();
+	if ( pPlayer->GetFlags() & FL_FROZEN || pPlayer->IsPlayerDead() )
+	{
+		if ( IsInSelectionMode() )
+		{
+			CancelWeaponSelection();
+		}
+	}
+#endif
 }
 
 //-----------------------------------------------------------------------------

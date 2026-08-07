@@ -304,14 +304,17 @@ bool C_SoundscapeSystem::Init()
 	m_loopingSoundId = 0;
 
 	const char *mapname = MapName();
+#ifndef FF
+	const char *mapSoundscapeFilename = NULL;
+#else
 	char mapSoundscapeFilename[256] = { 0 };
 	char mapSoundscapeFilenameFF[256] = { 0 }; // for the FF method of using maps/mapname_soundscapes.txt
-
+#endif
 	if ( mapname && *mapname )
 	{
-		// Jon - 2/14/2007: Let's support both methods.
-		//mapSoundscapeFilename = VarArgs( "scripts/soundscapes_%s.txt", mapname )
-
+#ifndef FF	// Jon - 2/14/2007: Let's support both methods.
+		mapSoundscapeFilename = VarArgs( "scripts/soundscapes_%s.txt", mapname );
+#else
 		// Let's load map soundscape files without worrying about the manifest.
 		if (filesystem->FileExists(VarArgs("scripts/soundscapes_%s.txt", mapname)))
 		{
@@ -334,6 +337,7 @@ bool C_SoundscapeSystem::Init()
 		// NULL their ends just in case
 		mapSoundscapeFilename[255] = 0;
 		mapSoundscapeFilenameFF[255] = 0;
+#endif
 	}
 
 	KeyValues *manifest = new KeyValues( SOUNDSCAPE_MANIFEST_FILE );
@@ -343,12 +347,12 @@ bool C_SoundscapeSystem::Init()
 		{
 			if ( !Q_stricmp( sub->GetName(), "file" ) )
 			{
-				// Jon - 2/14/2007: don't load the map soundscapes file twice
+#ifdef FF		// Jon - 2/14/2007: don't load the map soundscapes file twice
 				if (mapSoundscapeFilename[0] && FStrEq(sub->GetString(), mapSoundscapeFilename))
 					continue;
 				if (mapSoundscapeFilenameFF[0] && FStrEq(sub->GetString(), mapSoundscapeFilenameFF))
 					continue;
-
+#endif
 				// Add
 				AddSoundScapeFile( sub->GetString() );
 				continue;

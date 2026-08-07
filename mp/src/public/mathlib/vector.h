@@ -12,16 +12,16 @@
 #ifdef _WIN32
 #pragma once
 #endif
-
-// #include <math.h>
-// #include <float.h>
-
+#ifndef FF
+#include <math.h>
+#include <float.h>
+#endif
 // For vec_t, put this somewhere else?
 #include "tier0/basetypes.h"
 
-// For rand(). We really need a library!
-// #include <stdlib.h> // no we do not!
-
+#ifndef FF // For rand(). We really need a library!
+#include <stdlib.h> // In FF, we do not!
+#endif
 #ifndef _X360
 // For MMX intrinsics
 #include <xmmintrin.h>

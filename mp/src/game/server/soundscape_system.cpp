@@ -62,7 +62,7 @@ void CSoundscapeSystem::AddSoundscapeFile( const char *filename )
 	MEM_ALLOC_CREDIT();
 	// Open the soundscape data file, and abort if we can't
 	KeyValues *pKeyValuesData = new KeyValues( filename );
-	if ( pKeyValuesData->LoadFromFile( filesystem, filename, "GAME" ) )
+	if ( filesystem->LoadKeyValues( *pKeyValuesData, IFileSystem::TYPE_SOUNDSCAPE, filename, "GAME" ) )
 	{
 		// parse out all of the top level sections and save their names
 		KeyValues *pKeys = pKeyValuesData;
@@ -130,16 +130,17 @@ bool CSoundscapeSystem::Init()
 	m_soundscapeCount = 0;
 
 	const char *mapname = STRING( gpGlobals->mapname );
-	// Jon - 2/14/2007: new method
-	//const char *mapSoundscapeFilename = NULL;
+#ifndef FF	// Jon - 2/14/2007: new method
+	const char *mapSoundscapeFilename = NULL;
+#else
 	char mapSoundscapeFilename[256] = { 0 };
 	char mapSoundscapeFilenameFF[256] = { 0 }; // for the FF method of using maps/mapname_soundscapes.txt
-
+#endif
 	if ( mapname && *mapname )
 	{
-		// Jon - 2/14/2007: Let's support both methods.
-		//mapSoundscapeFilename = VarArgs( "scripts/soundscapes_%s.txt", mapname )
-
+#ifndef FF	// Jon - 2/14/2007: Let's support both methods.
+		mapSoundscapeFilename = UTIL_VarArgs( "scripts/soundscapes_%s.txt", mapname );
+#else
 		// Let's load map soundscape files without worrying about the manifest.
 		if (filesystem->FileExists(UTIL_VarArgs("scripts/soundscapes_%s.txt", mapname)))
 		{
@@ -162,39 +163,42 @@ bool CSoundscapeSystem::Init()
 		// NULL their ends just in case
 		mapSoundscapeFilename[255] = 0;
 		mapSoundscapeFilenameFF[255] = 0;
+#endif
 	}
 
 	KeyValues *manifest = new KeyValues( SOUNDSCAPE_MANIFEST_FILE );
-	if ( manifest->LoadFromFile( filesystem, SOUNDSCAPE_MANIFEST_FILE, "GAME" ) )
+	if ( filesystem->LoadKeyValues( *manifest, IFileSystem::TYPE_SOUNDSCAPE, SOUNDSCAPE_MANIFEST_FILE, "GAME" ) )
 	{
 		for ( KeyValues *sub = manifest->GetFirstSubKey(); sub != NULL; sub = sub->GetNextKey() )
 		{
 			if ( !Q_stricmp( sub->GetName(), "file" ) )
 			{
-				// Jon - 2/14/2007: don't load the map soundscapes file twice
+#ifdef FF		// Jon - 2/14/2007: don't load the map soundscapes file twice
 				if (mapSoundscapeFilename[0] && FStrEq(sub->GetString(), mapSoundscapeFilename))
 					continue;
 				if (mapSoundscapeFilenameFF[0] && FStrEq(sub->GetString(), mapSoundscapeFilenameFF))
 					continue;
-
+#endif
 				// Add
 				AddSoundscapeFile( sub->GetString() );
-				//if ( mapSoundscapeFilename && FStrEq( sub->GetString(), mapSoundscapeFilename ) )
-				//{
-				//	mapSoundscapeFilename = NULL; // we've already loaded the map's soundscape
-				//}
+#ifndef FF
+				if ( mapSoundscapeFilename && FStrEq( sub->GetString(), mapSoundscapeFilename ) )
+				{
+					mapSoundscapeFilename = NULL; // we've already loaded the map's soundscape
+				}
+#endif
 				continue;
 			}
 
 			Warning( "CSoundscapeSystem::Init:  Manifest '%s' with bogus file type '%s', expecting 'file'\n", 
 				SOUNDSCAPE_MANIFEST_FILE, sub->GetName() );
 		}
-
-		// Jon - 2/14/2007: altered and moved up above
-		/*if ( mapSoundscapeFilename && filesystem->FileExists( mapSoundscapeFilename ) )
+#ifndef FF	// Jon - 2/14/2007: altered and moved up above
+		if ( mapSoundscapeFilename && filesystem->FileExists( mapSoundscapeFilename ) )
 		{
 			AddSoundscapeFile( mapSoundscapeFilename );
-		}*/
+		}
+#endif
 	}
 	else
 	{

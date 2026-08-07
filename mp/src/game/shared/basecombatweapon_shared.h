@@ -18,7 +18,9 @@
 #include "baseviewmodel_shared.h"
 #include "weapon_proficiency.h"
 #include "utlmap.h"
+#ifdef FF
 #include "mathlib/mathlib.h"
+#endif
 
 #if defined( CLIENT_DLL )
 #define CBaseCombatWeapon C_BaseCombatWeapon
@@ -269,9 +271,6 @@ public:
 	virtual void			HandleFireOnEmpty();					// Called when they have the attack button down
 																	// but they are out of ammo. The default implementation
 																	// either reloads, switches weapons, or plays an empty sound.
-#ifdef FF
-	virtual void			GetHeatLevel(int _firemode, float& _current, float& _max) { _current = 0.f; _max = 0.f; }
-#endif
 	virtual bool			CanPerformSecondaryAttack() const;
 
 	virtual bool			ShouldBlockPrimaryFire() { return false; }

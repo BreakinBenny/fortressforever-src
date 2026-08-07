@@ -211,14 +211,12 @@ enum CastVote
 #define HIDEHUD_TARGET_ID                   ( 1<<16 )	// Target ID
 #define HIDEHUD_MATCH_STATUS				( 1<<17 )	// Hide match status
 #define HIDEHUD_BITCOUNT			18
-#else
-	#ifdef FF // --> FF
-	#define HIDEHUD_SPECTATING			( 1<<12 )	// Hide while spectating
-	#define HIDEHUD_UNASSIGNED			( 1<<13 )	// Hide while the local player has not chosen a class or team
-	#define HIDEHUD_BITCOUNT		14
-	#else // <-- FF
+#elif defined( FF_DLL ) || defined( FF_CLIENT_DLL ) // --> FF
+#define HIDEHUD_SPECTATING			( 1<<12 )	// Hide while spectating
+#define HIDEHUD_UNASSIGNED			( 1<<13 )	// Hide while the local player has not chosen a class or team
+#define HIDEHUD_BITCOUNT		14
+#else // <-- FF
 #define HIDEHUD_BITCOUNT			12
-	#endif // <-- FF
 #endif
 
 
@@ -246,7 +244,6 @@ enum CastVote
 	#define MAX_PLAYERS				65  // Absolute max players supported
 #else
 	#define MAX_PLAYERS				33  // Absolute max players supported
-										// FF sets this to 22, ... why?
 #endif
 
 #define MAX_PLACE_NAME_LENGTH		18

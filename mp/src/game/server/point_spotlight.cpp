@@ -300,13 +300,11 @@ void CPointSpotlight::OnEntityEvent( EntityEvent_t event, void *pEventData )
 //-------------------------------------------------------------------------------------
 int CPointSpotlight::UpdateTransmitState()
 {
-	// --> FF
-#ifdef GAME_DLL
+#ifdef FF	// --> FF
 	// always transmit if you're an objective
 	if (m_ObjectivePlayerRefs.Count() > 0)
 		return SetTransmitState(FL_EDICT_ALWAYS);
-#endif // GAME_DLL
-	// <-- FF
+#endif // <-- FF
 
 	if ( m_bEfficientSpotlight )
 		return SetTransmitState( FL_EDICT_DONTSEND );

@@ -18,10 +18,10 @@
 
 // For vec_t, put this somewhere else?
 #include "tier0/basetypes.h"
-
+#ifndef FF
 // For rand(). We really need a library!
-// #include <stdlib.h> // no we do not!
-
+#include <stdlib.h> // not in FF though!
+#endif
 #include "tier0/dbg.h"
 #include "mathlib/math_pfns.h"
 

@@ -1052,14 +1052,14 @@ bool CServerGameDLL::LevelInit( const char *pMapName, char const *pMapEntities, 
 		{
 			gpGlobals->eLoadType = MapLoad_NewGame;
 		}
-
+#ifndef FF
 		// Clear out entity references, and parse the entities into it.
-		/*g_MapEntityRefs.Purge();
+		g_MapEntityRefs.Purge();
 		CMapLoadEntityFilter filter;
 		MapEntity_ParseAllEntities( pMapEntities, &filter );
 
-		g_pServerBenchmark->StartBenchmark();*/
-
+		g_pServerBenchmark->StartBenchmark();
+#endif
 		// Now call the mod specific parse
 		LevelInit_ParseAllEntities( pMapEntities );
 	}

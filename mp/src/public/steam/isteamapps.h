@@ -197,5 +197,6 @@ struct TimedTrialStatus_t
 	uint32		m_unSecondsPlayed;	// how many seconds the app was already played
 };
 
+
 #pragma pack( pop )
 #endif // ISTEAMAPPS_H

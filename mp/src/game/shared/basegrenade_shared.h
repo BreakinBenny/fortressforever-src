@@ -123,10 +123,10 @@ public:
 	CNetworkVar( float, m_flNextAttack );
 	float				m_flDetonateTime;			// Time at which to detonate.
 	float				m_flWarnAITime;				// Time at which to warn the AI
-
+#ifdef FF
 	int					m_iKillType; // custom kill type sent with explosion damage info
 	int					m_iDamageType; // damage type used for default explosion calls
-
+#endif
 protected:
 
 	CNetworkVar( float, m_flDamage );		// Damage to inflict.

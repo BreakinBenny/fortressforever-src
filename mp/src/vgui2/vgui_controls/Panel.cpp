@@ -2027,7 +2027,7 @@ void Panel::InternalMouseTriplePressed( int code )
 		return;
 	}
 
-		OnMouseTriplePressed((MouseCode)code);
+	OnMouseTriplePressed((MouseCode)code);
 #if defined( VGUI_USEDRAGDROP )
 	DragDropStartDragging();
 #endif
@@ -2066,6 +2066,25 @@ void Panel::InternalMouseReleased(int code)
 		}
 	}
 
+#ifdef STAGING_ONLY
+	const char *pGameDir = COM_GetModDirectory();
+	if ( Q_stristr( pGameDir, "tf" ) && tf_strict_mouse_up_events.GetBool() )
+	{
+		// Only allow mouse release events to go to panels that we also
+		// first clicked into
+		if ( code >= MOUSE_LEFT && code <= MOUSE_MIDDLE )
+		{
+			const int nIndex = code - MOUSE_LEFT;
+			Panel* pPressedPanel = m_sMousePressedPanels[ nIndex ];
+			m_sMousePressedPanels[ nIndex ] = NULL;	// Clear out pressed panel
+			if ( pPressedPanel != this )
+			{
+				OnMouseMismatchedRelease( (MouseCode)code, pPressedPanel );
+				return;
+			}
+		}
+	}
+#endif
 
 		OnMouseReleased((MouseCode)code);
 }

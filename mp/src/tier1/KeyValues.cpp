@@ -2988,8 +2988,8 @@ bool KeyValues::Dump( IKeyValuesDumpContext *pDump, int nIndentLevel /* = 0 */ )
 	if ( !pDump->KvBeginKey( this, nIndentLevel ) )
 		return false;
 	
-		// Dump values
-		for ( KeyValues *val = this ? GetFirstValue() : NULL; val; val = val->GetNextValue() )
+	// Dump values
+	for ( KeyValues *val = this ? GetFirstValue() : NULL; val; val = val->GetNextValue() )
 	{
 		if ( !pDump->KvWriteValue( val, nIndentLevel + 1 ) )
 			return false;

@@ -532,12 +532,13 @@ void MuzzleFlashCallback( const CEffectData &data )
 
 		if ( data.m_nAttachmentIndex )
 		{
-			//FIXME: We also need to allocate these particles into an attachment space setup
-			//pRenderable->GetAttachment( data.m_nAttachmentIndex, vecOrigin, vecAngles );
+#ifndef FF	//FIXME: We also need to allocate these particles into an attachment space setup
+			pRenderable->GetAttachment( data.m_nAttachmentIndex, vecOrigin, vecAngles );
 
-			// Mirv: Fix for SG muzzleflashes
+#else			// Mirv: Fix for SG muzzleflashes
 			tempents->MuzzleFlash(data.m_fFlags & (~MUZZLEFLASH_FIRSTPERSON), data.m_hEntity, data.m_nAttachmentIndex, (data.m_fFlags & MUZZLEFLASH_FIRSTPERSON) != 0);
 			return;
+#endif
 		}
 		else
 		{
@@ -933,13 +934,13 @@ void FX_GunshipTracer( Vector& start, Vector& end, int velocity, bool makeWhiz )
 	//Get out shot direction and length
 	VectorSubtract( end, start, shotDir );
 	totalDist = VectorNormalize( shotDir );
-
+#ifndef FF
 	// --> Mirv: No do make small tracers
 	//Don't make small tracers
-	//if ( totalDist <= 256 )
-	//	return;
+	if ( totalDist <= 256 )
+		return;
 	// <--
-
+#endif
 	float length = random->RandomFloat( 128.0f, 256.0f );
 	float life = ( totalDist + length ) / velocity;	//NOTENOTE: We want the tail to finish its run as well
 	

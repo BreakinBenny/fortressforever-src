@@ -666,8 +666,8 @@ public:
 
 	// Accessor methods
 	int		FragCount() const		{ return m_iFrags; }
-	int		FortPointsCount() const { return m_iFortPoints; }
 	int		DeathCount() const		{ return m_iDeaths;}
+	int		FortPointsCount() const { return m_iFortPoints; }
 	int		AssistsCount() const	{ return m_iAssists; }
 	bool	IsConnected() const		{ return m_iConnected != PlayerDisconnected; }
 	bool	IsDisconnecting() const	{ return m_iConnected == PlayerDisconnecting; }
@@ -880,9 +880,11 @@ public:
 	IMPLEMENT_NETWORK_VAR_FOR_DERIVED( m_nNextThinkTick );
 	IMPLEMENT_NETWORK_VAR_FOR_DERIVED( m_vecVelocity );
 	IMPLEMENT_NETWORK_VAR_FOR_DERIVED( m_nWaterLevel );
+#ifdef FF
 	CNetworkVarForDerived(int, m_nButtons);
-	
-	//int						m_nButtons;
+#else
+	int						m_nButtons;
+#endif
 	int						m_afButtonPressed;
 	int						m_afButtonReleased;
 	int						m_afButtonLast;
@@ -1053,8 +1055,8 @@ private:
 	int						m_lastx, m_lasty;	// These are the previous update's crosshair angles, DON"T SAVE/RESTORE
 
 	int						m_iFrags;
-	int						m_iFortPoints;
 	int						m_iDeaths;
+	int						m_iFortPoints;
 	int						m_iAssists;
 
 	float					m_flNextDecalTime;// next time this player can spray a decal
