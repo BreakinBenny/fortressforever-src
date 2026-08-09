@@ -50,7 +50,7 @@ ConVar	sv_specnoclip	( "sv_specnoclip", "1", FCVAR_ARCHIVE | FCVAR_NOTIFY | FCVA
 
 #if defined( CSTRIKE_DLL ) || defined( HL1MP_DLL )
 ConVar	sv_maxspeed		( "sv_maxspeed", "320", FCVAR_NOTIFY | FCVAR_REPLICATED);
-#elif defined( FF_DLL )
+#elif defined( FF )
 ConVar	sv_maxspeed		( "sv_maxspeed", "800", FCVAR_NOTIFY | FCVAR_REPLICATED);	// |-- Mirv: A more sane max speed
 #else
 ConVar	sv_maxspeed		( "sv_maxspeed", "320", FCVAR_NOTIFY | FCVAR_REPLICATED | FCVAR_DEVELOPMENTONLY);
